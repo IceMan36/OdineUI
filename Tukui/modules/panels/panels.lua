@@ -159,7 +159,7 @@ if C["actionbar"].enable then
 	TukuiBar2:SetAllPoints(TukuiBar1)--Point("BOTTOM")
 
 	local TukuiSplitBarLeft = CreateFrame("Frame", "TukuiSplitBarLeft", UIParent)
-	TukuiSplitBarLeft:CreatePanel("Default", (T.buttonsize * 3) + (T.buttonspacing * 4) + 2, TukuiBar1:GetHeight(), "BOTTOMRIGHT", TukuiBar1, "BOTTOMLEFT", -6, 0)
+	TukuiSplitBarLeft:CreatePanel("Default", (T.buttonsize * 3) + (T.buttonspacing * 4) + 2, TukuiBar1:GetHeight(), "BOTTOMRIGHT", TukuiBar1, "BOTTOMLEFT", T.Scale(-6), 0)
 
 	local TukuiSplitBarRight = CreateFrame("Frame", "TukuiSplitBarRight", UIParent)
 	TukuiSplitBarRight:CreatePanel("Default", (T.buttonsize * 3) + (T.buttonspacing * 4) + 2, TukuiBar1:GetHeight(), "BOTTOMLEFT", TukuiBar1, "BOTTOMRIGHT", 6, 0)

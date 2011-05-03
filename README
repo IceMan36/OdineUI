@@ -1,8 +1,15 @@
+V6.1i - [05/03/2011]
+* skinned spellbook, barbershop, macro ui, character frame, gear manager to match Tukui (added options to seperatly disable them in config as well)
+* adjusted default actionbar button size/spacing until update actionbar code.. soon!
+* Clicking currency datatext for the time being will take you to character frame, not directly to the currency tab though
+
 V6.1h - [04/30/2011]
 * added new API functions from latest commit
 * skinned character frame
 * rename style names of UF to account for old named versions, might fix problems for users not deleting old folders
 * fixed bug when battle.net is down causing friend datatext to error out
+* added support for embedding recount
+* skin support for big wigs
 * many other misc bug fixes
 
 V6.1g - {04/28/2011]

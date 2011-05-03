@@ -40,5 +40,10 @@ if C["datatext"].currency and C["datatext"].currency > 0 then
 	Stat:RegisterEvent("PLAYER_LOGIN")	
 	hooksecurefunc("BackpackTokenFrame_Update", update)
 	Stat:SetScript("OnEvent", OnEvent)
-	Stat:SetScript("OnMouseDown", function() ToggleCharacter("TokenFrame") end)
+	Stat:SetScript("OnMouseDown", function()
+		ToggleCharacter("PaperDollFrame")
+		-- For now we cannot go directly to the currency tab stupid blizzard erorrs, even this hack for now can still cause
+		-- a blank currency window which there is nothing i can do about... 
+		--ToggleCharacter("TokenFrame")
+	end)
 end

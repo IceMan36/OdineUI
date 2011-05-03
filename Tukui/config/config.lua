@@ -144,10 +144,10 @@ DB["actionbar"] = {
 	["shapeshiftmouseover"] = false,					-- hide shapeshift or totembar unless moused over.
 	--["rightbarmouseover"] = true,						-- mouseover on rightbars
 	["showgrid"] = true,                                -- show grid on empty button
-	["buttonsize"] = 29,                                -- normal buttons size 27
+	["buttonsize"] = 27,                                -- normal buttons size 27
 	["petbuttonsize"] = 29,                             -- pet & stance buttons size
 	["stancebuttonsize"] = 29,                             -- pet & stance buttons size
-	["buttonspacing"] = 2,                              -- buttons spacing 4
+	["buttonspacing"] = 4,                              -- buttons spacing 4
 	["vertical_rightbars"] = true,						-- enables vertical rightbars
 }
 
@@ -270,7 +270,16 @@ DB["addonskins"] = {
 	["omen"] = true,									-- skins Omen
 	["skada"] = true,									-- skins skada
 	["coolline"] = true,								-- skins CoolLine
+	["bigwigs"] = true,									-- skins BigWigs
 	["embed"] = "NONE",
+}
+
+-- Blizzard Panels Skinned
+DB["blizzskins"] = {
+	["auction"] = true,
+	["spellbook"] = true,
+	["character"] = true,
+	["extra"] = true,									-- other frames (barber, etc)
 }
 
 DB["classtimer"] = {
