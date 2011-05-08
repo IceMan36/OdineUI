@@ -13,7 +13,7 @@ if db then
 	db.y = 490
 
 	db.h = T.buttonsize - 6
-	db.w = T.InfoLeftRightWidth - 6
+	db.w = C["chat"].width - 6
 	db.font = "Tukui UF"
 	db.fontsize = 13
 	db.bgcolor = { r = 0, g = 0, b = 0, a = 0, }

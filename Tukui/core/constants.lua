@@ -9,12 +9,12 @@ T.getscreenresolution = select(T.resolution, GetScreenResolutions())
 T.getscreenheight = tonumber(string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)"))
 T.getscreenwidth = tonumber(string.match(({GetScreenResolutions()})[GetCurrentResolution()], "(%d+)x+%d"))
 T.version = GetAddOnMetadata("Tukui", "Version")
+T.OUI = GetAddOnMetadata("Tukui_Config", "Version")
 T.versionnumber = tonumber(T.version)
 T.incombat = UnitAffectingCombat("player")
 T.patch = GetBuildInfo()
 T.level = UnitLevel("player")
 T.myrealm = GetRealmName()
-T.InfoLeftRightWidth = 377
 
 if not TukuiSaved then
 	TukuiSaved = {	

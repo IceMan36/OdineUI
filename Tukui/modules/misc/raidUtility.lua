@@ -9,7 +9,7 @@ local panel_height = ((T.Scale(5)*4) + (T.Scale(20)*4))
 --Create main frame
 local RaidUtilityPanel = CreateFrame("Frame", "RaidUtilityPanel", UIParent)
 --RaidUtilityPanel:CreatePanel("Default", T.Scale(170), panel_height, "TOP", UIParent, "TOP", -300, panel_height + 15)
-RaidUtilityPanel:CreatePanel("Default", T.InfoLeftRightWidth / 2, panel_height, "TOP", UIParent, "TOP", 0, panel_height + T.buttonsize)
+RaidUtilityPanel:CreatePanel("Default", C["chat"].width / 2, panel_height, "TOP", UIParent, "TOP", 0, panel_height + T.buttonsize)
 local r,g,b,_ = C["media"].backdropcolor
 RaidUtilityPanel:SetBackdropColor(r,g,b,0.6)
 

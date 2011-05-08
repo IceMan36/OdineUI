@@ -4,7 +4,7 @@
 local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
 
 -- this install Tukui with default settings.
-local function install()
+function T.install()
 	SetCVar("buffDurations", 1)
 	SetCVar("mapQuestDifficulty", 1)
 	SetCVar("scriptErrors", 1)
@@ -42,10 +42,10 @@ local function install()
 			local chatFrameId = frame:GetID()
 			local chatName = FCF_GetChatWindowInfo(chatFrameId)
 			
-			_G["ChatFrame"..i]:SetSize(T.Scale(T.InfoLeftRightWidth - 5), T.Scale(C["chat"].height))
+			_G["ChatFrame"..i]:SetSize(T.Scale(C["chat"].width - 5), T.Scale(C["chat"].height))
 			
 			-- this is the default width and height of Elvui chats.
-			SetChatWindowSavedDimensions(chatFrameId, T.Scale(T.InfoLeftRightWidth + -4), T.Scale(C["chat"].height))
+			SetChatWindowSavedDimensions(chatFrameId, T.Scale(C["chat"].width + -4), T.Scale(C["chat"].height))
 			
 			-- move general bottom left
 			if i == 1 then
@@ -194,7 +194,7 @@ StaticPopupDialogs["TUKUIINSTALL_UI"] = {
 	text = L.popup_install,
 	button1 = ACCEPT,
 	button2 = CANCEL,
-    OnAccept = install,
+    OnAccept = T.install,
 	OnCancel = function() TukuiDataPerChar.install = true end,
     timeout = 0,
     whileDead = 1,
@@ -204,7 +204,7 @@ StaticPopupDialogs["TUKUIRESET_UI"] = {
 	text = L.popup_reset,
 	button1 = ACCEPT,
 	button2 = CANCEL,
-    OnAccept = install,
+    OnAccept = T.install,
 	OnCancel = function() TukuiDataPerChar.install = true end,
     timeout = 0,
     whileDead = 1,
@@ -317,11 +317,8 @@ TukuiOnLogon:SetScript("OnEvent", function(self, event)
 	T.ChatLIn = true
 	T.ChatRIn = true
 	
-	print(L.core_welcome3)
+	print(format(L.core_welcome1, T.OUI))
 	print(L.core_welcome2)
-	if IsAddOnLoaded("Tukui_Config") then
-		print(L.core_welcomeCF)
-	end
 	
 	local maxresolution
 	for i=1, 30 do

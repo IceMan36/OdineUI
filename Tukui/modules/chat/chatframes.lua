@@ -333,11 +333,11 @@ TukuiChat:SetScript("OnUpdate", function(self, elapsed)
 				if id ~= 2 then
 					chat:ClearAllPoints()
 					chat:SetPoint("BOTTOMLEFT", ChatRBackground, "BOTTOMLEFT", T.Scale(2), T.Scale(4))
-					chat:SetSize(T.Scale(T.InfoLeftRightWidth - 4), T.Scale(C["chat"].height))
+					chat:SetSize(T.Scale(C["chat"].width - 4), T.Scale(C["chat"].height))
 				else
 					chat:ClearAllPoints()
 					chat:SetPoint("BOTTOMLEFT", ChatRBackground, "BOTTOMLEFT", T.Scale(2), T.Scale(4))
-					chat:SetSize(T.Scale(T.InfoLeftRightWidth - 4), T.Scale(C["chat"].height - CombatLogQuickButtonFrame_Custom:GetHeight()))				
+					chat:SetSize(T.Scale(C["chat"].width - 4), T.Scale(C["chat"].height - CombatLogQuickButtonFrame_Custom:GetHeight()))				
 				end
 				FCF_SavePositionAndDimensions(chat)			
 				
@@ -350,7 +350,7 @@ TukuiChat:SetScript("OnUpdate", function(self, elapsed)
 				if chat:GetID() ~= 2 and not (id > NUM_CHAT_WINDOWS) then
 					chat:ClearAllPoints()
 					chat:SetPoint("BOTTOMLEFT", ChatLBackground, "BOTTOMLEFT", T.Scale(2), T.Scale(4))
-					chat:SetSize(T.Scale(T.InfoLeftRightWidth - 4), T.Scale(C["chat"].height))
+					chat:SetSize(T.Scale(C["chat"].width - 4), T.Scale(C["chat"].height))
 					FCF_SavePositionAndDimensions(chat)		
 				end
 				chat:SetParent(ChatLBackground)

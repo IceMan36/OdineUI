@@ -3,14 +3,15 @@ local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, vari
 if C["datatext"].statblock ~= true then return end
 
 ----- [[     Panels     ]] -----
-
 local stat = CreateFrame("Frame")
-local width = (380 / 4) - 3
+local width = (C["chat"].width / 4) - 3
 
 
 for i = 1, 3 do
 	stat[i] = CreateFrame("Frame", "TukuiStat"..i, UIParent)
 	stat[i]:CreatePanel("Default", width, 20, "CENTER")
+	stat[i]:SetTemplate("Default", true)
+	stat[i]:CreateShadow("Default")
 	stat[i]:SetFrameLevel(1)
 	stat[i]:EnableMouse(true)
 	

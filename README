@@ -1,3 +1,8 @@
+V6.1j - [05/08/2011]
+* updated blizzard ticket frame to function properly with new changes they made. now anchored into minimap as well!
+* update skin code and added more skinnings support (talent frame, guild ui, dungeon ui, etc etc)
+* updated many other minor things
+
 V6.1i - [05/03/2011]
 * skinned spellbook, barbershop, macro ui, character frame, gear manager to match Tukui (added options to seperatly disable them in config as well)
 * adjusted default actionbar button size/spacing until update actionbar code.. soon!

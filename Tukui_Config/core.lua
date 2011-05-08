@@ -28,7 +28,6 @@ function OUI:LoadDefaults()
 			invite = DB["invite"],
 			buffreminder = DB["buffreminder"],
 			addonskins = DB["addonskins"],
-			blizzskins = DB["blizzskins"],
 			classtimer = DB["classtimer"],
 			error = DB["error"],
 			spellfilter = {
@@ -1526,39 +1525,6 @@ function OUI.GenerateOptionsInternal()
 								order = 14,
 								name = "CoolLine",
 								desc = "Toggles skinning of this addon.",
-							},
-						},
-					},
-					Blizzskins = {
-						order = 11,
-						type = "group",
-						name = "Blizzard Skinned",
-						get = function(info) return db.blizzskins[ info[#info] ] end,
-						set = function(info, value) db.blizzskins[ info[#info] ] = value; StaticPopup_Show("RELOAD_UI") end,
-						args = {
-							auction = {
-								type = "toggle",
-								order = 1,
-								name = "Auctionhouse",
-								desc = "Toggles skinning of the Auctionhouse.",
-							},
-							spellbook = {
-								type = "toggle",
-								order = 2,
-								name = "Spellbook",
-								desc = "Toggles skinning of the Spellbook frame.",
-							},
-							character = {
-								type = "toggle",
-								order = 3,
-								name = "Character",
-								desc = "Toggles skinning of the character frame.",
-							},
-							extra = {
-								type = "toggle",
-								order = 4,
-								name = "Extra",
-								desc = "Toggles skinning of misc panels (barbershop, etc).",
 							},
 						},
 					},

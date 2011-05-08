@@ -121,13 +121,13 @@ end
 local windows = {}
 function EmbedSkada()
 	if #windows == 1 then
-		EmbedWindow(windows[1], T.InfoLeftRightWidth - 4, (C["chat"].height - (barSpacing * 5)) / 8, C["chat"].height, "TOPRIGHT", ChatRBackground2, "TOPRIGHT", -2, -2)
+		EmbedWindow(windows[1], C["chat"].width - 4, (C["chat"].height - (barSpacing * 5)) / 8, C["chat"].height, "TOPRIGHT", ChatRBackground2, "TOPRIGHT", -2, -2)
 	elseif #windows == 2 then
-		EmbedWindow(windows[1], ((T.InfoLeftRightWidth - 4) / 2) - (borderWidth + T.mult), (C["chat"].height - (barSpacing * 5)) / 8, C["chat"].height,  "TOPRIGHT", ChatRBackground2, "TOPRIGHT", -2, -2)
-		EmbedWindow(windows[2], ((T.InfoLeftRightWidth - 4) / 2) - (borderWidth + T.mult), (C["chat"].height - (barSpacing * 5)) / 8, C["chat"].height,  "TOPLEFT", ChatRBackground2, "TOPLEFT", 2, -2)
+		EmbedWindow(windows[1], ((C["chat"].width - 4) / 2) - (borderWidth + T.mult), (C["chat"].height - (barSpacing * 5)) / 8, C["chat"].height,  "TOPRIGHT", ChatRBackground2, "TOPRIGHT", -2, -2)
+		EmbedWindow(windows[2], ((C["chat"].width - 4) / 2) - (borderWidth + T.mult), (C["chat"].height - (barSpacing * 5)) / 8, C["chat"].height,  "TOPLEFT", ChatRBackground2, "TOPLEFT", 2, -2)
 	elseif #windows > 2 then
-		EmbedWindow(windows[1], ((T.InfoLeftRightWidth - 4) / 2) - (borderWidth + T.mult), (C["chat"].height - (barSpacing * 5)) / 8, C["chat"].height,  "TOPRIGHT", ChatRBackground2, "TOPRIGHT", -2, -2)
-		EmbedWindow(windows[2], ((T.InfoLeftRightWidth - 4) / 2) - (borderWidth + T.mult), (C["chat"].height - (barSpacing * 8)) / 8, C["chat"].height / 2,  "TOPLEFT", ChatRBackground2, "TOPLEFT", 2, -2)
+		EmbedWindow(windows[1], ((C["chat"].width - 4) / 2) - (borderWidth + T.mult), (C["chat"].height - (barSpacing * 5)) / 8, C["chat"].height,  "TOPRIGHT", ChatRBackground2, "TOPRIGHT", -2, -2)
+		EmbedWindow(windows[2], ((C["chat"].width - 4) / 2) - (borderWidth + T.mult), (C["chat"].height - (barSpacing * 8)) / 8, C["chat"].height / 2,  "TOPLEFT", ChatRBackground2, "TOPLEFT", 2, -2)
 		EmbedWindow(windows[3], windows[2].db.barwidth, (C["chat"].height - (barSpacing * 8)) / 8, C["chat"].height / 2,  "TOPLEFT", windows[2].bargroup.bgframe, "BOTTOMLEFT", 2, -2)
 	end
 end
@@ -174,7 +174,7 @@ if C["addonskins"].embed == "Skada" then
 	
 	local ctab = CreateFrame("Frame", "TukuiEmbedBar", ChatRBackground2)
 	ctab:SetHeight(T.Scale(22))
-	ctab:SetWidth(T.Scale(T.InfoLeftRightWidth))
+	ctab:SetWidth(T.Scale(C["chat"].width))
 	ctab:SetFrameLevel(3)	
 	ctab:SetPoint("TOPLEFT", 0, 25)
 	ctab:SetTemplate("Default", true)
@@ -235,7 +235,7 @@ if C["addonskins"].embed == "Skada" then
 		
 		local ctab = CreateFrame("Frame", "TukuiAddonBar", ChatRBackground2)
 		ctab:SetHeight(T.Scale(22))
-		ctab:SetWidth(T.Scale(T.InfoLeftRightWidth))
+		ctab:SetWidth(T.Scale(C["chat"].width))
 		ctab:SetFrameLevel(3)	
 		ctab:SetPoint("TOPLEFT", 0, 25)
 		ctab:SetTemplate("Default", true)

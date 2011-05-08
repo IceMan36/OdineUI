@@ -15,7 +15,7 @@ local aggroColors = {
 -- create the bar
 local TukuiThreatBar = CreateFrame("StatusBar", "TukuiThreatBar", ChatFrame1)
 TukuiThreatBar:SetHeight(T.Scale(20))
-TukuiThreatBar:SetWidth(T.Scale(T.InfoLeftRightWidth - 4))
+TukuiThreatBar:SetWidth(T.Scale(C["chat"].width - 4))
 TukuiThreatBar:SetFrameLevel(3)
 TukuiThreatBar:SetPoint("TOPLEFT", 0, 25)
 TukuiThreatBar:SetStatusBarTexture(C.media.normTex)

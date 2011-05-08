@@ -683,11 +683,11 @@ function Stuffing:Layout(lb)
 
 	if lb then
 		bs = bags_BANK
-		cols = (floor(T.InfoLeftRightWidth/370 * 10))
+		cols = (floor(C["chat"].width/370 * 10))
 		f = self.bankFrame
 	else
 		bs = bags_BACKPACK
-		cols = (floor(T.InfoLeftRightWidth/370 * 10))
+		cols = (floor(C["chat"].width/370 * 10))
 		f = self.frame
 
 		f.gold:SetText (GetCoinTextureString(GetMoney(), 12))
@@ -762,6 +762,29 @@ function Stuffing:Layout(lb)
 			b.frame:Size(bsize)
 			b.frame:Show()
 			
+			--Change all bag alpha when mousing over a bag frame to display
+			--what slots belong to what bag..
+			--Feature by Caliburnus
+			local btns = self.buttons
+			b.frame:HookScript("OnEnter", function(self)
+				local bag
+				if lb then bag = v else bag = v + 1 end
+
+				for ind, val in ipairs(btns) do
+					if val.bag == bag then
+						val.frame:SetAlpha(1)
+					else
+						val.frame:SetAlpha(0.2)
+					end
+				end
+			end)
+
+			b.frame:HookScript("OnLeave", function(self)
+				for _, btn in ipairs(btns) do
+					btn.frame:SetAlpha(1)
+				end
+			end)
+			
 			local t = _G[b.frame:GetName().."IconTexture"]
 			b.frame:SetPushedTexture("")
 			b.frame:SetNormalTexture("")
@@ -800,7 +823,7 @@ function Stuffing:Layout(lb)
 		rows = rows + 1
 	end
 
-	f:SetWidth(T.Scale(T.InfoLeftRightWidth))
+	f:SetWidth(T.Scale(C["chat"].width))
 	f:SetHeight(T.Scale(rows * 31 + (rows - 1) * 4 + off + 12 * 2))
 
 	local bf = CreateFrame("Frame", "BagHolderFrame", f)

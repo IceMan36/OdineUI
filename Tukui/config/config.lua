@@ -32,7 +32,7 @@ DB["media"] = {
 	["backdropfadecolor"] = { .1, .1, .1, 0.9 }, -- same thing just different alpha
 	["altbordercolor"] = { .4, .4, .4 }, -- alternative border color, mainly for unitframes text panels.
 	
-	["txtcolor"] = { .09, .51, .81 },
+	["txtcolor"] = { .09, .51, .81 },					-- derp shit
 	
 	-- sound
 	["whisper"] = "Tukui Whisper",
@@ -213,7 +213,8 @@ DB["misc"] = {
 DB["chat"] = {
 	["enable"] = true,                                  -- blah
 	["whispersound"] = true,                            -- play a sound when receiving whisper
-	["height"] = 150,									-- adjust the chatframe height default: 165 odine: 200
+	["height"] = 150,									-- adjust the chatframe height
+	["width"] = 377,									-- adjust the chatframe width
 	["background"] = true,								-- chat frame backgrounds 150
 	["fading"] = false,									-- allow chat windows to fade out
 	["justifyRight"] = false,							-- when set to true text in right chat box will be aligned towards the right side of the chat box
@@ -272,14 +273,6 @@ DB["addonskins"] = {
 	["coolline"] = true,								-- skins CoolLine
 	["bigwigs"] = true,									-- skins BigWigs
 	["embed"] = "NONE",
-}
-
--- Blizzard Panels Skinned
-DB["blizzskins"] = {
-	["auction"] = true,
-	["spellbook"] = true,
-	["character"] = true,
-	["extra"] = true,									-- other frames (barber, etc)
 }
 
 DB["classtimer"] = {
