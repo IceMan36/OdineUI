@@ -103,6 +103,7 @@
 	<Script file="modules\maps\worldmap.lua"/>
 	<Script file="modules\maps\zonemap.lua"/>
 	<Script file="modules\blizzard\mirror.lua"/>
+	<Script file="modules\blizzard\timerTracker.lua"/>
 	<Script file="modules\notifications\selfbuffs.lua"/>
 	<Script file="modules\skins\blizzardframes.lua"/>
 	<Script file="modules\skins\bubbles.lua"/>
