@@ -369,7 +369,8 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 		GameTooltip:AddLine(UnitName(unit.."target"), r, g, b)
 	end
 	
-	if C["tooltip"].whotarget == true then token = unit AddTargetedBy() end
+	token = unit
+	AddTargetedBy()
 	
 	-- Sometimes this wasn't getting reset, the fact a cleanup isn't performed at this point, now that it was moved to "OnTooltipCleared" is very bad, so this is a fix
 	self.fadeOut = nil

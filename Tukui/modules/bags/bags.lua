@@ -82,6 +82,7 @@ end
 
 
 local function StuffingBank_OnHide()
+	Stuffing.frame:SetScript("OnUpdate", nil)
 	CloseBankFrame()
 	if Stuffing.frame:IsShown() then
 		Stuffing.frame:Hide()
@@ -137,6 +138,7 @@ function Stuffing:SlotUpdate(b)
 	-- set all slot color to default tukui on update
 	if not b.frame.lock then
 		b.frame:SetBackdropBorderColor(unpack(C.media.bordercolor))
+		--b.frame:SetTemplate("Default", true) -- temp fix with new template option
 	end
 	
 	if b.Cooldown then
@@ -378,8 +380,8 @@ end
 
 function Stuffing:SearchReset()
 	for _, b in ipairs(self.buttons) do
-		b.frame:SetAlpha(1)
 		SetItemButtonDesaturated(b.frame, 0, 1, 1, 1)
+		b.frame:SetAlpha(1)
 	end
 end
 
@@ -510,7 +512,7 @@ function Stuffing:CreateBagFrame(w)
 		f.b_purchase:Size(80, 20)
 		f.b_purchase:Point("TOPLEFT", 10, -10)
 		f.b_purchase:RegisterForClicks("AnyUp")
-		f.b_purchase:SetTemplate("Default", true)
+		f.b_purchase:SetTemplate(C["general"].template, true)
 		f.b_purchase:SetScript("OnEnter", function(self)
 			self:SetBackdropBorderColor(unpack(C["media"].bordercolor))			
 		end)
@@ -590,7 +592,7 @@ function Stuffing:InitBags()
 	editbox:Hide()
 	editbox:SetAutoFocus(true)
 	editbox:Height(T.Scale(32))
-	editbox:SetTemplate("Default", true)
+	editbox:SetTemplate(C["general"].template, true)
 
 	local updateSearch = function(self, t)
 		if t == true then
@@ -611,7 +613,8 @@ function Stuffing:InitBags()
 	detail:SetPoint("RIGHT", T.Scale(-(16 + 24)), 0)
 	detail:SetJustifyH("LEFT")
 	detail:SetText("|cff9999ff" .. "Search")
-	editbox:SetAllPoints(detail)
+	editbox:SetPoint("TOPLEFT", detail, "TOPLEFT", 0, 0)
+	editbox:SetPoint("BOTTOMRIGHT", detail, "BOTTOMRIGHT", 0, -4)
 
 	local gold = f:CreateFontString(nil, "ARTWORK", "GameFontHighlightLarge")
 	gold:SetJustifyH("RIGHT")
@@ -744,7 +747,6 @@ function Stuffing:Layout(lb)
 		fb:Hide()	
 	end
 
-
 	local idx = 0
 	local numSlots, full = GetNumBankSlots()
 	for i, v in ipairs(bs) do
@@ -791,7 +793,7 @@ function Stuffing:Layout(lb)
 			t:SetTexCoord(.08, .92, .08, .92)
 			t:SetPoint("TOPLEFT", b.frame, T.Scale(2), T.Scale(-2))
 			t:SetPoint("BOTTOMRIGHT", b.frame, T.Scale(-2), T.Scale(2))
-			b.frame:SetTemplate("Default", true)
+			b.frame:SetTemplate(C["general"].template, true)
 		
 			b.frame:StyleButton()			
 			
@@ -869,7 +871,7 @@ function Stuffing:Layout(lb)
 					b.frame:SetPushedTexture("")
 					b.frame:SetNormalTexture("")
 					b.frame:Show()
-					b.frame:SetTemplate("Default", true)
+					b.frame:SetTemplate(C["general"].template, true)
 					--b.frame:SetBackdropColor(unpack(C["media"].backdropfadecolor))
 					b.frame:StyleButton()
 					local clink = GetContainerItemLink
@@ -984,6 +986,9 @@ function Stuffing:ADDON_LOADED(addon)
 	
 	tinsert(UISpecialFrames,"TukuiBags")
 
+	--
+	-- hook functions
+	--
 	ToggleBackpack = Stuffing_Toggle
 	ToggleBag = Stuffing_ToggleBag
 	OpenAllBags = Stuffing_Toggle
@@ -1019,7 +1024,7 @@ function Stuffing:PLAYER_ENTERING_WORLD()
 		t:SetTexCoord(.08, .92, .08, .92)
 		t:SetPoint("TOPLEFT", slot, T.Scale(2), T.Scale(-2))
 		t:SetPoint("BOTTOMRIGHT", slot, T.Scale(-2), T.Scale(2))
-		slot:SetTemplate("Default", true)
+		slot:SetTemplate(C["general"].template, true)
 		
 		slot:StyleButton()
 	end
@@ -1075,8 +1080,6 @@ end
 
 
 function Stuffing:BANKFRAME_OPENED()
-	Stuffing_Open()
-	
 	if not self.bankFrame then
 		self:InitBank()
 	end
@@ -1086,6 +1089,7 @@ function Stuffing:BANKFRAME_OPENED()
 		self:BagSlotUpdate(x)
 	end
 	self.bankFrame:Show()
+	Stuffing_Open()
 end
 
 

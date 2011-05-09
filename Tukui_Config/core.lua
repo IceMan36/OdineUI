@@ -500,6 +500,22 @@ function OUI.GenerateOptionsInternal()
 		
 		collectgarbage("collect")
 	end
+	
+	local function SetMyTheme()
+		if db.general.template == "Default" then
+			db.media.bordercolor = { .05, .05, .05, 1 }
+			db.media.backdropcolor = { .132, .132, .132, 1 }
+			db.media.backdropfadecolor = { .132, .132, .132, .09 }
+		elseif db.general.template == "Elv" then
+			db.media.bordercolor = { .23, .23, .23, 1 }
+			db.media.backdropcolor = { .07, .07, .07, 1 }
+			db.media.backdropfadecolor = { .07, .07, .07, .09 }
+		elseif db.general.template == "Tukui" then
+			db.media.bordercolor = { .6, .6, .6, 1 }
+			db.media.backdropcolor = { .1, .1, .1, 1 }
+			db.media.backdropfadecolor = { .1, .1, .1, .09 }
+		end
+	end
 
 	OUI.Options = {
 		type = "group",
@@ -545,66 +561,27 @@ function OUI.GenerateOptionsInternal()
 						desc = L["OVERRIDE_DESC"],
 						type = "toggle",
 					},
-					empty5 = {
+					emptyg25 = {
 						name = "   ",
 						width = "full",
 						type = "description",
 						order = 7,
 					},
-					Colors = {
-						type = "group",
+					template = {
 						order = 8,
-						name = L["Color Options"],
-						guiInline = true,
-						disabled = function() return not db.unitframes.enable end,
-						args = {
-							unicolor = {
-								type = "toggle",
-								order = 1,
-								name = L["Unicolor Theme"],
-								desc = L["UNICOLOR_DESC"],
-								get = function() return db.unitframes.unicolor end,
-								set = function(info, value) db.unitframes.unicolor = value; StaticPopup_Show("RELOAD_UI") end,
-							},
-							empty5 = {
-								name = "   ",
-								width = "half",
-								type = "description",
-								order = 1.5,
-							},
-							healthColor = {
-								type = "color",
-								order = 2,
-								name = L["Healthbar Color"],
-								desc = L["HBAR_DESC"],
-								disabled = function() return not db.unitframes.unicolor end,
-								get = function(info)
-									local r, g, b = unpack(db.unitframes[ info[#info] ])
-									return r, g, b
-								end,
-								set = function(info, r, g, b)
-									StaticPopup_Show("RELOAD_UI")
-									db.unitframes[ info[#info] ] = {r, g, b}
-								end,
-								hasAlpha = false,
-							},
-							healthBgColor = {
-								type = "color",
-								order = 3,
-								name = L["Healthbar BG Color"],
-								desc = L["HBARBG_DESC"],
-								disabled = function() return not db.unitframes.unicolor end,
-								get = function(info)
-									local r, g, b = unpack(db.unitframes[ info[#info] ])
-									return r, g, b
-								end,
-								set = function(info, r, g, b)
-									StaticPopup_Show("RELOAD_UI")
-									db.unitframes[ info[#info] ] = {r, g, b}
-								end,
-								hasAlpha = false,
-							},
-						},
+						type = "select",
+						name = "Theme",
+						desc = "Allows you to customize the UIs appearance to other popular edits.",
+						set = function(info, value)
+							db.general.template = value
+							SetMyTheme()
+							StaticPopup_Show("RELOAD_UI")
+						end,
+						values = {
+							["Default"] = "Odine",
+							["Elv"] = "Elv",
+							["Tukui"] = "Tukui",
+						},						
 					},
 				},
 			},
@@ -907,6 +884,61 @@ function OUI.GenerateOptionsInternal()
 								desc = L["Controls how many debuffs are displayed.(player/target frames only)"],
 								type = "range",
 								min = 5, max = 9, step = 1,									
+							},
+						},
+					},
+					Colors = {
+						type = "group",
+						order = 7,
+						name = L["Color Options"],
+						guiInline = true,
+						disabled = function() return not db.unitframes.enable end,
+						args = {
+							unicolor = {
+								type = "toggle",
+								order = 1,
+								name = L["Unicolor Theme"],
+								desc = L["UNICOLOR_DESC"],
+								get = function() return db.unitframes.unicolor end,
+								set = function(info, value) db.unitframes.unicolor = value; StaticPopup_Show("RELOAD_UI") end,
+							},
+							empty5 = {
+								name = "   ",
+								width = "half",
+								type = "description",
+								order = 3,
+							},
+							healthColor = {
+								type = "color",
+								order = 5,
+								name = L["Healthbar Color"],
+								desc = L["HBAR_DESC"],
+								disabled = function() return not db.unitframes.unicolor end,
+								get = function(info)
+									local r, g, b = unpack(db.unitframes[ info[#info] ])
+									return r, g, b
+								end,
+								set = function(info, r, g, b)
+									StaticPopup_Show("RELOAD_UI")
+									db.unitframes[ info[#info] ] = {r, g, b}
+								end,
+								hasAlpha = false,
+							},
+							healthBgColor = {
+								type = "color",
+								order = 7,
+								name = L["Healthbar BG Color"],
+								desc = L["HBARBG_DESC"],
+								disabled = function() return not db.unitframes.unicolor end,
+								get = function(info)
+									local r, g, b = unpack(db.unitframes[ info[#info] ])
+									return r, g, b
+								end,
+								set = function(info, r, g, b)
+									StaticPopup_Show("RELOAD_UI")
+									db.unitframes[ info[#info] ] = {r, g, b}
+								end,
+								hasAlpha = false,
 							},
 						},
 					},
@@ -1586,9 +1618,23 @@ function OUI.GenerateOptionsInternal()
 						min = 100, max = 300, step = 1,
 						disabled = function() return not db.chat.enable end,
 					},
+					width = {
+						type = "range",
+						order = 8,
+						name = L["Width"],
+						desc = L["Choose the width of chat windows."],
+						min = 100, max = 500, step = 1,
+						disabled = function() return not db.chat.enable end,
+					},
+					emptyderp5444 = {
+						name = "   ",
+						width = "full",
+						type = "description",
+						order = 9,
+					},
 					combathide = {
 						type = "select",
-						order = 8,
+						order = 10,
 						name = L["Toggle Chat In Combat"],
 						desc = L["When you enter combat, the selected window will be hidden."],
 						values = {
@@ -1653,13 +1699,6 @@ function OUI.GenerateOptionsInternal()
 						width = "full",
 						type = "description",
 						order = 6,
-					},
-					whotarget = {
-						type = "toggle",
-						order = 5,
-						name = L["Who Target"],
-						desc = L["When enabled allows you to see who is targetting you while in a raid or party."],
-						disabled = function() return not db.tooltip.enable end,
 					},
 				},
 			},

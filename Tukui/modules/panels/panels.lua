@@ -8,6 +8,7 @@ f:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", T.mult, -T.mult)
 f:SetFrameStrata("BACKGROUND")
 f:SetFrameLevel(0)
 
+
 -- Bottom Data Panels
 local dbottom = CreateFrame("Frame", "TukuiDataBottom", UIParent)
 dbottom:CreatePanel("Default", (T.buttonsize * 12 + T.buttonspacing * 13) + 2, 23, "BOTTOM", UIParent, "BOTTOM", 0, T.Scale(8))

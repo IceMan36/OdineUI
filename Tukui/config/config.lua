@@ -5,6 +5,7 @@ DB["general"] = {
 	["uiscale"] = 0.71,                                 -- set your value (between 0.64 and 1) of your uiscale if autoscale is off
 	["overridelowtohigh"] = false,                      -- EXPERIMENTAL ONLY! override lower version to higher version on a lower reso.
 	["multisampleprotect"] = true,                      -- i don't recommend this because of shitty border but, voila!
+	["template"] = "Default",							-- sets default template, options are Elv, Default, Dajova
 }
 
 DB["media"] = {
@@ -29,7 +30,7 @@ DB["media"] = {
 
 	["bordercolor"] = { .05, .05, .05, 1 }, -- border color of tukui panels 
 	["backdropcolor"] = { .132, .132, .132, 1 }, -- background color of tukui panels
-	["backdropfadecolor"] = { .1, .1, .1, 0.9 }, -- same thing just different alpha
+	["backdropfadecolor"] = { .132, .132, .132, 0.9 }, -- same thing just different alpha
 	["altbordercolor"] = { .4, .4, .4 }, -- alternative border color, mainly for unitframes text panels.
 	
 	["txtcolor"] = { .09, .51, .81 },					-- derp shit
@@ -240,7 +241,6 @@ DB["tooltip"] = {
 	["hidebuttons"] = false,                            -- always hide action bar buttons tooltip.
 	["hideuf"] = false,                                 -- hide tooltip on unitframes
 	["cursor"] = false,                                 -- tooltip via cursor only
-	["whotarget"] = true,								-- show who is targeting you (raid/party only)
 }
 
 DB["merchant"] = {

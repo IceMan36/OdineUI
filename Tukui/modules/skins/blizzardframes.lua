@@ -1390,7 +1390,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	end
 	
 	--BarberShop
-	if addon == "Blizzard_BarbershopUI" and C["blizzskins"].extra == true then
+	if addon == "Blizzard_BarbershopUI" then
 		local buttons = {
 			"BarberShopFrameOkayButton",
 			"BarberShopFrameCancelButton",
@@ -1444,7 +1444,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	end
 	
 	--Macro Frame
-	if addon == "Blizzard_MacroUI" and C["blizzskins"].extra == true then
+	if addon == "Blizzard_MacroUI" then
 		SkinCloseButton(MacroFrameCloseButton)
 		
 		MacroFrame:Width(360)
@@ -1551,7 +1551,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 	end	
 	
-	if addon == "Blizzard_DebugTools" and C["blizzskins"].extra == true then
+	if addon == "Blizzard_DebugTools" then
 		local noscalemult = T.mult * C["general"].uiscale
 		local bg = {
 		  bgFile = C["media"].blank, 

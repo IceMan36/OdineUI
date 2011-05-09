@@ -22,6 +22,14 @@ T.mult = mult
 ---------------------------------------------------
 
 local function GetTemplate(t)
+
+	if t == "Transparent" then 
+		backdropa = 0.8
+	else 
+		backdropa = 1
+	end
+	local t = C["general"].template
+
 	if t == "Tukui" then
 		borderr, borderg, borderb = .6, .6, .6
 		backdropr, backdropg, backdropb = .1, .1, .1
@@ -30,13 +38,13 @@ local function GetTemplate(t)
 		borderr, borderg, borderb = c[1], c[2], c[3]
 		backdropr, backdropg, backdropb = unpack(C["media"].backdropcolor)
 	elseif t == "Elv" then
-		borderr, borderg, borderb = .3, .3, .3
-		backdropr, backdropg, backdropb = .1, .1, .1	
+		borderr, borderg, borderb = .23, .23, .23
+		backdropr, backdropg, backdropb = .07, .07, .07	
 	elseif t == "Duffed" then
 		borderr, borderg, borderb = .2, .2, .2
 		backdropr, backdropg, backdropb = .02, .02, .02
 	elseif t == "Dajova" then
-		borderr, borderg, borderb = .05, .05, .05
+		borderr, borderg, borderb = .3, .3, .3
 		backdropr, backdropg, backdropb = .1, .1, .1
 	elseif t == "Eclipse" then
 		borderr, borderg, borderb = .1, .1, .1
@@ -147,14 +155,6 @@ local function SetTemplate(f, t, tex)
 	  tile = false, tileSize = 0, edgeSize = mult, 
 	  insets = { left = -mult, right = -mult, top = -mult, bottom = -mult}
 	})
-	
-	if t == "Transparent" then 
-		backdropr, backdropg, backdropb, backdropa = unpack(C["media"].backdropfadecolor)
-		tex = false
-	else 
-		backdropr, backdropg, backdropb, backdropa = unpack(C["media"].backdropcolor)
-		tex = true
-	end
 	
 	f:SetBackdropColor(backdropr, backdropg, backdropb, backdropa)
 	f:SetBackdropBorderColor(borderr, borderg, borderb)
