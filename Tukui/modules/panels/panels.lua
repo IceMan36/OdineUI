@@ -187,6 +187,25 @@ if C["actionbar"].enable then
 	end
 end
 
+-- VIEWPORT ON TOP AND BOTTOM OF THE UI
+if C["misc"].viewport then
+	local height = T.buttonsize - 10
+
+	local tbar = CreateFrame("Frame", "TukuiVPTopBar", UIParent)
+	tbar:CreatePanel("Default", 1, 1, "TOP", UIParent, "TOP", 0, T.buttonspacing)
+	tbar:SetWidth(T.getscreenwidth + 4)
+	tbar:SetHeight(height+2)
+	tbar:SetFrameStrata("BACKGROUND")
+	tbar:SetFrameLevel(0)
+		
+	local bbar = CreateFrame("Frame", "TukuiVPBottomBar", UIParent)
+	bbar:CreatePanel("Default", 1, 1, "BOTTOM", UIParent, "BOTTOM", 0, -T.buttonspacing)
+	bbar:SetWidth(T.getscreenwidth + 4)
+	bbar:SetHeight(height+2)
+	bbar:SetFrameStrata("BACKGROUND")
+	bbar:SetFrameLevel(0)
+end
+
 --BATTLEGROUND STATS FRAME
 if C["datatext"].battleground == true then
 	local bgframe = CreateFrame("Frame", "TukuiInfoLeftBattleGround", UIParent)

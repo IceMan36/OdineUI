@@ -1561,10 +1561,10 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		}
 		
 		ScriptErrorsFrame:SetBackdrop(bg)
-		ScriptErrorsFrame:SetBackdropColor(unpack(C.media.backdropfadecolor))
+		ScriptErrorsFrame:SetBackdropColor(unpack(C.media.backdropcolor))
 		ScriptErrorsFrame:SetBackdropBorderColor(unpack(C.media.bordercolor))	
 
-		EventTraceFrame:SetTemplate("Transparent")
+		EventTraceFrame:SetTemplate("Default")
 		
 		local texs = {
 			"TopLeft",

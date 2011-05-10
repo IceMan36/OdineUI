@@ -4,6 +4,10 @@ V6.2 - [05/09/2011]
 * added option to customize width of chat windows (Work in progress report bugs in the forums please)
 * whotarget is no longer an option built in to tooltips directly now
 * fixed/adjusted some cosmetic things with the way template/panels are created
+* tweaked viewport option slightly
+* fixed bug when classcolor datatext was disabled chat tab color were not correct
+
+* adjusted chat width default by 1 pixel
 
 V6.1j - [05/08/2011]
 * updated blizzard ticket frame to function properly with new changes they made. now anchored into minimap as well!

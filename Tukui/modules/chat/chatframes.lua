@@ -83,7 +83,11 @@ local function SetChatStyle(frame)
 	end
 
 	local color = RAID_CLASS_COLORS[T.myclass]
-	_G[chat.."TabText"]:SetTextColor(color.r, color.g, color.b)
+	if C["datatext"].classcolor == true then
+		_G[chat.."TabText"]:SetTextColor(color.r, color.g, color.b)
+	else
+		_G[chat.."TabText"]:SetTextColor(unpack(C["datatext"].color))
+	end
 	_G[chat.."TabText"]:SetFont(C["media"].dfont, C["datatext"].fsize, "THINOUTLINE")
 	_G[chat.."TabText"]:SetShadowColor(0, 0, 0, 0.4)
 	_G[chat.."TabText"]:SetShadowOffset(T.mult, -T.mult)

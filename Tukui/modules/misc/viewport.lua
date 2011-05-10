@@ -3,8 +3,8 @@ local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, vari
 if C["misc"].viewport ~= true then return end
 	--roth's quake-like viewport mod
 	--config values
-	local mytop = 20 - 6
-	local mybottom = 20 - 6
+	local mytop = T.buttonsize - 18
+	local mybottom = T.buttonsize - 18
 	local myleft = 0
 	local myright = 0
 	local myscale = 1
@@ -18,6 +18,10 @@ if C["misc"].viewport ~= true then return end
 		WorldFrame.bg = t
 	end
 
+	--GLOBAL or LOCAL, you choose. If its global you can access it in the chat window.
+	--/run change_worldframe_setpoints(20,20,0,0,1)
+
+	--local function change_worldframe_setpoints(t,b,l,r,s)
 	function change_worldframe_setpoints(t,b,l,r,s)
 		WorldFrame:ClearAllPoints()
 		WorldFrame:SetPoint("LEFT", (l/s), 0)

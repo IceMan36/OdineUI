@@ -581,6 +581,7 @@ function OUI.GenerateOptionsInternal()
 							["Default"] = "Odine",
 							["Elv"] = "Elv",
 							["Tukui"] = "Tukui",
+							--["ClassColor"] = "ClassColor",
 						},						
 					},
 				},
@@ -2314,7 +2315,7 @@ function OUI.GenerateOptionsInternal()
 								local name_list = db.spellfilter[db.spellfilter.FilterPicker]
 								name_list[value] = true
 								UpdateSpellFilter()
-								E[name_list] = db.spellfilter[name_list]
+								T[name_list] = db.spellfilter[name_list]
 								
 								StaticPopup_Show("RELOAD_UI")
 							end
@@ -2392,7 +2393,7 @@ function OUI.GenerateOptionsInternal()
 								else
 									name_list[value] = nil
 									UpdateSpellFilter()
-									E[name_list] = db.spellfilter[name_list]
+									T[name_list] = db.spellfilter[name_list]
 									
 									if name_list == "RaidDebuffs" then
 										StaticPopup_Show("RELOAD_UI")
