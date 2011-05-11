@@ -145,19 +145,72 @@ local function CreateBorder(f, i, o)
 end
 
 local function SetTemplate(f, t, tex)
-	if tex then texture = C.media.panTex else texture = C.media.blank end
-
-	GetTemplate(t)
+	if C["general"].theme == "Elv" then
+		GetTemplate(t)
 		
-	f:SetBackdrop({
-	  bgFile = texture, 
-	  edgeFile = C["media"].blank, 
-	  tile = false, tileSize = 0, edgeSize = mult, 
-	  insets = { left = -mult, right = -mult, top = -mult, bottom = -mult}
-	})
-	
-	f:SetBackdropColor(backdropr, backdropg, backdropb, backdropa)
-	f:SetBackdropBorderColor(borderr, borderg, borderb)
+		f:SetBackdrop({
+		  bgFile = C["media"].blank, 
+		  edgeFile = C["media"].blank, 
+		  tile = false, tileSize = 0, edgeSize = T.mult, 
+		  insets = { left = -T.mult, right = -T.mult, top = -T.mult, bottom = -T.mult}
+		})
+
+		if texture and not f.tex then
+			f:SetBackdropColor(0, 0, 0, backdropa)
+			
+			local tex = f:CreateTexture(nil, "BORDER")
+			tex:Point("TOPLEFT", f, "TOPLEFT", 2, -2)
+			tex:Point("BOTTOMRIGHT", f, "BOTTOMRIGHT", -2, 2)
+			tex:SetTexture(C["media"].glossTex)
+			tex:SetVertexColor(backdropr, backdropg, backdropb)
+			tex:SetDrawLayer("BORDER", -8)
+			tex:SetAlpha(backdropa)
+			f.tex = tex
+		else
+			f:SetBackdropColor(backdropr, backdropg, backdropb, backdropa)
+			
+			if not f.oborder and not f.iborder then
+				local border = CreateFrame("Frame", nil, f)
+				border:Point("TOPLEFT", T.mult, -T.mult)
+				border:Point("BOTTOMRIGHT", -T.mult, T.mult)
+				border:SetBackdrop({
+					edgeFile = C["media"].blank, 
+					edgeSize = T.mult, 
+					insets = { left = T.mult, right = T.mult, top = T.mult, bottom = T.mult }
+				})
+				border:SetBackdropBorderColor(0, 0, 0, 1)
+				f.iborder = border
+				
+				if f.oborder then return end
+				local border = CreateFrame("Frame", nil, f)
+				border:Point("TOPLEFT", -T.mult, T.mult)
+				border:Point("BOTTOMRIGHT", T.mult, -T.mult)
+				border:SetFrameLevel(f:GetFrameLevel() + 1)
+				border:SetBackdrop({
+					edgeFile = C["media"].blank, 
+					edgeSize = T.mult, 
+					insets = { left = T.mult, right = T.mult, top = T.mult, bottom = T.mult }
+				})
+				border:SetBackdropBorderColor(0, 0, 0, 1)
+				f.oborder = border				
+			end
+		end
+		f:SetBackdropBorderColor(borderr, borderg, borderb)
+	else
+		if tex then texture = C.media.panTex else texture = C.media.blank end
+
+		GetTemplate(t)
+			
+		f:SetBackdrop({
+		  bgFile = texture, 
+		  edgeFile = C["media"].blank, 
+		  tile = false, tileSize = 0, edgeSize = mult, 
+		  insets = { left = -mult, right = -mult, top = -mult, bottom = -mult}
+		})
+		
+		f:SetBackdropColor(backdropr, backdropg, backdropb, backdropa)
+		f:SetBackdropBorderColor(borderr, borderg, borderb)
+	end
 end
 
 local function CreatePanel(f, t, w, h, a1, p, a2, x, y)
@@ -170,7 +223,10 @@ local function CreatePanel(f, t, w, h, a1, p, a2, x, y)
 		backdropr, backdropg, backdropb, backdropa = unpack(C["media"].backdropcolor)
 		tex = true
 	end
-	if tex then texture = C.media.panTex else texture = C.media.blank end
+	
+	if C["general"].theme ~= "Elv" then
+		if tex then texture = C.media.panTex else texture = C.media.blank end
+	end
 	
 	local sh = Scale(h)
 	local sw = Scale(w)

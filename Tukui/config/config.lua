@@ -19,6 +19,7 @@ DB["media"] = {
 	-- textures
 	["normTex"] = "Tukui Norm",
 	["glowTex"] = "Tukui Glow",
+	["glossTex"] = "Tukui Glossy",
 	["blank"] = "Tukui Blank",
 	
 	["hTex"] = [[Interface\AddOns\Tukui\medias\textures\Glamour2]], -- texture used for health bars
