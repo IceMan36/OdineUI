@@ -8,8 +8,10 @@ V6.2 - [05/09/2011]
 * fixed bug when classcolor datatext was disabled chat tab color were not correct
 * added arrows into skinned talent frame, and skinned blizzard help window
 * tweaks to theme option recently added. should better resemble other edits/default tukui now
-
 * adjusted chat width default by 1 pixel
+
+KNOWN BUGS:
+* Right actionbars set to horizontal but hidden tooltip is not anchored in the right spot at all!
 
 V6.1j - [05/08/2011]
 * updated blizzard ticket frame to function properly with new changes they made. now anchored into minimap as well!

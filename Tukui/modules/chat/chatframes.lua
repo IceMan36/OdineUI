@@ -224,6 +224,7 @@ local function SetupChat(self)
 		local frame = _G[format("ChatFrame%s", i)]
 		SetChatStyle(frame)
 		FCFTab_UpdateAlpha(frame)
+		_G["ChatFrame"..i]:SetFont(C["media"].cfont, C["chat"].fsize, "NONE")
 	end
 
 	-- Remember last channel
