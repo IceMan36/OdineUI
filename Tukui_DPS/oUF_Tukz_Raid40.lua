@@ -44,7 +44,7 @@ local function Shared(self, unit)
 		health.Smooth = true
 	end
 
-	if C["unitframes"].unicolor == true then
+	if C["general"].template ~= "ClassColor" then
 		health.colorDisconnected = false
 		health.colorClass = false
 		health:SetStatusBarColor(unpack(C["unitframes"].healthColor))
@@ -61,7 +61,7 @@ local function Shared(self, unit)
 	name:SetFont(C["media"].uffont, 14, "OUTLINE")
 	name:Point("CENTER", health, "CENTER", 0, 1)
 	name:SetWidth(40)
-	if C["unitframes"].unicolor then
+	if C["general"].template ~= "ClassColor" then
 		self:Tag(name, '[Tukui:getnamecolor][Tukui:name_short][Tukui:dead][Tukui:afk]')
 	else
 		self:Tag(name, '[Tukui:name_short][Tukui:dead][Tukui:afk]')

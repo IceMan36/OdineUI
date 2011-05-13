@@ -190,7 +190,7 @@ local function CreateAuraHeader(filter, ...)
 		header:HookScript("OnUpdate", CheckWeapons)
 	end
 	
-	header:SetTemplate("Default")
+	header:SetTemplate("Default", true)
 	header:SetBackdropColor(0,0,0,0)
 	header:SetBackdropBorderColor(0,0,0,0)
 	header:Show()

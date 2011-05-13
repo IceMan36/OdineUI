@@ -16,8 +16,14 @@ Kill:SetScript("OnEvent", function(self, event, addon)
 			InterfaceOptionsFrameCategoriesButton11:SetAlpha(0)
 			CompactRaidFrameManager:Kill()
 			CompactRaidFrameContainer:Kill()
-		end	
+		end
+		
+		if T.myclass == "DEATHKNIGHT" then
+			RuneFrame:Kill()
+		end
+		
 	else
+	
 		if addon == "Blizzard_AchievementUI" then
 			if C.tooltip.enable then
 				hooksecurefunc("AchievementFrameCategories_DisplayButton", function(button) button.showTooltipFunc = nil end)
@@ -25,6 +31,9 @@ Kill:SetScript("OnEvent", function(self, event, addon)
 		end
 		
 		if addon ~= "Tukui" then return end
+		
+		GuildChallengeAlertFrame:Kill()
+		
 		StreamingIcon:Kill()
 		Advanced_UseUIScale:Kill()
 		Advanced_UIScaleSlider:Kill()

@@ -248,7 +248,7 @@ healthBarBG:SetFrameLevel(healthBar:GetFrameLevel() - 1)
 healthBarBG:Point("TOPLEFT", -2, 2)
 healthBarBG:Point("BOTTOMRIGHT", 2, -2)
 healthBarBG:SetTemplate("Default", true)
-healthBarBG:CreateShadow("Default")
+--healthBarBG:CreateShadow("Default")
 
 -- Add "Targeted By" line
 local targetedList = {}
@@ -421,7 +421,7 @@ end
 
 local SetStyle = function(self)
 	self:SetTemplate("Default", true)
-	self:CreateShadow("Default")
+	--self:CreateShadow("Default")
 	BorderColor(self)
 end
 
@@ -434,7 +434,7 @@ TukuiTooltip:SetScript("OnEvent", function(self)
 	ItemRefTooltip:HookScript("OnTooltipSetItem", SetStyle)
 	ItemRefTooltip:HookScript("OnShow", SetStyle)	
 	FriendsTooltip:SetTemplate("Default", true)
-	FriendsTooltip:CreateShadow("Default")
+	--FriendsTooltip:CreateShadow("Default")
 
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	self:SetScript("OnEvent", nil)

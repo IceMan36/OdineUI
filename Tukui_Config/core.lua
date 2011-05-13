@@ -500,22 +500,6 @@ function OUI.GenerateOptionsInternal()
 		
 		collectgarbage("collect")
 	end
-	
-	local function SetMyTheme()
-		if db.general.template == "Default" then
-			db.media.bordercolor = { .05, .05, .05, 1 }
-			db.media.backdropcolor = { .132, .132, .132, 1 }
-			db.media.backdropfadecolor = { .132, .132, .132, .09 }
-		elseif db.general.template == "Elv" then
-			db.media.bordercolor = { .23, .23, .23, 1 }
-			db.media.backdropcolor = { .07, .07, .07, 1 }
-			db.media.backdropfadecolor = { .07, .07, .07, .09 }
-		elseif db.general.template == "Tukui" then
-			db.media.bordercolor = { .6, .6, .6, 1 }
-			db.media.backdropcolor = { .1, .1, .1, 1 }
-			db.media.backdropfadecolor = { .1, .1, .1, .09 }
-		end
-	end
 
 	OUI.Options = {
 		type = "group",
@@ -567,22 +551,36 @@ function OUI.GenerateOptionsInternal()
 						type = "description",
 						order = 7,
 					},
+					emptygasd25 = {
+						name = "   ",
+						width = "full",
+						type = "description",
+						order = 7.5,
+					},
 					template = {
 						order = 8,
 						type = "select",
 						name = "Theme",
-						desc = "Allows you to customize the UIs appearance to other popular edits.",
-						set = function(info, value)
-							db.general.template = value
-							SetMyTheme()
-							StaticPopup_Show("RELOAD_UI")
-						end,
+						desc = "Allows you to customize the UIs overall appearance (This will change other settings in the process.)",
 						values = {
 							["Default"] = "Odine",
 							["Elv"] = "Elv",
-							["Tukui"] = "Tukui",
-							--["ClassColor"] = "ClassColor",
+							--["Tukui"] = "Tukui",
+							["ClassColor"] = "ClassColor",
+							--["Dajova"] = "Dajova",
 						},						
+					},
+					emptyg25asd = {
+						name = "   ",
+						width = "full",
+						type = "description",
+						order = 9,
+					},
+					sharpborders = {
+						order = 10,
+						name = "Sharp Borders",
+						desc = "Enable sharper borders around UI panels.",
+						type = "toggle",
 					},
 				},
 			},
@@ -895,26 +893,11 @@ function OUI.GenerateOptionsInternal()
 						guiInline = true,
 						disabled = function() return not db.unitframes.enable end,
 						args = {
-							unicolor = {
-								type = "toggle",
-								order = 1,
-								name = L["Unicolor Theme"],
-								desc = L["UNICOLOR_DESC"],
-								get = function() return db.unitframes.unicolor end,
-								set = function(info, value) db.unitframes.unicolor = value; StaticPopup_Show("RELOAD_UI") end,
-							},
-							empty5 = {
-								name = "   ",
-								width = "half",
-								type = "description",
-								order = 3,
-							},
 							healthColor = {
 								type = "color",
 								order = 5,
 								name = L["Healthbar Color"],
 								desc = L["HBAR_DESC"],
-								disabled = function() return not db.unitframes.unicolor end,
 								get = function(info)
 									local r, g, b = unpack(db.unitframes[ info[#info] ])
 									return r, g, b
@@ -924,13 +907,13 @@ function OUI.GenerateOptionsInternal()
 									db.unitframes[ info[#info] ] = {r, g, b}
 								end,
 								hasAlpha = false,
+								disabled = function() return db.general.template == "ClassColor" end,
 							},
 							healthBgColor = {
 								type = "color",
 								order = 7,
 								name = L["Healthbar BG Color"],
 								desc = L["HBARBG_DESC"],
-								disabled = function() return not db.unitframes.unicolor end,
 								get = function(info)
 									local r, g, b = unpack(db.unitframes[ info[#info] ])
 									return r, g, b
@@ -940,6 +923,7 @@ function OUI.GenerateOptionsInternal()
 									db.unitframes[ info[#info] ] = {r, g, b}
 								end,
 								hasAlpha = false,
+								disabled = function() return db.general.template == "ClassColor" end,
 							},
 						},
 					},

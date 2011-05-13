@@ -147,7 +147,7 @@ local function Shared(self, unit)
 			power.Smooth = true
 		end
 		
-		if C["unitframes"].unicolor == true then			
+		if C["general"].template ~= "ClassColor" then
 			health.colorTapping = false
 			health.colorDisconnected = false
 			health.colorClass = false
@@ -867,7 +867,7 @@ local function Shared(self, unit)
 			health.Smooth = true
 		end
 		
-		if C["unitframes"].unicolor == true then
+		if C["general"].template ~= "ClassColor" then
 			health.colorTapping = false
 			health.colorDisconnected = false
 			health.colorClass = false
@@ -1053,7 +1053,7 @@ local function Shared(self, unit)
 			power.Smooth = true
 		end
 		
-		if C["unitframes"].unicolor == true then
+		if C["general"].template ~= "ClassColor" then
 			health.colorTapping = false
 			health.colorDisconnected = false
 			health.colorClass = false

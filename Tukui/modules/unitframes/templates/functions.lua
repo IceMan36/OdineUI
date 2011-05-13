@@ -154,9 +154,7 @@ T.PostUpdateHealth = function(health, unit, min, max)
 	else
 		local r, g, b
 		
-		-- overwrite healthbar color for enemy player (a tukui option if enabled), target vehicle/pet too far away returning unitreaction nil and friend unit not a player. (mostly for overwrite tapped for friendly)
-		-- I don't know if we really need to call C["unitframes"].unicolor but anyway, it's safe this way.
-		if (C["unitframes"].unicolor ~= true and C["unitframes"].enemyhcolor and unit == "target" and UnitIsEnemy(unit, "player") and UnitIsPlayer(unit)) or (C["unitframes"].unicolor ~= true and unit == "target" and not UnitIsPlayer(unit) and UnitIsFriend(unit, "player")) then
+		if (C["general"].template == "ClassColor" and C["unitframes"].enemyhcolor and unit == "target" and UnitIsEnemy(unit, "player") and UnitIsPlayer(unit)) or (C["general"].template == "ClassColor" and unit == "target" and not UnitIsPlayer(unit) and UnitIsFriend(unit, "player")) then
 			local c = T.oUF_colors.reaction[UnitReaction(unit, "player")]
 			if c then 
 				r, g, b = c[1], c[2], c[3]
@@ -166,7 +164,7 @@ T.PostUpdateHealth = function(health, unit, min, max)
 				-- this should fix color not updating for vehicle/pet too far away from yourself.
 				r, g, b = 75/255,  175/255, 76/255
 				health:SetStatusBarColor(r, g, b)
-			end					
+			end
 		end
 
 		if min ~= max then
@@ -213,7 +211,7 @@ T.PostUpdateHealthRaid = function(health, unit, min, max)
 	else
 		-- doing this here to force friendly unit (vehicle or pet) very far away from you to update color correcly
 		-- because if vehicle or pet is too far away, unitreaction return nil and color of health bar is white.
-		if not UnitIsPlayer(unit) and UnitIsFriend(unit, "player") and C["unitframes"].unicolor ~= true then
+		if not UnitIsPlayer(unit) and UnitIsFriend(unit, "player") and C["general"].template == "ClassColor" then
 			local c = T.oUF_colors.reaction[5]
 			local r, g, b = c[1], c[2], c[3]
 			health:SetStatusBarColor(r, g, b)
@@ -231,7 +229,7 @@ end
 T.PostUpdatePetColor = function(health, unit, min, max)
 	-- doing this here to force friendly unit (vehicle or pet) very far away from you to update color correcly
 	-- because if vehicle or pet is too far away, unitreaction return nil and color of health bar is white.
-	if not UnitIsPlayer(unit) and UnitIsFriend(unit, "player") and C["unitframes"].unicolor ~= true then
+	if not UnitIsPlayer(unit) and UnitIsFriend(unit, "player") and C["general"].template == "ClassColor" then
 		local c = T.oUF_colors.reaction[5]
 		local r, g, b = c[1], c[2], c[3]
 

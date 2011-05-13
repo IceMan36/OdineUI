@@ -1,4 +1,4 @@
-V6.2 - [05/09/2011]
+V6.2 - [05/13/2011]
 * added option to change templates ingame config. This allows for people to change the overall look n feel to those of other popular edits out there (default tukui, dajova, eclipse, etc)
 * added support for blizzard timer bars
 * added option to customize width of chat windows (Work in progress report bugs in the forums please)
@@ -9,6 +9,8 @@ V6.2 - [05/09/2011]
 * added arrows into skinned talent frame, and skinned blizzard help window
 * tweaks to theme option recently added. should better resemble other edits/default tukui now
 * adjusted chat width default by 1 pixel
+* added more skkinning support, updated theme code, unicolor option removed and moved to theme section
+* cleaned up ALOT of api code for themes and panel creation. should be smoother and function better now!
 
 KNOWN BUGS:
 * Right actionbars set to horizontal but hidden tooltip is not anchored in the right spot at all!

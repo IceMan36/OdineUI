@@ -5,7 +5,8 @@ DB["general"] = {
 	["uiscale"] = 0.71,                                 -- set your value (between 0.64 and 1) of your uiscale if autoscale is off
 	["overridelowtohigh"] = false,                      -- EXPERIMENTAL ONLY! override lower version to higher version on a lower reso.
 	["multisampleprotect"] = true,                      -- i don't recommend this because of shitty border but, voila!
-	["template"] = "Default",							-- sets default template, options are Elv, Default, Dajova
+	["template"] = "Default",							-- customize the overall UI look and feel
+	["sharpborders"] = true,
 }
 
 DB["media"] = {
@@ -29,10 +30,11 @@ DB["media"] = {
 	["copyicon"] = [[Interface\AddOns\Tukui\medias\textures\copy]], -- copy icon
 	["buttonhover"] = [[Interface\AddOns\Tukui\medias\textures\button_hover]],
 
-	["bordercolor"] = { .05, .05, .05, 1 }, -- border color of tukui panels 
-	["backdropcolor"] = { .132, .132, .132, 1 }, -- background color of tukui panels
-	["backdropfadecolor"] = { .132, .132, .132, 0.9 }, -- same thing just different alpha
+	["bordercolor"] = { .05, .05, .05, 1 }, -- border color of tukui panels
 	["altbordercolor"] = { .4, .4, .4 }, -- alternative border color, mainly for unitframes text panels.
+
+	["backdropcolor"] = { .07, .07, .07, 1 }, -- background color of Elvui panels
+	["backdropfadecolor"] = { .07, .07, .07, 0.9 }, --this is always the same as the backdrop color with an alpha of 0.8, see colors.lua
 	
 	["txtcolor"] = { .09, .51, .81 },					-- derp shit
 	
@@ -47,9 +49,8 @@ DB["unitframes"] = {
 	
 	-- Colors
 	["enemyhcolor"] = false,                            -- enemy target (players) color by hostility, very useful for healer.
-	["unicolor"] = true,                               -- enable unicolor theme
-		["healthColor"] = { .1, .1, .1 },
-		["healthBgColor"] = { .7, .1, .1 },
+	["healthColor"] = { .1, .1, .1 },					-- option only works if theme is NOT set to classcolor
+	["healthBgColor"] = { .7, .1, .1 },					-- see above derp
 	
 	-- Castbar
 	["unitcastbar"] = true,                          	-- enable tukui castbar
@@ -129,6 +130,13 @@ DB["unitframes"] = {
 	
 	-- class bar
 	["classbar"] = true,                                -- enable tukui classbar over player unit, false disables all classes
+	
+	--[[["gradienthealth"] = true,                          -- change raid health color based on health percent.
+	["gradient"] = {                                    -- health gradient color if unicolor is true.
+		1.0, 0.3, 0.3, -- R, G, B (low HP)
+		0.6, 0.3, 0.3, -- R, G, B (medium HP)
+		0.3, 0.3, 0.3, -- R, G, B (high HP)
+	},--]]
 }
 
 DB["arena"] = {

@@ -45,7 +45,7 @@ local function Shared(self, unit)
 		health.Smooth = true
 	end
 
-	if C["unitframes"].unicolor == true then
+	if C["general"].template ~= "ClassColor" then
 		health.colorDisconnected = false
 		health.colorClass = false
 		health:SetStatusBarColor(unpack(C["unitframes"].healthColor))
@@ -88,7 +88,7 @@ local function Shared(self, unit)
 			power.Smooth = true
 		end
 
-		if C["unitframes"].unicolor == true then
+		if C["general"].template ~= "ClassColor" then
 			power.colorClass = true
 		else
 			power.colorPower = true		
