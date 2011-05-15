@@ -7,7 +7,7 @@
 ## Title: |cffC495DDTukui|r
 ## Notes: UI of awesomeness!
 ## SavedVariables: TukuiData
-## SavedVariablesPerCharacter: TukuiDataPerChar, TukuiSaved
+## SavedVariablesPerCharacter: TukuiUFpos, TukuiSaved
 ## OptionalDeps: Tukui_Config, !ClassColors, Clique, Skada, Recount, Omen, KLE, Skada, DBM-Core, LibSharedMedia-3.0, SharedMedia, SharedMediaAdditionalFonts, TinyDPS, ACP
 ## X-oUF: oUFTukui
 

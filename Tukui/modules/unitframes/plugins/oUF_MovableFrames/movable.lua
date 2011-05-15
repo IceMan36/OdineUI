@@ -298,9 +298,8 @@ do
 
 	function frame:VARIABLES_LOADED()
 		-- I honestly don't trust the load order of SVs.
-		if (TukuiDataPerChar == nil) then TukuiDataPerChar = {} end
-		_DB = TukuiDataPerChar.ufpos or {}
-		TukuiDataPerChar.ufpos = _DB
+		_DB = ElvuiUFpos or {}
+		TukuiUFpos = _DB
 		
 		-- Got to catch them all!
 		for _, obj in next, oUF.objects do
@@ -382,16 +381,9 @@ do
 end
 
 -- reset data
-local function RESETUF()
-	if C["unitframes"].positionbychar == true then
-		TukuiUFpos = {}
-	else
-		TukuiData.ufpos = {}
-	end
-	ReloadUI()
+function T.ResetUF()
+	TukuiUFpos = {}
 end
-SLASH_RESETUF1 = "/resetuf"
-SlashCmdList["RESETUF"] = RESETUF
 
 T.MoveUnitFrames = function(inp)
 	if(InCombatLockdown()) then

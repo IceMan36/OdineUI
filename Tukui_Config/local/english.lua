@@ -28,8 +28,10 @@ L["General Settings"] = true
 		L["GEN_SCALE"] = "Manualy adjust the scale of your UI"
 	L["Multisample Protection"] = true
 		L["GEN_SAMPLE"] = "Force the Blizzard Multisample Option to be set to 1x. WARNING: Turning this off will lead to blurry borders"
-	L["Override LOW -> HIGH"] = true
-		L["OVERRIDE_DESC"] = "This is EXPERIMENTAL! Override lower version to higher version on a lower reso setup!"
+	L["Resolution Override"] = true
+		L["OVERRIDE_DESC"] = "Set a resolution version to use. By default any screensize > 1440 is considered a High resolution. This effects actionbar/unitframe layouts. If set to None, then it will be automatically determined by your screen size"
+			L["Low"] = true
+			L["High"] = true
 	L["Color Options"] = true
 	L["Unicolor Theme"] = true
 		L["UNICOLOR_DESC"] = "When checked allows you to choose health and bg colors below, unchecked will use class colors"
@@ -37,6 +39,8 @@ L["General Settings"] = true
 		L["HBAR_DESC"] = "Allows you to select a custom color for health bars"
 	L["Healthbar BG Color"] = true
 		L["HBARBG_DESC"] = "Allows you to select a custom color for health bars BG"
+	L["Transparency"] = true
+		L["TRANS_DESC"] = "Adjusts the transparency of transparent windows. (Setting to 1 disables this function)"
 	
 		
 -- Unit Frames
@@ -274,6 +278,8 @@ L["Border Color"] = true
 	L["BCOLOR_DESC"] = "Main Frame's Border Color"
 L["Backdrop Color"] = true
 	L["BDROP_DESC"] = "Main Frame's Backdrop Color"
+L["Backdrop Fade Color"] = true
+	L["BDROPFADE_DESC"] = "Main Frame's that use Transparency."
 L["Alt Border Color"] = true
 	L["ABDROP_DESC"] = "Main Frame's Alternate Border Color"
 	
@@ -334,3 +340,17 @@ L["Friendly"] = true
 L["Enemy"] = true
 L["Fill only if you want to see line on bar that indicates if its safe to start casting spell and not clip the last tick, also note that this can be different from aura id."] = true
 L["To disable set to zero, otherwise set to the amount of times the spell ticks in a cast"] = true
+
+L["Filter whether or not a nameplate is shown by the name of the nameplate"] = true
+	L["Filter the buffs that get displayed on arena units."] = true
+	L["Set buffs that will never get displayed."] = true
+	L["These debuffs will always get displayed on the Target Frame, Arena Frames, and Nameplates."] = true
+	L["These debuffs only get displayed on the target unit when the unit happens to be an enemy player."] = true
+	L["These debuffs will be displayed on your raid frames in addition to any debuff that is dispellable."] = true
+	L["These buffs are displayed on the healer raid and party layouts"] = true
+	L["These buffs are displayed on the DPS raid and party layouts"] = true
+	L["These buffs are displayed on the pet frame"] = true
+	L["These buffs are displayed no matter your class you must have a layout enabled that uses trinkets however for them to show"] = true
+	L["These buffs/debuffs are displayed as a classtimer, where they get positioned is based on your layout option choice"] = true
+	L["These spells when cast will display tick marks on the castbar"] = true
+	L["Filter the error messages that are never displayed."] = true

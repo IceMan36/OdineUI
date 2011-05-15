@@ -1,3 +1,17 @@
+V6.2.3 - [05/15/2011]
+* updated to Tukz new configuration style. (everyone needs to do config again sorry)
+* more commands to reset certain aspect of the UI instead of being forced to reset it all or nothing
+* vehicle exist button was overlapping actionbar
+* when entering a vehicle ui aspect was being hidden unless pressing escape
+* changed the way UI resolution override function works (may help some lower res users?)
+* added option to change fadedbackdropcolor (transparent windows) in media section
+* slighly adjust chat window settings
+
+BUGS/KNOWN ISSUES:
+* actionbar "movement functionality" is crap. I have been working on this no worries!
+* tooltip anchor isnt correct in some situations.
+
+
 V6.2 - [05/13/2011]
 * added option to change templates ingame config. This allows for people to change the overall look n feel to those of other popular edits out there (default tukui, dajova, eclipse, etc)
 * added support for blizzard timer bars

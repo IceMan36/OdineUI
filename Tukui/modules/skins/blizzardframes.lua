@@ -199,6 +199,164 @@ TukuiSkin:RegisterEvent("ADDON_LOADED")
 TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	if IsAddOnLoaded("Skinner") or IsAddOnLoaded("Aurora") then return end
 	
+	-- LF guild UI
+	if addon == "Blizzard_LookingForGuildUI" then
+		local checkbox = {
+			"LookingForGuildPvPButton",
+			"LookingForGuildWeekendsButton",
+			"LookingForGuildWeekdaysButton",
+			"LookingForGuildRPButton",
+			"LookingForGuildRaidButton",
+			"LookingForGuildQuestButton",
+			"LookingForGuildDungeonButton",
+		}
+		-- skin checkboxes
+		for _, v in pairs(checkbox) do
+			SkinCheckBox(_G[v])
+		end
+		
+	
+		-- have to skin these checkboxes seperate for some reason o_O
+		SkinCheckBox(LookingForGuildTankButton.checkButton)
+		SkinCheckBox(LookingForGuildHealerButton.checkButton)
+		SkinCheckBox(LookingForGuildDamagerButton.checkButton)
+		
+		-- skinning other frames
+		LookingForGuildFrameInset:StripTextures(false)
+		LookingForGuildFrame:StripTextures()
+		LookingForGuildFrame:SetTemplate("Default")
+		LookingForGuildBrowseButton_LeftSeparator:Kill()
+		LookingForGuildRequestButton_RightSeparator:Kill()
+		SkinScrollBar(LookingForGuildBrowseFrameContainerScrollBar)
+		SkinButton(LookingForGuildBrowseButton)
+		SkinButton(LookingForGuildRequestButton)
+		SkinCloseButton(LookingForGuildFrameCloseButton)
+		LookingForGuildCommentInputFrame:CreateBackdrop("Default")
+		LookingForGuildCommentInputFrame:StripTextures(false)
+		
+		-- skin container buttons on browse and request page
+		for i = 1, 4 do
+			local b = _G["LookingForGuildBrowseFrameContainerButton"..i]
+			local t = _G["LookingForGuildAppsFrameContainerButton"..i]
+			SkinButton(b, true)
+			SkinButton(t, true)
+		end
+		
+		-- skin tabs
+		for i= 1, 3 do
+			SkinTab(_G["LookingForGuildFrameTab"..i])
+		end
+		
+	end	
+	
+	--Inspect Frame
+	if addon == "Blizzard_InspectUI" then
+		InspectFrame:StripTextures(true)
+		InspectFrameInset:StripTextures(true)
+		InspectTalentFramePointsBar:StripTextures()
+		InspectFrame:CreateBackdrop("Transparent")
+		InspectFrame.backdrop:SetAllPoints()
+		SkinCloseButton(InspectFrameCloseButton)
+		
+		for i=1, 4 do
+			SkinTab(_G["InspectFrameTab"..i])
+		end
+		
+		InspectModelFrameBorderTopLeft:Kill()
+		InspectModelFrameBorderTopRight:Kill()
+		InspectModelFrameBorderTop:Kill()
+		InspectModelFrameBorderLeft:Kill()
+		InspectModelFrameBorderRight:Kill()
+		InspectModelFrameBorderBottomLeft:Kill()
+		InspectModelFrameBorderBottomRight:Kill()
+		InspectModelFrameBorderBottom:Kill()
+		InspectModelFrameBorderBottom2:Kill()
+		InspectModelFrameBackgroundOverlay:Kill()
+		InspectModelFrame:CreateBackdrop("Default")
+		
+			local slots = {
+				"HeadSlot",
+				"NeckSlot",
+				"ShoulderSlot",
+				"BackSlot",
+				"ChestSlot",
+				"ShirtSlot",
+				"TabardSlot",
+				"WristSlot",
+				"HandsSlot",
+				"WaistSlot",
+				"LegsSlot",
+				"FeetSlot",
+				"Finger0Slot",
+				"Finger1Slot",
+				"Trinket0Slot",
+				"Trinket1Slot",
+				"MainHandSlot",
+				"SecondaryHandSlot",
+				"RangedSlot",
+			}
+			for _, slot in pairs(slots) do
+				local icon = _G["Inspect"..slot.."IconTexture"]
+				local slot = _G["Inspect"..slot]
+				slot:StripTextures()
+				slot:StyleButton(false)
+				icon:SetTexCoord(.08, .92, .08, .92)
+				icon:ClearAllPoints()
+				icon:Point("TOPLEFT", 2, -2)
+				icon:Point("BOTTOMRIGHT", -2, 2)
+				
+				slot:SetFrameLevel(slot:GetFrameLevel() + 2)
+				slot:CreateBackdrop("Default")
+				slot.backdrop:SetAllPoints()
+			end		
+		
+		SkinRotateButton(InspectModelFrameRotateLeftButton)
+		SkinRotateButton(InspectModelFrameRotateRightButton)
+		InspectModelFrameRotateRightButton:Point("TOPLEFT", InspectModelFrameRotateLeftButton, "TOPRIGHT", 3, 0)
+		
+		InspectPVPFrameBottom:Kill()
+		InspectGuildFrameBG:Kill()
+		InspectPVPFrame:HookScript("OnShow", function() InspectPVPFrameBG:Kill() end)
+		
+		for i=1, 3 do
+			_G["InspectPVPTeam"..i]:StripTextures()
+			_G["InspectTalentFrameTab"..i]:StripTextures()
+		end
+		
+		InspectTalentFrame.bg = CreateFrame("Frame", nil, InspectTalentFrame)
+		InspectTalentFrame.bg:SetTemplate("Default")
+		InspectTalentFrame.bg:Point("TOPLEFT", InspectTalentFrameBackgroundTopLeft, "TOPLEFT", -2, 2)
+		InspectTalentFrame.bg:Point("BOTTOMRIGHT", InspectTalentFrameBackgroundBottomRight, "BOTTOMRIGHT", -20, 52)
+		InspectTalentFrame.bg:SetFrameLevel(InspectTalentFrame.bg:GetFrameLevel() - 2)
+		
+		for i = 1, MAX_NUM_TALENTS do
+			local button = _G["InspectTalentFrameTalent"..i]
+			local icon = _G["InspectTalentFrameTalent"..i.."IconTexture"]
+			if button then
+				button:StripTextures()
+				button:StyleButton()
+				button:SetTemplate("Default")
+				button.SetHighlightTexture = T.dummy
+				button.SetPushedTexture = T.dummy
+				button:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+				button:GetPushedTexture():SetTexCoord(.08, .92, .08, .92)
+				button:GetHighlightTexture():SetAllPoints(icon)
+				button:GetPushedTexture():SetAllPoints(icon)
+				
+				if button.Rank then
+					button.Rank:SetFont(FONT, 12, FONTFLAG)
+					button.Rank:ClearAllPoints()
+					button.Rank:SetPoint("BOTTOMRIGHT")
+				end		
+				
+				icon:ClearAllPoints()
+				icon:Point("TOPLEFT", 2, -2)
+				icon:Point("BOTTOMRIGHT", -2, 2)
+				icon:SetTexCoord(.08, .92, .08, .92)
+			end
+		end		
+	end
+	
 	--Keybinds
 	if addon == "Blizzard_BindingUI" then
 		local buttons = {

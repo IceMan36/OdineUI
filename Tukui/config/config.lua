@@ -3,7 +3,8 @@
 DB["general"] = {
 	["autoscale"] = true,                               -- mainly enabled for users that don't want to mess with the config file
 	["uiscale"] = 0.71,                                 -- set your value (between 0.64 and 1) of your uiscale if autoscale is off
-	["overridelowtohigh"] = false,                      -- EXPERIMENTAL ONLY! override lower version to higher version on a lower reso.
+	["fontscale"] = 12,									-- global font scale most aspect of the ui (UNFINISHED)m
+	["overridelowtohigh"] = "NONE",                      -- EXPERIMENTAL ONLY! override lower version to higher version on a lower reso.
 	["multisampleprotect"] = true,                      -- i don't recommend this because of shitty border but, voila!
 	["template"] = "Default",							-- customize the overall UI look and feel
 	["sharpborders"] = true,
@@ -34,7 +35,8 @@ DB["media"] = {
 	["altbordercolor"] = { .4, .4, .4 }, -- alternative border color, mainly for unitframes text panels.
 
 	["backdropcolor"] = { .07, .07, .07, 1 }, -- background color of Elvui panels
-	["backdropfadecolor"] = { .07, .07, .07, 0.9 }, --this is always the same as the backdrop color with an alpha of 0.8, see colors.lua
+	["backdropfadecolor"] = { .07, .07, .07, 0.9 }, --this is always the same as the backdrop color with an alpha of 0.9, see colors.lua
+	
 	
 	["txtcolor"] = { .09, .51, .81 },					-- derp shit
 	
@@ -217,6 +219,7 @@ DB["misc"] = {
 	["announceint"] = true,								-- announce your interrupts in chat
 	["epgp"] = false,									-- enable to show epgp points in guild datatext
 	["viewport"] = false,								-- enable viewport
+		--["vp_height"] = T.buttonsize - 9,
 	["autoquest"] = false,								-- enable automatic turn in/autoaccept quests
 }
 

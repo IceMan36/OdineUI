@@ -445,34 +445,34 @@ function OUI.GenerateOptionsInternal()
 		
 		return newtable
 	end
-				
+	
 	local function GetFilterDesc()
 		if db.spellfilter.FilterPicker == "PlateBlacklist" then
-			return "Filter whether or not a nameplate is shown by the name of the nameplate"
-		elseif db.spellfilter.FilterPicker == "ErrorList" then
-			return "Allows you to customize which error messages will be hidden."
-		elseif db.spellfilter.FilterPicker == "RaidDebuffs" then
-			return "These debuffs will be displayed on your raid frames in addition to any debuff that is dispellable."
-		elseif db.spellfilter.FilterPicker == "TargetPVPOnly" then
-			return "These debuffs only get displayed on the target unit when the unit happens to be an enemy player."
-		elseif db.spellfilter.FilterPicker == "DebuffWhiteList" then
-			return "These debuffs will always get displayed on the Target Frame, Arena Frames, and Nameplates."
+			return L["Filter whether or not a nameplate is shown by the name of the nameplate"]
 		elseif db.spellfilter.FilterPicker == "ArenaBuffWhiteList" then
-			return "Filter the buffs that get displayed on arena units."
+			return L["Filter the buffs that get displayed on arena units."]
+		elseif db.spellfilter.FilterPicker == "ErrorList" then
+			return L["Filter the error messages that are never displayed."]
 		elseif db.spellfilter.FilterPicker == "DebuffBlacklist" then
-			return "Set buffs that will never get displayed."
+			return L["Set buffs that will never get displayed."]
+		elseif db.spellfilter.FilterPicker == "DebuffWhiteList" then
+			return L["These debuffs will always get displayed on the Target Frame, Arena Frames, and Nameplates."]
+		elseif db.spellfilter.FilterPicker == "TargetPVPOnly" then
+			return L["These debuffs only get displayed on the target unit when the unit happens to be an enemy player."]
+		elseif db.spellfilter.FilterPicker == "RaidDebuffs" then
+			return L["These debuffs will be displayed on your raid frames in addition to any debuff that is dispellable."]
 		elseif db.spellfilter.FilterPicker == "HealerBuffIDs" then
-			return "These buffs are displayed on the healer raid and party layouts"
+			return L["These buffs are displayed on the healer raid and party layouts"]
 		elseif db.spellfilter.FilterPicker == "DPSBuffIDs" then
-			return "These buffs are displayed on the DPS raid and party layouts"
+			return L["These buffs are displayed on the DPS raid and party layouts"]
 		elseif db.spellfilter.FilterPicker == "PetBuffs" then
-			return "These buffs are displayed on the pet frame"
+			return L["These buffs are displayed on the pet frame"]
 		elseif db.spellfilter.FilterPicker == "TRINKET_FILTER" then
-			return "These buffs are displayed no matter your class you must have a layout enabled that uses trinkets however for them to show"
+			return L["These buffs are displayed no matter your class you must have a layout enabled that uses trinkets however for them to show"]
 		elseif db.spellfilter.FilterPicker == "CLASS_FILTERS" then
-			return "These buffs/debuffs are displayed as a classtimer, where they get positioned is based on your layout option choice"
+			return L["These buffs/debuffs are displayed as a classtimer, where they get positioned is based on your layout option choice"]
 		elseif db.spellfilter.FilterPicker == "ChannelTicks" then
-			return "These spells when cast will display tick marks on the castbar"
+			return L["These spells when cast will display tick marks on the castbar"]
 		else
 			return ""
 		end
@@ -541,9 +541,14 @@ function OUI.GenerateOptionsInternal()
 					},
 					overridelowtohigh = {
 						order = 6,
-						name = L["Override LOW -> HIGH"],
+						name = L["Resolution Override"],
 						desc = L["OVERRIDE_DESC"],
-						type = "toggle",
+						type = "select",
+						values = {
+							["NONE"] = L["None"],
+							["Low"] = L["Low"],
+							["High"] = L["High"],
+						},
 					},
 					emptyg25 = {
 						name = "   ",
@@ -565,7 +570,7 @@ function OUI.GenerateOptionsInternal()
 						values = {
 							["Default"] = "Odine",
 							["Elv"] = "Elv",
-							--["Tukui"] = "Tukui",
+							["Tukui"] = "Tukui",
 							["ClassColor"] = "ClassColor",
 							--["Dajova"] = "Dajova",
 						},						
@@ -581,6 +586,12 @@ function OUI.GenerateOptionsInternal()
 						name = "Sharp Borders",
 						desc = "Enable sharper borders around UI panels.",
 						type = "toggle",
+					},
+					emptyg24asd = {
+						name = "   ",
+						width = "full",
+						type = "description",
+						order = 12,
 					},
 				},
 			},
@@ -1406,8 +1417,31 @@ function OUI.GenerateOptionsInternal()
 							},
 						},
 					},
-					Derp = {
+					Viewport = {
 						order = 7,
+						type = "group",
+						name = "Viewport Settings",
+						get = function(info) return db.misc[ info[#info] ] end,
+						set = function(info, value) db.misc[ info[#info] ] = value; StaticPopup_Show("RELOAD_UI") end,
+						args = {
+							viewport = {
+								type = "toggle",
+								order = 1,
+								name = "Enabled",
+								desc = "Toggles whether you want to use a viewport.",
+							},
+							--[[vp_height = {
+								type = "range",
+								order = 7,
+								name = "Size",
+								desc = "Set the size of the viewport bar.",
+								min = 1, max = 30, step = 1,
+								disabled = function() return not db.misc.viewport end,
+							},--]]
+						},
+					},
+					Derp = {
+						order = 8,
 						type = "group",
 						name = "Other",
 						get = function(info) return db.misc[ info[#info] ] end,
@@ -1439,16 +1473,10 @@ function OUI.GenerateOptionsInternal()
 								name = "Display EPGP",
 								desc = "Toggles whether you want to display EPGP in related sections (guild datatext).",
 							},
-							viewport = {
-								type = "toggle",
-								order = 6,
-								name = "Viewport",
-								desc = "Toggles whether you want to use a viewport.",
-							},
 						},
 					},
 					Errors = {
-						order = 8,
+						order = 10,
 						type = "group",
 						name = "Errors",
 						get = function(info) return db.error[ info[#info] ] end,
@@ -1463,7 +1491,7 @@ function OUI.GenerateOptionsInternal()
 						},
 					},
 					Reminders = {
-						order = 9,
+						order = 12,
 						type = "group",
 						name = "Buff Reminders",
 						get = function(info) return db.buffreminder[ info[#info] ] end,
@@ -1484,7 +1512,7 @@ function OUI.GenerateOptionsInternal()
 						},
 					},
 					Addonskins = {
-						order = 10,
+						order = 14,
 						type = "group",
 						name = "Addon Skins",
 						get = function(info) return db.addonskins[ info[#info] ] end,
@@ -2059,6 +2087,18 @@ function OUI.GenerateOptionsInternal()
 								get = function() return unpack(db.media.backdropcolor) end,
 								set = function(_,r,g,b,a)
 									db.media.backdropcolor = { r, g, b, a }
+									StaticPopup_Show("RELOAD_UI")
+								end,						
+							},
+							backdropfadecolor = {
+								type = "color",
+								order = 2.5,
+								name = L["Backdrop Fade Color"],
+								desc = L["BDROPFADE_DESC"],
+								hasAlpha = true,
+								get = function() return unpack(db.media.backdropfadecolor) end,
+								set = function(_,r,g,b,a)
+									db.media.backdropfadecolor = { r, g, b, a }
 									StaticPopup_Show("RELOAD_UI")
 								end,						
 							},

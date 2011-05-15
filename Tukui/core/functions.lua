@@ -311,3 +311,30 @@ function T.Delay(delay, func, ...)
 	tinsert(waitTable,{delay,func,{...}})
 	return true
 end
+
+--Check if our embed right addon is shown
+function T.CheckAddOnShown()
+	if T.ChatRightShown == true and T.RightChat and T.RightChat == true then
+		return true
+	elseif C["addonskins"].embed == "Omen" and IsAddOnLoaded("Omen") and OmenAnchor then
+		if OmenAnchor:IsShown() then
+			return true
+		else
+			return false
+		end
+	elseif C["addonskins"].embed == "Recount" and IsAddOnLoaded("Recount") and Recount_MainWindow then
+		if Recount_MainWindow:IsShown() then
+			return true
+		else
+			return false
+		end
+	elseif  C["addonskins"].embed ==  "Skada" and IsAddOnLoaded("Skada") and Skada:GetWindows()[1] then
+		if Skada:GetWindows()[1].bargroup:IsShown() then
+			return true
+		else
+			return false
+		end
+	else
+		return false
+	end
+end

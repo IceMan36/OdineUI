@@ -66,14 +66,6 @@ bar:SetScript("OnEvent", function(self, event, ...)
 			end
 		]])
 		
-		self:SetAttribute("_onstate-vehicleupdate", [[		
-			if newstate == "s2" then
-				self:GetParent():Hide()
-			else
-				self:GetParent():Show()
-			end	
-		]])
-		
 		RegisterStateDriver(self, "page", GetBar())
 		RegisterStateDriver(self, "vehicleupdate", "[vehicleui] s2;s1")
 	elseif event == "PLAYER_ENTERING_WORLD" then

@@ -9,7 +9,7 @@ local _, settings = ...
 local _DEFAULTS = {
 	width = T.Scale(220),
 	height = T.Scale(19),
-	texture = C["media"].blank,
+	texture = C["media"].normTex,
 
 	position = {
 		["BREATH"] = 'TOP#UIParent#TOP#0#-96';
@@ -83,7 +83,6 @@ do
 		border:Point("TOPLEFT", frame, -2, 2)
 		border:Point("BOTTOMRIGHT", frame, 2, -2)
 		border:SetTemplate("Default")
-		border:CreateShadow("Default")
 		border:SetFrameLevel(0)
 
 		local text = frame:CreateFontString(nil, 'OVERLAY')
