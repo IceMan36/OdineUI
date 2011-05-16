@@ -31,6 +31,18 @@ function T.Install()
 		print(L.TukuiInstall_CVarSet)
 	end
 	
+	local function ResetAll()
+		InstallNextButton:Disable()
+		InstallPrevButton:Disable()
+		InstallOption1Button:Hide()
+		InstallOption1Button:SetScript("OnClick", nil)
+		InstallOption1Button:SetText("")
+		TukuiInstallFrame.SubTitle:SetText("")
+		TukuiInstallFrame.Desc1:SetText("")
+		TukuiInstallFrame.Desc2:SetText("")
+		TukuiInstallFrame.Desc3:SetText("")
+	end
+	
 	local function ResetUFPos()
 		if C["unitframes"].positionbychar == true then
 			TukuiUFpos = {}
@@ -167,18 +179,6 @@ function T.Install()
 			ToggleChatColorNamesByClassGroup(true, "CHANNEL10")
 			ToggleChatColorNamesByClassGroup(true, "CHANNEL11")
 		end
-	end
-	
-	local function ResetAll()
-		InstallNextButton:Disable()
-		InstallPrevButton:Disable()
-		InstallOption1Button:Hide()
-		InstallOption1Button:SetScript("OnClick", nil)
-		InstallOption1Button:SetText("")
-		TukuiInstallFrame.SubTitle:SetText("")
-		TukuiInstallFrame.Desc1:SetText("")
-		TukuiInstallFrame.Desc2:SetText("")
-		TukuiInstallFrame.Desc3:SetText("")
 	end
 	
 	local function SetPage(PageNum)

@@ -4,6 +4,8 @@ local FONT = C["media"].font
 local FONTSIZE = 18
 local FONTFLAG = "THINOUTLINE"
 
+
+
 local function SetModifiedBackdrop(self)
 	if C["general"].template == "ClassColor" then
 		self:SetBackdropBorderColor(unpack(C["media"].bordercolor))		
@@ -17,7 +19,7 @@ local function SetOriginalBackdrop(self)
 	if C["general"].template == "ClassColor" then
 		self:SetBackdropBorderColor(color.r, color.g, color.b)
 	else
-		self:SetTemplate("Default")
+		self:SetTemplate("Default", true)
 	end
 end
 
@@ -73,9 +75,17 @@ local function SkinTab(tab)
 	if not tab then return end
 	for _, object in pairs(tabs) do
 		local tex = _G[tab:GetName()..object]
-		tex:SetTexture(nil)
+		if tex then
+			tex:SetTexture(nil)
+		end
 	end
-	tab:GetHighlightTexture():SetTexture(nil)
+	
+	if tab.GetHighlightTexture and tab:GetHighlightTexture() then
+		tab:GetHighlightTexture():SetTexture(nil)
+	else
+		tab:StripTextures()
+	end
+	
 	tab.backdrop = CreateFrame("Frame", nil, tab)
 	tab.backdrop:SetTemplate("Default")
 	tab.backdrop:SetFrameLevel(tab:GetFrameLevel() - 1)
@@ -128,6 +138,7 @@ local function SkinEditBox(frame)
 	if _G[frame:GetName().."Left"] then _G[frame:GetName().."Left"]:Kill() end
 	if _G[frame:GetName().."Middle"] then _G[frame:GetName().."Middle"]:Kill() end
 	if _G[frame:GetName().."Right"] then _G[frame:GetName().."Right"]:Kill() end
+	if _G[frame:GetName().."Mid"] then _G[frame:GetName().."Mid"]:Kill() end
 	frame:CreateBackdrop("Default")
 	
 	if frame:GetName() and frame:GetName():find("Silver") or frame:GetName():find("Copper") then
@@ -171,33 +182,343 @@ local function SkinCheckBox(frame)
 end
 
 local function SkinCloseButton(f, point)
-	if f.SetNormalTexture then f:SetNormalTexture("") end
-
-	if f.SetHighlightTexture then f:SetHighlightTexture("") end
-
-	if f.SetPushedTexture then f:SetPushedTexture("") end
-
-	if f.SetDisabledTexture then f:SetDisabledTexture("") end
-	f:SetTemplate("Default", true)
-	f:Size(18,18)
-
-	local text = f:FontString(nil, FONT, FONTSIZE, FONTFLAG)
-	text:SetPoint("CENTER", 1, 1)
-	text:SetText("x")
+	for i=1, f:GetNumRegions() do
+		local region = select(i, f:GetRegions())
+		if region:GetObjectType() == "Texture" then
+			region:SetDesaturated(1)
+		end
+	end	
 	
 	if point then
-		f:Point("TOPRIGHT", point, "TOPRIGHT", -4, -4)
-	else
-		f:Point("TOPRIGHT", -4, -4)
+		f:Point("TOPRIGHT", point, "TOPRIGHT", 2, 2)
 	end
-	f:HookScript("OnEnter", SetModifiedBackdrop)
-	f:HookScript("OnLeave", SetOriginalBackdrop)
 end
 
 local TukuiSkin = CreateFrame("Frame")
 TukuiSkin:RegisterEvent("ADDON_LOADED")
 TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	if IsAddOnLoaded("Skinner") or IsAddOnLoaded("Aurora") then return end
+	
+	if addon == "Blizzard_AchievementUI" then
+		local frames = {
+			"AchievementFrame",
+			"AchievementFrameCategories",
+			"AchievementFrameSummary",
+			"AchievementFrameHeader",
+			"AchievementFrameSummaryCategoriesHeader",
+			"AchievementFrameSummaryAchievementsHeader",
+			"AchievementFrameStatsBG",
+			"AchievementFrameAchievements",
+			"AchievementFrameComparison",
+			"AchievementFrameComparisonHeader",
+			"AchievementFrameComparisonSummaryPlayer",
+			"AchievementFrameComparisonSummaryFriend",
+		}
+		
+		for _, frame in pairs(frames) do
+			_G[frame]:StripTextures(true)
+		end
+		
+		local noname_frames = {
+			"AchievementFrameStats",
+			"AchievementFrameSummary",
+			"AchievementFrameAchievements",
+			"AchievementFrameComparison"
+		}
+		
+		for _, frame in pairs(noname_frames) do
+			for i=1, _G[frame]:GetNumChildren() do
+				local child = select(i, _G[frame]:GetChildren())
+				if child and not child:GetName() then
+					child:SetBackdrop(nil)
+				end
+			end
+		end
+		
+		AchievementFrame:CreateBackdrop("Transparent")
+		AchievementFrame.backdrop:Point("TOPLEFT", 0, 6)
+		AchievementFrame.backdrop:SetPoint("BOTTOMRIGHT")
+		AchievementFrameHeader:CreateBackdrop("Transparent")
+		AchievementFrameHeader.backdrop:Point("TOPLEFT", 300, -18)
+		AchievementFrameHeader.backdrop:Point("BOTTOMRIGHT", -250, 46)
+		
+		--Backdrops
+		AchievementFrameCategoriesContainer:CreateBackdrop("Default")
+		AchievementFrameCategoriesContainer.backdrop:Point("TOPLEFT", 0, 4)
+		AchievementFrameCategoriesContainer.backdrop:Point("BOTTOMRIGHT", -2, -3)
+		AchievementFrameAchievementsContainer:CreateBackdrop("Default")
+		AchievementFrameAchievementsContainer.backdrop:Point("TOPLEFT", 0, 2)
+		AchievementFrameAchievementsContainer.backdrop:Point("BOTTOMRIGHT", -3, -3)
+		
+		SkinCloseButton(AchievementFrameCloseButton, AchievementFrame.backdrop)
+		SkinDropDownBox(AchievementFrameFilterDropDown)
+		AchievementFrameFilterDropDown:Point("TOPRIGHT", AchievementFrame, "TOPRIGHT", -44, 5)
+		
+		-- ScrollBars
+		SkinScrollBar(AchievementFrameCategoriesContainerScrollBar)
+		SkinScrollBar(AchievementFrameAchievementsContainerScrollBar)
+		SkinScrollBar(AchievementFrameStatsContainerScrollBar)
+		SkinScrollBar(AchievementFrameComparisonContainerScrollBar)
+		SkinScrollBar(AchievementFrameComparisonStatsContainerScrollBar)
+		
+		--Tabs
+		for i = 1, 3 do
+			SkinTab(_G["AchievementFrameTab"..i])
+			_G["AchievementFrameTab"..i]:SetFrameLevel(_G["AchievementFrameTab"..i]:GetFrameLevel() + 2)
+		end
+		
+		local function SkinStatusBar(bar)
+			bar:StripTextures()
+			bar:SetStatusBarTexture(C["media"].normTex)
+			bar:SetStatusBarColor(4/255, 179/255, 30/255)
+			bar:CreateBackdrop("Default")
+			
+			if _G[bar:GetName().."Title"] then
+				_G[bar:GetName().."Title"]:SetPoint("LEFT", 4, 0)
+			end
+
+			if _G[bar:GetName().."Label"] then
+				_G[bar:GetName().."Label"]:SetPoint("LEFT", 4, 0)
+			end
+			
+			if _G[bar:GetName().."Text"] then
+				_G[bar:GetName().."Text"]:SetPoint("RIGHT", -4, 0)
+			end
+		end
+
+		SkinStatusBar(AchievementFrameSummaryCategoriesStatusBar)
+		SkinStatusBar(AchievementFrameComparisonSummaryPlayerStatusBar)
+		SkinStatusBar(AchievementFrameComparisonSummaryFriendStatusBar)
+		AchievementFrameComparisonSummaryFriendStatusBar.text:ClearAllPoints()
+		AchievementFrameComparisonSummaryFriendStatusBar.text:SetPoint("CENTER")
+		AchievementFrameComparisonHeader:Point("BOTTOMRIGHT", AchievementFrameComparison, "TOPRIGHT", 45, -20)
+		
+		for i=1, 8 do
+			local frame = _G["AchievementFrameSummaryCategoriesCategory"..i]
+			local button = _G["AchievementFrameSummaryCategoriesCategory"..i.."Button"]
+			local highlight = _G["AchievementFrameSummaryCategoriesCategory"..i.."ButtonHighlight"]
+			SkinStatusBar(frame)
+			button:StripTextures()
+			highlight:StripTextures()
+			
+			_G[highlight:GetName().."Middle"]:SetTexture(1, 1, 1, 0.3)
+			_G[highlight:GetName().."Middle"]:SetAllPoints(frame)
+		end
+		
+		AchievementFrame:HookScript("OnShow", function()
+			for i=1, 20 do
+				local frame = _G["AchievementFrameCategoriesContainerButton"..i]
+				local lastframe = _G["AchievementFrameCategoriesContainerButton"..i-1]
+				
+				frame:StripTextures()
+				frame:StyleButton()				
+			end	
+		end)
+		
+		hooksecurefunc("AchievementFrameSummary_UpdateAchievements", function()
+			for i=1, ACHIEVEMENTUI_MAX_SUMMARY_ACHIEVEMENTS do
+				local frame = _G["AchievementFrameSummaryAchievement"..i]
+				_G["AchievementFrameSummaryAchievement"..i.."Highlight"]:Kill()
+				frame:StripTextures()
+				
+				
+				_G["AchievementFrameSummaryAchievement"..i.."Description"]:SetTextColor(1, 1, 0)
+				
+				if not frame.backdrop then
+					frame:CreateBackdrop("Default", true)
+					frame.backdrop:Point("TOPLEFT", 2, -2)
+					frame.backdrop:Point("BOTTOMRIGHT", -2, 2)
+
+					_G["AchievementFrameSummaryAchievement"..i.."IconBling"]:Kill()
+					_G["AchievementFrameSummaryAchievement"..i.."IconOverlay"]:Kill()
+					_G["AchievementFrameSummaryAchievement"..i.."Icon"]:SetTemplate("Default")
+					_G["AchievementFrameSummaryAchievement"..i.."Icon"]:Height(_G["AchievementFrameSummaryAchievement"..i.."Icon"]:GetHeight() - 14)
+					_G["AchievementFrameSummaryAchievement"..i.."Icon"]:Width(_G["AchievementFrameSummaryAchievement"..i.."Icon"]:GetWidth() - 14)
+					_G["AchievementFrameSummaryAchievement"..i.."Icon"]:ClearAllPoints()
+					_G["AchievementFrameSummaryAchievement"..i.."Icon"]:Point("LEFT", 6, 0)
+					_G["AchievementFrameSummaryAchievement"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+					_G["AchievementFrameSummaryAchievement"..i.."IconTexture"]:ClearAllPoints()
+					_G["AchievementFrameSummaryAchievement"..i.."IconTexture"]:Point("TOPLEFT", 2, -2)
+					_G["AchievementFrameSummaryAchievement"..i.."IconTexture"]:Point("BOTTOMRIGHT", -2, 2)
+				end
+			end				
+		end)
+		
+		for i=1, 7 do
+			local frame = _G["AchievementFrameAchievementsContainerButton"..i]
+			_G["AchievementFrameAchievementsContainerButton"..i.."Highlight"]:Kill()
+			frame:StripTextures()
+						
+			frame:CreateBackdrop("Default", true)
+			frame.backdrop:Point("TOPLEFT", 2, -2)
+			frame.backdrop:Point("BOTTOMRIGHT", -2, 2)
+			frame.SetBackdropBorderColor = T.dummy
+
+			_G["AchievementFrameAchievementsContainerButton"..i.."Description"]:SetTextColor(0.6, 0.6, 0.6)
+			_G["AchievementFrameAchievementsContainerButton"..i.."Description"].SetTextColor = T.dummy
+			_G["AchievementFrameAchievementsContainerButton"..i.."HiddenDescription"]:SetTextColor(1, 1, 1)
+			_G["AchievementFrameAchievementsContainerButton"..i.."HiddenDescription"].SetTextColor = T.dummy
+			
+			_G["AchievementFrameAchievementsContainerButton"..i.."HiddenDescription"]:SetParent(frame.backdrop)
+			_G["AchievementFrameAchievementsContainerButton"..i.."Description"]:SetParent(frame.backdrop)
+			_G["AchievementFrameAchievementsContainerButton"..i.."Icon"]:SetParent(frame.backdrop)
+			_G["AchievementFrameAchievementsContainerButton"..i.."Shield"]:SetParent(frame.backdrop)
+			_G["AchievementFrameAchievementsContainerButton"..i.."Label"]:SetParent(frame.backdrop)
+			
+			_G["AchievementFrameAchievementsContainerButton"..i.."IconBling"]:Kill()
+			_G["AchievementFrameAchievementsContainerButton"..i.."IconOverlay"]:Kill()
+			_G["AchievementFrameAchievementsContainerButton"..i.."Icon"]:SetTemplate("Default")
+			_G["AchievementFrameAchievementsContainerButton"..i.."Icon"]:Height(_G["AchievementFrameAchievementsContainerButton"..i.."Icon"]:GetHeight() - 14)
+			_G["AchievementFrameAchievementsContainerButton"..i.."Icon"]:Width(_G["AchievementFrameAchievementsContainerButton"..i.."Icon"]:GetWidth() - 14)
+			_G["AchievementFrameAchievementsContainerButton"..i.."Icon"]:ClearAllPoints()
+			_G["AchievementFrameAchievementsContainerButton"..i.."Icon"]:Point("LEFT", 6, 0)
+			_G["AchievementFrameAchievementsContainerButton"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+			_G["AchievementFrameAchievementsContainerButton"..i.."IconTexture"]:ClearAllPoints()
+			_G["AchievementFrameAchievementsContainerButton"..i.."IconTexture"]:Point("TOPLEFT", 2, -2)
+			_G["AchievementFrameAchievementsContainerButton"..i.."IconTexture"]:Point("BOTTOMRIGHT", -2, 2)		
+		end
+		
+		local compares = {
+			"Player",
+			"Friend"
+		}
+		
+		for _, compare in pairs(compares) do
+			for i=1, 9 do
+				local frame = "AchievementFrameComparisonContainerButton"..i..compare
+				
+				_G[frame]:StripTextures()
+				_G[frame.."Background"]:Kill()
+				
+				_G[frame]:CreateBackdrop("Default", true)
+				_G[frame].backdrop:Point("TOPLEFT", 2, -2)
+				_G[frame].backdrop:Point("BOTTOMRIGHT", -2, 2)
+				_G[frame].SetBackdropBorderColor = T.dummy		
+				
+				if _G[frame.."Description"] then
+					_G[frame.."Description"]:SetTextColor(0.6, 0.6, 0.6)
+					_G[frame.."Description"].SetTextColor = T.dummy
+					_G[frame.."Description"]:SetParent(_G[frame].backdrop)
+				end
+				
+				_G[frame.."Icon"]:SetParent(_G[frame].backdrop)
+				_G[frame.."Shield"]:SetParent(_G[frame].backdrop)
+				
+				if compare == "Friend" then
+					_G[frame.."Shield"]:Point("TOPRIGHT", _G["AchievementFrameComparisonContainerButton"..i.."Friend"], "TOPRIGHT", -20, -9)
+				end
+				
+				if _G[frame.."Label"] then
+					_G[frame.."Label"]:SetParent(_G[frame].backdrop)
+				end
+				
+				_G[frame.."IconBling"]:Kill()
+				_G[frame.."IconOverlay"]:Kill()
+				_G[frame.."Icon"]:SetTemplate("Default")
+				_G[frame.."Icon"]:Height(_G[frame.."Icon"]:GetHeight() - 14)
+				_G[frame.."Icon"]:Width(_G[frame.."Icon"]:GetWidth() - 14)
+				_G[frame.."Icon"]:ClearAllPoints()
+				_G[frame.."Icon"]:Point("LEFT", 6, 0)
+				_G[frame.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+				_G[frame.."IconTexture"]:ClearAllPoints()
+				_G[frame.."IconTexture"]:Point("TOPLEFT", 2, -2)
+				_G[frame.."IconTexture"]:Point("BOTTOMRIGHT", -2, 2)					
+			end
+		end
+		
+		for i=1, 20 do
+			local frame = _G["AchievementFrameStatsContainerButton"..i]
+			frame:StyleButton()
+			
+			_G["AchievementFrameStatsContainerButton"..i.."BG"]:SetTexture(1, 1, 1, 0.2)
+			_G["AchievementFrameStatsContainerButton"..i.."HeaderLeft"]:Kill()
+			_G["AchievementFrameStatsContainerButton"..i.."HeaderRight"]:Kill()
+			_G["AchievementFrameStatsContainerButton"..i.."HeaderMiddle"]:Kill()
+			
+			local frame = "AchievementFrameComparisonStatsContainerButton"..i
+			_G[frame]:StripTextures()
+			_G[frame]:StyleButton()
+		
+			_G[frame.."BG"]:SetTexture(1, 1, 1, 0.2)
+			_G[frame.."HeaderLeft"]:Kill()
+			_G[frame.."HeaderRight"]:Kill()
+			_G[frame.."HeaderMiddle"]:Kill()			
+		end
+		
+		
+		hooksecurefunc("AchievementButton_GetProgressBar", function(index)
+			local frame = _G["AchievementFrameProgressBar"..index]
+			if frame then
+				if not frame.skinned then
+					frame:StripTextures()
+					frame:SetStatusBarTexture(C["media"].normTex)
+					frame:SetStatusBarColor(4/255, 179/255, 30/255)
+					frame:SetFrameLevel(frame:GetFrameLevel() + 3)
+					
+					--Initiate fucked up method of creating a backdrop
+					frame.bg1 = frame:CreateTexture(nil, "BACKGROUND")
+					frame.bg1:SetDrawLayer("BACKGROUND", -7)
+					frame.bg1:SetTexture(unpack(C["media"].backdropcolor))
+					frame.bg1:Point("TOPLEFT", -T.mult*3, T.mult*3)
+					frame.bg1:Point("BOTTOMRIGHT", T.mult*3, -T.mult*3)
+					
+					frame.bg2 = frame:CreateTexture(nil, "BACKGROUND")
+					frame.bg2:SetDrawLayer("BACKGROUND", -6)
+					frame.bg2:SetTexture(unpack(C["media"].bordercolor))
+					frame.bg2:Point("TOPLEFT", -T.mult*2, T.mult*2)
+					frame.bg2:Point("BOTTOMRIGHT", T.mult*2, -T.mult*2)					
+
+					frame.bg3 = frame:CreateTexture(nil, "BACKGROUND")
+					frame.bg3:SetDrawLayer("BACKGROUND", -5)
+					frame.bg3:SetTexture(unpack(C["media"].backdropcolor))
+					frame.bg3:Point("TOPLEFT", -T.mult, T.mult)
+					frame.bg3:Point("BOTTOMRIGHT", T.mult, -T.mult)		
+					
+					frame.text:ClearAllPoints()
+					frame.text:SetPoint("CENTER", frame, "CENTER", 0, -2)
+					frame.text:SetJustifyH("CENTER")
+					frame.skinned = true
+				end
+
+			end
+		end)
+		
+		hooksecurefunc("AchievementObjectives_DisplayCriteria", function(objectivesFrame, id)
+			local numCriteria = GetAchievementNumCriteria(id)
+			local textStrings, metas = 0, 0
+			for i = 1, numCriteria do	
+				local criteriaString, criteriaType, completed, quantity, reqQuantity, charName, flags, assetID, quantityString = GetAchievementCriteriaInfo(id, i)
+				
+				if ( criteriaType == CRITERIA_TYPE_ACHIEVEMENT and assetID ) then
+					metas = metas + 1;
+					local metaCriteria = AchievementButton_GetMeta(metas);				
+					if ( objectivesFrame.completed and completed ) then
+						metaCriteria.label:SetShadowOffset(0, 0)
+						metaCriteria.label:SetTextColor(1, 1, 1, 1);
+					elseif ( completed ) then
+						metaCriteria.label:SetShadowOffset(1, -1)
+						metaCriteria.label:SetTextColor(0, 1, 0, 1);
+					else
+						metaCriteria.label:SetShadowOffset(1, -1)
+						metaCriteria.label:SetTextColor(.6, .6, .6, 1);
+					end				
+				elseif criteriaType ~= 1 then
+					textStrings = textStrings + 1;
+					local criteria = AchievementButton_GetCriteria(textStrings);				
+					if ( objectivesFrame.completed and completed ) then
+						criteria.name:SetTextColor(1, 1, 1, 1);
+						criteria.name:SetShadowOffset(0, 0);
+					elseif ( completed ) then
+						criteria.name:SetTextColor(0, 1, 0, 1);
+						criteria.name:SetShadowOffset(1, -1);
+					else
+						criteria.name:SetTextColor(.6, .6, .6, 1);
+						criteria.name:SetShadowOffset(1, -1);
+					end		
+				end
+			end
+		end)
+	end	
 	
 	-- LF guild UI
 	if addon == "Blizzard_LookingForGuildUI" then
@@ -2024,6 +2345,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			WorldStateScoreFrame:SetTemplate("Transparent")
 			SkinCloseButton(WorldStateScoreFrameCloseButton)
 			WorldStateScoreFrameInset:Kill()
+			SkinButton(WorldStateScoreFrameLeaveButton)
 			
 			for i = 1, WorldStateScoreScrollFrameScrollChildFrame:GetNumChildren() do
 				local b = _G["WorldStateScoreButton"..i]
@@ -2517,6 +2839,248 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 					end
 				end
 			end)
+		end
+		
+		--Greeting Frame
+		do
+			QuestFrameGreetingPanel:HookScript("OnShow", function()
+				QuestFrameGreetingPanel:StripTextures()
+				SkinButton(QuestFrameGreetingGoodbyeButton, true)
+				GreetingText:SetTextColor(1, 1, 1)
+				CurrentQuestsText:SetTextColor(1, 1, 0)
+				QuestGreetingFrameHorizontalBreak:Kill()
+				AvailableQuestsText:SetTextColor(1, 1, 0)
+				
+				for i=1, MAX_NUM_QUESTS do
+					local button = _G["QuestTitleButton"..i]
+					if button:GetFontString() then
+						if button:GetFontString():GetText() and button:GetFontString():GetText():find("|cff000000") then
+							button:GetFontString():SetText(string.gsub(button:GetFontString():GetText(), "|cff000000", "|cffFFFF00"))
+						end
+					end
+				end
+			end)
+		end
+		
+		--Minor watch frame skin
+		do
+			SkinCloseButton(WatchFrameCollapseExpandButton)
+		end
+		
+		--Opacity Frame
+		do
+			OpacityFrame:StripTextures()
+			OpacityFrame:SetTemplate("Transparent")
+		end
+		
+		--WorldMap
+		do
+			WorldMapFrame:CreateBackdrop("Transparent")
+			WorldMapDetailFrame:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel() + 1)
+			WorldMapDetailFrame.backdrop = CreateFrame("Frame", nil, WorldMapFrame)
+			WorldMapDetailFrame.backdrop:SetTemplate("Default")
+			WorldMapDetailFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -2, 2)
+			WorldMapDetailFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 2, -2)
+			WorldMapDetailFrame.backdrop:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel() - 2)
+
+			SkinCloseButton(WorldMapFrameCloseButton)
+			SkinCloseButton(WorldMapFrameSizeDownButton)
+			SkinCloseButton(WorldMapFrameSizeUpButton)
+									
+			SkinDropDownBox(WorldMapLevelDropDown)
+			SkinDropDownBox(WorldMapZoneMinimapDropDown)
+			SkinDropDownBox(WorldMapContinentDropDown)
+			SkinDropDownBox(WorldMapZoneDropDown)
+			SkinButton(WorldMapZoomOutButton)
+			WorldMapZoomOutButton:Point("LEFT", WorldMapZoneDropDown, "RIGHT", 0, 4)
+			
+			SkinCheckBox(WorldMapTrackQuest)
+			SkinCheckBox(WorldMapQuestShowObjectives)
+			SkinCheckBox(WorldMapShowDigSites)
+			
+			--Mini
+			local function SmallSkin()
+				WorldMapLevelDropDown:ClearAllPoints()
+				WorldMapLevelDropDown:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -10, -4)
+				
+				WorldMapFrame.backdrop:ClearAllPoints()
+				WorldMapFrame.backdrop:Point("TOPLEFT", 2, 2)
+				WorldMapFrame.backdrop:Point("BOTTOMRIGHT", 2, -2)
+			end
+			
+			--Large
+			local function LargeSkin()
+				if not InCombatLockdown() then
+					WorldMapFrame:SetParent(UIParent)
+					WorldMapFrame:EnableMouse(false)
+					WorldMapFrame:EnableKeyboard(false)
+					SetUIPanelAttribute(WorldMapFrame, "area", "center");
+					SetUIPanelAttribute(WorldMapFrame, "allowOtherPanels", true)
+				end
+				
+				WorldMapFrame.backdrop:ClearAllPoints()
+				WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -25, 70)
+				WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 25, -30)    
+			end
+			
+			local function QuestSkin()
+				if not InCombatLockdown() then
+					WorldMapFrame:SetParent(UIParent)
+					WorldMapFrame:EnableMouse(false)
+					WorldMapFrame:EnableKeyboard(false)
+					SetUIPanelAttribute(WorldMapFrame, "area", "center");
+					SetUIPanelAttribute(WorldMapFrame, "allowOtherPanels", true)
+				end
+				
+				WorldMapFrame.backdrop:ClearAllPoints()
+				WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -25, 70)
+				WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 325, -235)  
+				
+				if not WorldMapQuestDetailScrollFrame.backdrop then
+					WorldMapQuestDetailScrollFrame:CreateBackdrop("Default")
+					WorldMapQuestDetailScrollFrame.backdrop:Point("TOPLEFT", -22, 2)
+					WorldMapQuestDetailScrollFrame.backdrop:Point("BOTTOMRIGHT", 23, -4)
+				end
+				
+				if not WorldMapQuestRewardScrollFrame.backdrop then
+					WorldMapQuestRewardScrollFrame:CreateBackdrop("Default")
+					WorldMapQuestRewardScrollFrame.backdrop:Point("BOTTOMRIGHT", 22, -4)				
+				end
+				
+				if not WorldMapQuestScrollFrame.backdrop then
+					WorldMapQuestScrollFrame:CreateBackdrop("Default")
+					WorldMapQuestScrollFrame.backdrop:Point("TOPLEFT", 0, 2)
+					WorldMapQuestScrollFrame.backdrop:Point("BOTTOMRIGHT", 24, -3)				
+				end
+			end			
+			
+			local function FixSkin()
+				WorldMapFrame:StripTextures()
+				if WORLDMAP_SETTINGS.size == WORLDMAP_FULLMAP_SIZE then
+					LargeSkin()
+				elseif WORLDMAP_SETTINGS.size == WORLDMAP_WINDOWED_SIZE then
+					SmallSkin()
+				elseif WORLDMAP_SETTINGS.size == WORLDMAP_QUESTLIST_SIZE then
+					QuestSkin()
+				end
+	
+				if not InCombatLockdown() then
+					WorldMapFrame:SetScale(1)
+					WorldMapFrameSizeDownButton:Show()
+					WorldMapFrame:SetFrameStrata("DIALOG")
+				else
+					WorldMapFrameSizeDownButton:Hide()
+					WorldMapFrameSizeUpButton:Hide()
+				end	
+				
+				WorldMapFrameAreaFrame:SetFrameStrata("FULLSCREEN")
+				WorldMapFrameAreaLabel:SetFont(C["media"].font, 50, "OUTLINE")
+				WorldMapFrameAreaLabel:SetShadowOffset(2, -2)
+				WorldMapFrameAreaLabel:SetTextColor(0.90, 0.8294, 0.6407)	
+				
+				WorldMapFrameAreaDescription:SetFont(C["media"].font, 40, "OUTLINE")
+				WorldMapFrameAreaDescription:SetShadowOffset(2, -2)	
+				
+				WorldMapZoneInfo:SetFont(C["media"].font, 27, "OUTLINE")
+				WorldMapZoneInfo:SetShadowOffset(2, -2)		
+			end
+			
+			WorldMapFrame:HookScript("OnShow", FixSkin)
+			hooksecurefunc("WorldMapFrame_SetFullMapView", LargeSkin)
+			hooksecurefunc("WorldMapFrame_SetQuestMapView", QuestSkin)
+			hooksecurefunc("WorldMap_ToggleSizeUp", FixSkin)
+			
+			if not GetCVarBool("miniWorldMap") then
+				ToggleFrame(WorldMapFrame)
+				ToggleFrame(WorldMapFrame)
+			end			
+	
+			WorldMapFrameSizeDownButton:RegisterEvent("PLAYER_REGEN_DISABLED")
+			WorldMapFrameSizeDownButton:RegisterEvent("PLAYER_REGEN_ENABLED")
+			WorldMapFrameSizeDownButton:SetScript("OnEvent", function(self, event)
+				if InCombatLockdown() then
+					self:Hide()
+				else
+					self:Show()
+				end
+			end)
+			
+			WorldMapFrameSizeUpButton:RegisterEvent("PLAYER_REGEN_DISABLED")
+			WorldMapFrameSizeUpButton:RegisterEvent("PLAYER_REGEN_ENABLED")
+			WorldMapFrameSizeUpButton:SetScript("OnEvent", function(self, event)
+				if InCombatLockdown() then
+					self:Hide()
+				else
+					self:Show()
+				end
+			end)
+			
+			local coords = CreateFrame("Frame", "CoordsFrame", WorldMapFrame)
+			local fontheight = select(2, WorldMapQuestShowObjectivesText:GetFont())*1.1
+			coords:SetFrameLevel(90)
+			coords:FontString("PlayerText", C["media"].font, fontheight, "THINOUTLINE")
+			coords:FontString("MouseText", C["media"].font, fontheight, "THINOUTLINE")
+			coords.PlayerText:SetTextColor(WorldMapQuestShowObjectivesText:GetTextColor())
+			coords.MouseText:SetTextColor(WorldMapQuestShowObjectivesText:GetTextColor())
+			coords.PlayerText:SetPoint("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", 5, -5)
+			coords.PlayerText:SetText("Player:   0, 0")
+			coords.MouseText:SetPoint("TOPLEFT", coords.PlayerText, "BOTTOMLEFT", 0, -5)
+			coords.MouseText:SetText("Mouse:   0, 0")
+
+			local int = 0
+			coords:SetScript("OnUpdate", function(self, elapsed)
+				int = int + 1
+				
+				if int >= 3 then
+					local inInstance, _ = IsInInstance()
+					local x,y = GetPlayerMapPosition("player")
+					x = math.floor(100 * x)
+					y = math.floor(100 * y)
+					if x ~= 0 and y ~= 0 then
+						self.PlayerText:SetText(PLAYER..":   "..x..", "..y)
+					else
+						self.PlayerText:SetText(" ")
+					end
+					
+
+					local scale = WorldMapDetailFrame:GetEffectiveScale()
+					local width = WorldMapDetailFrame:GetWidth()
+					local height = WorldMapDetailFrame:GetHeight()
+					local centerX, centerY = WorldMapDetailFrame:GetCenter()
+					local x, y = GetCursorPosition()
+					local adjustedX = (x / scale - (centerX - (width/2))) / width
+					local adjustedY = (centerY + (height/2) - y / scale) / height	
+
+					if (adjustedX >= 0  and adjustedY >= 0 and adjustedX <= 1 and adjustedY <= 1) then
+						adjustedX = math.floor(100 * adjustedX)
+						adjustedY = math.floor(100 * adjustedY)
+						coords.MouseText:SetText(MOUSE_LABEL..":   "..adjustedX..", "..adjustedY)
+					else
+						coords.MouseText:SetText(" ")
+					end
+					
+					int = 0
+				end
+			end)			
+		end
+		
+		--Item Text Frame
+		do
+			ItemTextFrame:StripTextures(true)
+			ItemTextScrollFrame:StripTextures()
+			ItemTextFrame:SetTemplate("Transparent")
+			SkinCloseButton(ItemTextCloseButton)
+			SkinNextPrevButton(ItemTextPrevPageButton)
+			SkinNextPrevButton(ItemTextNextPageButton)
+		end
+		
+		--Taxi Frame
+		do
+			TaxiFrame:StripTextures()
+			TaxiFrame:CreateBackdrop("Transparent")
+			TaxiRouteMap:CreateBackdrop("Default")
+			TaxiRouteMap.backdrop:SetAllPoints()
+			SkinCloseButton(TaxiFrameCloseButton)
 		end
 		
 		--LFD frame
@@ -3728,6 +4292,20 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		for i = 1, 2 do
 			for j = 1, 3 do
 				SkinButton(_G["StaticPopup"..i.."Button"..j])
+				SkinEditBox(_G["StaticPopup"..i.."EditBox"])
+				SkinEditBox(_G["StaticPopup"..i.."MoneyInputFrameGold"])
+				SkinEditBox(_G["StaticPopup"..i.."MoneyInputFrameSilver"])
+				SkinEditBox(_G["StaticPopup"..i.."MoneyInputFrameCopper"])
+				_G["StaticPopup"..i.."EditBox"].backdrop:Point("TOPLEFT", -2, -4)
+				_G["StaticPopup"..i.."EditBox"].backdrop:Point("BOTTOMRIGHT", 2, 4)
+				_G["StaticPopup"..i.."ItemFrameNameFrame"]:Kill()
+				_G["StaticPopup"..i.."ItemFrame"]:GetNormalTexture():Kill()
+				_G["StaticPopup"..i.."ItemFrame"]:SetTemplate("Default")
+				_G["StaticPopup"..i.."ItemFrame"]:StyleButton()
+				_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetTexCoord(.08, .92, .08, .92)
+				_G["StaticPopup"..i.."ItemFrameIconTexture"]:ClearAllPoints()
+				_G["StaticPopup"..i.."ItemFrameIconTexture"]:Point("TOPLEFT", 2, -2)
+				_G["StaticPopup"..i.."ItemFrameIconTexture"]:Point("BOTTOMRIGHT", -2, 2)
 			end
 		end
 		

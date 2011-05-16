@@ -6,7 +6,6 @@ DB["general"] = {
 	["fontscale"] = 12,									-- global font scale most aspect of the ui (UNFINISHED)m
 	["overridelowtohigh"] = "NONE",                      -- EXPERIMENTAL ONLY! override lower version to higher version on a lower reso.
 	["multisampleprotect"] = true,                      -- i don't recommend this because of shitty border but, voila!
-	["template"] = "Default",							-- customize the overall UI look and feel
 	["sharpborders"] = true,
 }
 
@@ -31,11 +30,12 @@ DB["media"] = {
 	["copyicon"] = [[Interface\AddOns\Tukui\medias\textures\copy]], -- copy icon
 	["buttonhover"] = [[Interface\AddOns\Tukui\medias\textures\button_hover]],
 
-	["bordercolor"] = { .05, .05, .05, 1 }, -- border color of tukui panels
-	["altbordercolor"] = { .4, .4, .4 }, -- alternative border color, mainly for unitframes text panels.
+	--["bordercolor"] = { .05, .05, .05, 1 }, -- border color of tukui panels
+	["bordercolor"] = { .2, .2, .2, 1 }, -- border color of tukui panels 
+	["altbordercolor"] = { .2, .2, .2 }, -- alternative border color, mainly for unitframes text panels.
 
-	["backdropcolor"] = { .07, .07, .07, 1 }, -- background color of Elvui panels
-	["backdropfadecolor"] = { .07, .07, .07, 0.9 }, --this is always the same as the backdrop color with an alpha of 0.9, see colors.lua
+	["backdropcolor"] = { .1, .1, .1, 1 }, -- background color of Elvui panels
+	["backdropfadecolor"] = { .1, .1, .1, 0.8 }, --this is always the same as the backdrop color with an alpha of 0.9, see colors.lua
 	
 	
 	["txtcolor"] = { .09, .51, .81 },					-- derp shit

@@ -6,10 +6,17 @@ V6.2.3 - [05/15/2011]
 * changed the way UI resolution override function works (may help some lower res users?)
 * added option to change fadedbackdropcolor (transparent windows) in media section
 * slighly adjust chat window settings
+* more skinning related changes. (map, greeting, achievements, item box etc)
+* removed theme options.. just wasnt going in the direction I had thought out originally.. (tweaked layout of my UI slightly)
 
 BUGS/KNOWN ISSUES:
 * actionbar "movement functionality" is crap. I have been working on this no worries!
 * tooltip anchor isnt correct in some situations.
+
+TODO:
+* fix actionbar movement stuff
+* rework combo stuff
+* classcolor theme options put back in
 
 
 V6.2 - [05/13/2011]

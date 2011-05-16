@@ -24,21 +24,11 @@ T.mult = mult
 local function GetTemplate(t)
 	backdropa = 1
 	if t == "Transparent" then
-		if C["general"].template == "Elv" then
-			borderr, borderg, borderb = .23, .23, .23
-			backdropr, backdropg, backdropb, backdropa = unpack(C["media"].backdropfadecolor)
-		else
-			borderr, borderg, borderb = unpack(C["media"].bordercolor)
-			backdropr, backdropg, backdropb, backdropa = unpack(C["media"].backdropfadecolor)
-		end
+		borderr, borderg, borderb = unpack(C["media"].bordercolor)
+		backdropr, backdropg, backdropb, backdropa = unpack(C["media"].backdropfadecolor)
 	else
-		if C["general"].template == "Elv" then
-			borderr, borderg, borderb = .23, .23, .23
-			backdropr, backdropg, backdropb = .07, .07, .07	
-		else
-			borderr, borderg, borderb = unpack(C["media"].bordercolor)
-			backdropr, backdropg, backdropb = unpack(C["media"].backdropcolor)
-		end
+		borderr, borderg, borderb = unpack(C["media"].bordercolor)
+		backdropr, backdropg, backdropb = unpack(C["media"].backdropcolor)
 	end
 end
 
@@ -129,10 +119,11 @@ local function CreateBorder(f, i, o)
 end
 
 local function SetTemplate(f, t, texture)
+	if texture then myTex = C.media.panTex else myTex = C.media.blank end
 	GetTemplate(t)
 		
 	f:SetBackdrop({
-	  bgFile = C["media"].blank, 
+	  bgFile = myTex, 
 	  edgeFile = C["media"].blank, 
 	  tile = false, tileSize = 0, edgeSize = T.mult, 
 	  insets = { left = -T.mult, right = -T.mult, top = -T.mult, bottom = -T.mult}
