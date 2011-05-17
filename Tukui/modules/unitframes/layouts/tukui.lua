@@ -1263,39 +1263,21 @@ f:SetScript("OnEvent", function(self, event, addon)
 	if addon == "Tukui_DPS" then
 		--[ DPS ]--
 		-- points
-		if T.lowversion then
-			player:Point("TOP", UIParent, "BOTTOM", -96 , 220)
-			target:Point("TOP", UIParent, "BOTTOM", 96, 220)
-			tot:Point("TOPRIGHT", TukuiTarget, "BOTTOMRIGHT", 0, -5)
-			pet:Point("TOPLEFT", TukuiPlayer, "BOTTOMLEFT", 0, -5)
+		player:Point("TOP", UIParent, "BOTTOM", -225 , 235)
+		target:Point("TOP", UIParent, "BOTTOM", 225, 235)
+		tot:Point("TOPRIGHT", TukuiTarget, "BOTTOMRIGHT", 0, -5)
+		pet:Point("TOPLEFT", TukuiPlayer, "BOTTOMLEFT", 0, -5)
 
-			focus:Point("TOP", UIParent, "BOTTOM", 0, 133)
-		else
-			player:Point("TOP", UIParent, "BOTTOM", -225 , 235)
-			target:Point("TOP", UIParent, "BOTTOM", 225, 235)
-			tot:Point("TOPRIGHT", TukuiTarget, "BOTTOMRIGHT", 0, -5)
-			pet:Point("TOPLEFT", TukuiPlayer, "BOTTOMLEFT", 0, -5)
-
-			focus:Point("TOP", UIParent, "BOTTOM", 0, 230)
-		end
+		focus:Point("TOP", UIParent, "BOTTOM", 0, 230)
 	elseif addon == "Tukui_Heal" then
 		--[ HEAL ]--
 		-- points
-		if T.lowversion then
-			player:Point("TOP", UIParent, "BOTTOM", -315 , 230)
-			target:Point("TOP", UIParent, "BOTTOM", 315, 230)
-			tot:Point("TOPRIGHT", TukuiTarget, "BOTTOMRIGHT", 0, -5)
-			pet:Point("TOPLEFT", TukuiPlayer, "BOTTOMLEFT", 0, -5)
-			
-			focus:Point("BOTTOMRIGHT", ChatLBackground2, "TOPRIGHT", 0, 150)
-		else
-			player:Point("TOP", UIParent, "BOTTOM", -325 , 230)
-			target:Point("TOP", UIParent, "BOTTOM", 325, 230)
-			tot:Point("TOPRIGHT", TukuiTarget, "BOTTOMRIGHT", 0, -5)
-			pet:Point("TOPLEFT", TukuiPlayer, "BOTTOMLEFT", 0, -5)
+		player:Point("TOP", UIParent, "BOTTOM", -325 , 230)
+		target:Point("TOP", UIParent, "BOTTOM", 325, 230)
+		tot:Point("TOPRIGHT", TukuiTarget, "BOTTOMRIGHT", 0, -5)
+		pet:Point("TOPLEFT", TukuiPlayer, "BOTTOMLEFT", 0, -5)
 
-			focus:Point("BOTTOMRIGHT", ChatLBackground2, "TOPRIGHT", 0, 150)
-		end
+		focus:Point("BOTTOMRIGHT", ChatLBackground2, "TOPRIGHT", 0, 150)
 	end
 end)
 
