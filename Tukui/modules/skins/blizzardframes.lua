@@ -2878,6 +2878,11 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			HelpFrameKnowledgebaseSearchBox:ClearAllPoints()
 			HelpFrameKnowledgebaseSearchBox:Point("TOPLEFT", HelpFrameMainInset, "TOPLEFT", 13, -10)
 			HelpFrameKnowledgebaseNavBarOverlay:Kill()
+			
+			if T.IsPTR() then
+				HelpFrameKnowledgebaseNavBar:StripTextures()
+			end
+			
 			HelpFrame:StripTextures(true)
 			HelpFrame:CreateBackdrop("Transparent")
 			SkinEditBox(HelpFrameKnowledgebaseSearchBox)
@@ -3083,6 +3088,34 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		do
 			OpacityFrame:StripTextures()
 			OpacityFrame:SetTemplate("Transparent")
+		end
+		
+		--Encounter Journal
+		if T.IsPTR() then
+			do
+				EncounterJournal:StripTextures(true)
+				EncounterJournal:SetTemplate("Transparent")
+				EncounterJournalNavBar:StripTextures(true)
+				EncounterJournalNavBarOverlay:StripTextures(true)
+				
+				EncounterJournalNavBar:CreateBackdrop("Default")
+				EncounterJournalNavBar.backdrop:Point("TOPLEFT", -2, 0)
+				EncounterJournalNavBar.backdrop:SetPoint("BOTTOMRIGHT")
+				SkinButton(EncounterJournalNavBarHomeButton, true)
+				
+				SkinEditBox(EncounterJournalSearchBox)
+				SkinCloseButton(EncounterJournalCloseButton)
+				
+				EncounterJournalInset:StripTextures(true)
+				EncounterJournalInset:CreateBackdrop("Default")
+				EncounterJournalInset.backdrop:Point("TOPLEFT", 0, -2)
+				EncounterJournalInset.backdrop:Point("BOTTOMRIGHT", -2, 0)
+				EncounterJournalInset.backdrop:SetFrameLevel(EncounterJournalInset.backdrop:GetFrameLevel() + 1)
+				
+				EncounterJournalInstanceSelect:SetFrameLevel(EncounterJournalInstanceSelect:GetFrameLevel() + 1)
+				
+				SkinScrollBar(EncounterJournalInstanceSelectScrollFrameScrollBar)
+			end
 		end
 		
 		--WorldMap
@@ -3723,7 +3756,9 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			PVPTeamManagementFrameInvalidTeamFrame.backdrop:Point( "BOTTOMRIGHT", PVPTeamManagementFrameInvalidTeamFrame, "BOTTOMRIGHT")
 			PVPTeamManagementFrameInvalidTeamFrame.backdrop:SetFrameLevel(PVPTeamManagementFrameInvalidTeamFrame:GetFrameLevel())
 			PVPFrameConquestBar:StripTextures()
-			PVPFrameConquestBar:SetStatusBarTexture(C["media"].normTex)
+			if not T.IsPTR() then
+				PVPFrameConquestBar:SetStatusBarTexture(C["media"].normTex)
+			end
 			PVPFrameConquestBar:CreateBackdrop("Default")
 			PVPBannerFrame:CreateBackdrop("Transparent")
 			PVPBannerFrame.backdrop:Point( "TOPLEFT", PVPBannerFrame, "TOPLEFT")
@@ -4026,7 +4061,15 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 					local icon = _G["SpellButton"..i.."IconTexture"]
 					
 					if first then
-						button:StripTextures()
+						--button:StripTextures()
+						for i=1, button:GetNumRegions() do
+							local region = select(i, button:GetRegions())
+							if region:GetObjectType() == "Texture" then
+								if region:GetTexture() ~= "Interface\\Buttons\\ActionBarFlyoutButton" then
+									region:SetTexture(nil)
+								end
+							end
+						end
 					end
 					
 					if _G["SpellButton"..i.."Highlight"] then

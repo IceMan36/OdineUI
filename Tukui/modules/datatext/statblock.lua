@@ -414,6 +414,60 @@ local function OpenMenu()
 			Calendar_Toggle()
 		end},
 	}
+	
+	if T.IsPTR() then
+		menuList = {
+			{text = CHARACTER_BUTTON,
+			func = function() ToggleCharacter("PaperDollFrame") end},
+			{text = SPELLBOOK_ABILITIES_BUTTON,
+			func = function() if InCombatLockdown() then return end ToggleFrame(SpellBookFrame) end},
+			{text = TALENTS_BUTTON,
+			func = function()
+				if not PlayerTalentFrame then
+					LoadAddOn("Blizzard_TalentUI")
+				end
+
+				if not GlyphFrame then
+					LoadAddOn("Blizzard_GlyphUI")
+				end
+				PlayerTalentFrame_Toggle()
+			end},
+			{text = ACHIEVEMENT_BUTTON,
+			func = function() ToggleAchievementFrame() end},
+			{text = QUESTLOG_BUTTON,
+			func = function() ToggleFrame(QuestLogFrame) end},
+			{text = SOCIAL_BUTTON,
+			func = function() ToggleFriendsFrame(1) end},
+			{text = calendar_string,
+			func = function() GameTimeFrame:Click() end},
+			{text = PLAYER_V_PLAYER,
+			func = function() ToggleFrame(PVPFrame) end},
+			{text = ACHIEVEMENTS_GUILD_TAB,
+			func = function()
+				if IsInGuild() then
+					if not GuildFrame then LoadAddOn("Blizzard_GuildUI") end
+					GuildFrame_Toggle()
+				else
+					if not LookingForGuildFrame then LoadAddOn("Blizzard_LookingForGuildUI") end
+					if not LookingForGuildFrame then return end
+					LookingForGuildFrame_Toggle()
+				end
+			end},
+			{text = LFG_TITLE,
+			func = function() ToggleFrame(LFDParentFrame) end},
+			{text = L_LFRAID,
+			func = function() ToggleFrame(LFRParentFrame) end},
+			{text = ENCOUNTER_JOURNAL, 
+			func = function() ToggleFrame(EncounterJournal) end},	
+			{text = L_CALENDAR,
+			func = function()
+			if(not CalendarFrame) then LoadAddOn("Blizzard_Calendar") end
+				Calendar_Toggle()
+			end},			
+			{text = HELP_BUTTON,
+			func = function() ToggleHelpFrame() end},
+		}
+	end
 
 	EasyMenu(menuList, menuFrame, "cursor", 0, 0, "MENU", 2)
 end
@@ -497,6 +551,7 @@ ClearTargetButtonText:SetJustifyH("CENTER", 1, 0)
 --Create toggle button
 local ToggleButton = CreateFrame("Frame", "ToggleButton", UIParent)
 ToggleButton:CreatePanel("Default", width, 20, "CENTER", UIParent, "CENTER", 0, 0)
+ToggleButton:SetTemplate("Default", true) -- hacks for now.. use createframe instead of createpanel
 ToggleButton:ClearAllPoints()
 ToggleButton:SetPoint("TOPLEFT", stat[3], "TOPRIGHT", T.Scale(8), 0)
 ToggleButton:EnableMouse(true)

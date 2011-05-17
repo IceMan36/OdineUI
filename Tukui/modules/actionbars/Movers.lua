@@ -216,10 +216,14 @@ do
 			LeftSplit:SetPoint("TOPRIGHT", TukuiSplitActionBarLeftBackground, "TOPLEFT", T.Scale(-4), 0)
 			LeftSplit:SetPoint("BOTTOMLEFT", TukuiSplitActionBarLeftBackground, "BOTTOMLEFT", T.Scale(-19), 0)
 			
+			--TukuiLeftSplitBarData:Show()
+			
 			RightSplit.Text:SetText("<")
 			RightSplit:ClearAllPoints()
 			RightSplit:SetPoint("TOPLEFT", TukuiSplitActionBarRightBackground, "TOPRIGHT", T.Scale(4), 0)
-			RightSplit:SetPoint("BOTTOMRIGHT", TukuiSplitActionBarRightBackground, "BOTTOMRIGHT", T.Scale(19), 0)				
+			RightSplit:SetPoint("BOTTOMRIGHT", TukuiSplitActionBarRightBackground, "BOTTOMRIGHT", T.Scale(19), 0)
+
+			--TukuiRightSplitBarData:Show()
 		else
 			SaveBars("splitbar", false)
 			LeftSplit.Text:SetText("<")
@@ -227,10 +231,14 @@ do
 			LeftSplit:SetPoint("TOPRIGHT", TukuiMainMenuBar, "TOPLEFT", T.Scale(-4), 0)
 			LeftSplit:SetPoint("BOTTOMLEFT", TukuiMainMenuBar, "BOTTOMLEFT", T.Scale(-19), 0)
 			
+			--TukuiLeftSplitBarData:Hide()
+			
 			RightSplit.Text:SetText(">")
 			RightSplit:ClearAllPoints()
 			RightSplit:SetPoint("TOPLEFT", TukuiMainMenuBar, "TOPRIGHT", T.Scale(4), 0)
 			RightSplit:SetPoint("BOTTOMRIGHT", TukuiMainMenuBar, "BOTTOMRIGHT", T.Scale(19), 0)
+			
+			--TukuiRightSplitBarData:Hide()
 		end
 		
 		if T.lowversion ~= true and T["actionbar"].rightbars > 2 and T["actionbar"].splitbar == true and T["actionbar"].bottomrows == 1 then

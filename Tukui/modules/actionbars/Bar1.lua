@@ -42,7 +42,9 @@ local function GetBar()
 end
 
 function T.PositionMainBar()
-	MainMenuBar_UpdateKeyRing()
+	if not T.IsPTR() then
+		MainMenuBar_UpdateKeyRing()
+	end
 	local button
 	for i = 1, 12 do
 		button = _G["ActionButton"..i]

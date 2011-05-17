@@ -226,7 +226,7 @@ local function Shared(self, unit)
 			local Resting = health:CreateTexture(nil, "OVERLAY")
 			Resting:SetHeight(25/1.5)
 			Resting:SetWidth(25/1.5)
-			Resting:SetPoint("TOPRIGHT", 2, 8)
+			Resting:SetPoint("CENTER", 0, 2)
 			Resting:SetTexture([=[Interface\CharacterFrame\UI-StateIcon]=])
 			Resting:SetTexCoord(0, 0.5, 0, 0.421875)
 			self.Resting = Resting

@@ -7,7 +7,7 @@ PlayerPowerBarAlt:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	
 local AltPowerBar = CreateFrame("Frame", "TukuiAltPowerBar", TukuiInfoRight)
 AltPowerBar:SetAllPoints()
-AltPowerBar:SetFrameStrata("MEDIUM")
+AltPowerBar:SetFrameStrata("TOOLTIP")
 AltPowerBar:SetFrameLevel(0)
 AltPowerBar:EnableMouse(true)
 AltPowerBar:SetTemplate("Default")

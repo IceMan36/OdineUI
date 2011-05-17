@@ -997,6 +997,7 @@ function Stuffing:ADDON_LOADED(addon)
 end
 
 function Stuffing:PLAYER_ENTERING_WORLD()
+	if T.IsPTR() then return end
 	-- setting key ring bag
 	-- reskin keyring
 
@@ -1479,24 +1480,26 @@ function Stuffing.Menu(self, level)
 	end
 	UIDropDownMenu_AddButton(info, level)
 	
-	wipe(info)
-	info.text = "Show Keyring"
-	info.checked = function()
-		return key_ring == 1
-	end
-	
-	info.func = function()
-		if key_ring == 1 then
-			key_ring = 0
-		else
-			key_ring = 1
+	if not T.IsPTR() then
+		wipe(info)
+		info.text = "Show Keyring"
+		info.checked = function()
+			return key_ring == 1
 		end
-		ToggleKeyRing()
-		Stuffing:Layout()
+		
+		info.func = function()
+			if key_ring == 1 then
+				key_ring = 0
+			else
+				key_ring = 1
+			end
+			ToggleKeyRing()
+			Stuffing:Layout()
+		end
+		
+		
+		UIDropDownMenu_AddButton(info, level)
 	end
-	
-	
-	UIDropDownMenu_AddButton(info, level)
 
 	wipe(info)
 	info.disabled = nil
