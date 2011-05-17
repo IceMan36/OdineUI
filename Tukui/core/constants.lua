@@ -16,15 +16,6 @@ T.patch = GetBuildInfo()
 T.level = UnitLevel("player")
 T.myrealm = GetRealmName()
 
-if not TukuiSaved then
-	TukuiSaved = {	
-		["bottomrows"] = 1,
-		["rightbars"] = 1,
-		["splitbars"] = true,
-		["actionbarsLocked"] = false,
-	}
-end
-
 -- sort this out later
 T.Colors = {
 	tapped = {0.55, 0.57, 0.61},

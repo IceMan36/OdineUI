@@ -34,105 +34,54 @@ anchor:SetAlpha(0)
 anchor:SetTemplate("Default", true)
 anchor:SetBackdropBorderColor(1, 0, 0, 1)
 anchor:SetMovable(true)
-if C.chat.background and ChatRBackground2 and not C["actionbar"].vertical_rightbars then
-	anchor:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", 0, T.Scale(28))
-elseif C.chat.background and ChatRBackground2 then
-	anchor:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", 0, T.Scale(3))
-else
-	anchor:SetPoint("BOTTOMRIGHT", TukuiInfoRight)
-end
+anchor:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", 0, T.Scale(3))
 anchor.text = T.SetFontString(anchor, C["media"].font, 11, "OUTLINE")
 anchor.text:SetPoint("CENTER")
 anchor.text:SetText(L.move_tooltip)
 
--- Update Tukui Tooltip Position on some specifics Tooltip
--- Also used because on Eyefinity, SetClampedToScreen doesn't work on left and right side of screen #1
-local function UpdateTooltip(self)
-	local owner = self:GetOwner()
-	if not owner then return end	
-	local name = owner:GetName()
-	
-	-- fix X-offset or Y-offset
-	local x = T.buttonspacing
-	--local tempX = T.buttonsize + T.buttonspacing + 33 add 13
-	
-	-- mouseover
-	if self:GetAnchorType() == "ANCHOR_CURSOR" then
-		-- h4x for world object tooltip border showing last border color 
-		-- or showing background sometime ~blue :x		
-		if NeedBackdropBorderRefresh then
-			NeedBackdropBorderRefresh = false			
-			self:SetBackdropColor(unpack(C.media.backdropcolor))
-			if not C["tooltip"].cursor then
-				self:SetBackdropBorderColor(unpack(C.media.bordercolor))
-			end
-		end
-	elseif self:GetAnchorType() == "ANCHOR_NONE" and InCombatLockdown() and C["tooltip"].hidecombat == true then
+local function SetRightTooltipPos(self)
+	local inInstance, instanceType = IsInInstance()
+	self:ClearAllPoints()
+	if InCombatLockdown() and C["tooltip"].hidecombat == true and (C["tooltip"].hidecombatraid == true and inInstance and (instanceType == "raid")) then
 		self:Hide()
-	end
-	
-	if name and (TukuiPlayerBuffs or TukuiPlayerDebuffs) then
-		if (TukuiPlayerBuffs:GetPoint():match("LEFT") or TukuiPlayerDebuffs:GetPoint():match("LEFT")) and (name:match("TukuiPlayerBuffs") or name:match("TukuiPlayerDebuffs")) then
-			self:SetAnchorType("ANCHOR_BOTTOMRIGHT", x, -x)
-		end
-	end
-		
-	if (owner == MiniMapBattlefieldFrame or owner == MiniMapMailFrame) and TukuiMinimap then
-		if TukuiMinimap:GetPoint():match("LEFT") then 
-			self:SetAnchorType("ANCHOR_TOPRIGHT", x, -x)
-		end
-	end
-	
-	if self:GetAnchorType() == "ANCHOR_NONE" and TukuiTooltipAnchor then
-		local point = TukuiTooltipAnchor:GetPoint()
-		if point == "TOPLEFT" then
-			self:ClearAllPoints()
-			self:SetPoint("TOPLEFT", TukuiTooltipAnchor, "BOTTOMLEFT", 0, -x)			
-		elseif point == "TOP" then
-			self:ClearAllPoints()
-			self:SetPoint("TOP", TukuiTooltipAnchor, "BOTTOM", 0, -x)			
-		elseif point == "TOPRIGHT" then
-			self:ClearAllPoints()
-			self:SetPoint("TOPRIGHT", TukuiTooltipAnchor, "BOTTOMRIGHT", 0, -x)			
-		elseif point == "BOTTOMLEFT" or point == "LEFT" then
-			self:ClearAllPoints()
-			self:SetPoint("BOTTOMLEFT", TukuiTooltipAnchor, "TOPLEFT", 0, x)		
-		elseif point == "BOTTOMRIGHT" or point == "RIGHT" then
-			if TukuiBags and TukuiBags:IsShown() then
-				self:ClearAllPoints()
-				self:SetPoint("BOTTOMRIGHT", TukuiBags, "TOPRIGHT", 0, x)
-			elseif not C["actionbar"].vertical_rightbars then
-				if HasPetUI() then
-					self:ClearAllPoints()
-					self:SetPoint("BOTTOMRIGHT", TukuiPetBar, "TOPRIGHT", 0, x)
-				else
-					self:ClearAllPoints()
-					self:SetPoint("BOTTOMRIGHT", TukuiRightBar, "TOPRIGHT", 0, x)
-				end
-			elseif T.ChatRightShown == false then
-				if  C["addonskins"].embed ==  "Skada" and IsAddOnLoaded("Skada") and Skada:GetWindows()[1].bargroup:IsShown() then
-					self:ClearAllPoints()
-					self:SetPoint("BOTTOMRIGHT", TukuiTooltipAnchor, "TOPRIGHT", 0, x)
-				else
-					self:ClearAllPoints()
-					self:SetPoint("BOTTOMRIGHT", TukuiInfoRight, "TOPRIGHT", 0, x)
-				end
+	elseif InCombatLockdown() and C["tooltip"].hidecombat == true and C["tooltip"].hidecombatraid == false then
+		self:Hide()
+	else
+		if C["bags"].enable == true and TukuiBags and TukuiBags:IsShown() then
+			self:SetPoint("BOTTOMRIGHT", TukuiBags, "TOPRIGHT", -1, T.Scale(18))	
+		elseif TooltipMover and T.Movers["TooltipMover"]["moved"] == true then
+			local point, _, _, _, _ = TooltipMover:GetPoint()
+			if point == "TOPLEFT" then
+				self:SetPoint("TOPLEFT", TooltipMover, "BOTTOMLEFT", 1, T.Scale(-4))
+			elseif point == "TOPRIGHT" then
+				self:SetPoint("TOPRIGHT", TooltipMover, "BOTTOMRIGHT", -1, T.Scale(-4))
+			elseif point == "BOTTOMLEFT" or point == "LEFT" then
+				self:SetPoint("BOTTOMLEFT", TooltipMover, "TOPLEFT", 1, T.Scale(18))
 			else
-				self:ClearAllPoints()
-				self:SetPoint("BOTTOMRIGHT", TukuiTooltipAnchor, "TOPRIGHT", 0, x)
+				self:SetPoint("BOTTOMRIGHT", TooltipMover, "TOPRIGHT", -1, T.Scale(18))
 			end
 		else
-			self:ClearAllPoints()
-			self:SetPoint("BOTTOM", TukuiTooltipAnchor, "TOP", 0, x)	
+			if T.CheckAddOnShown() == true then
+				if C["chat"].background == true and T.ChatRightShown == true then
+					if T.RightChat == true then
+						self:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", -1, T.Scale(28))	
+					else
+						self:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", -1, T.Scale(18))	
+					end
+				else
+					self:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", -1, T.Scale(18))		
+				end	
+			else
+				self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", T.Scale(-3), T.Scale(28))	
+			end
 		end
 	end
 end
 
-
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(self, parent)
 	if C["tooltip"].cursor == true then
-		if IsAddOnLoaded("Tukui_Heal") and parent ~= UIParent then
-			self:SetOwner(parent, "ANCHOR_NONE")
+		if IsAddOnLoaded("Tukui_Heal") and parent ~= UIParent then 
+			self:SetOwner(parent, "ANCHOR_NONE")	
 		else
 			self:SetOwner(parent, "ANCHOR_CURSOR")
 		end
@@ -142,7 +91,24 @@ hooksecurefunc("GameTooltip_SetDefaultAnchor", function(self, parent)
 	self.default = 1
 end)
 
-GameTooltip:HookScript("OnUpdate", function(self, ...) UpdateTooltip(self) end)
+GameTooltip:HookScript("OnUpdate",function(self, ...)
+	if self:GetAnchorType() == "ANCHOR_CURSOR" then
+		local x, y = GetCursorPosition();
+		local effScale = self:GetEffectiveScale();
+		self:ClearAllPoints();
+		self:SetPoint("BOTTOMLEFT","UIParent","BOTTOMLEFT",(x / effScale + (15)),(y / effScale + (7)))		
+	end
+	
+	if self:GetAnchorType() == "ANCHOR_CURSOR" and NeedBackdropBorderRefresh == true and C["tooltip"].cursor ~= true then
+		-- h4x for world object tooltip border showing last border color 
+		-- or showing background sometime ~blue :x
+		NeedBackdropBorderRefresh = false
+		self:SetBackdropColor(unpack(C.media.backdropfadecolor))
+		self:SetBackdropBorderColor(unpack(C.media.bordercolor))
+	elseif self:GetAnchorType() == "ANCHOR_NONE" then
+		SetRightTooltipPos(self)
+	end
+end)
 
 local function Hex(color)
 	return string.format('|cff%02x%02x%02x', color.r * 255, color.g * 255, color.b * 255)

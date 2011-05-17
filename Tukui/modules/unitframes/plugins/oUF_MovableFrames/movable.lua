@@ -298,7 +298,7 @@ do
 
 	function frame:VARIABLES_LOADED()
 		-- I honestly don't trust the load order of SVs.
-		_DB = ElvuiUFpos or {}
+		_DB = TukuiUFpos or {}
 		TukuiUFpos = _DB
 		
 		-- Got to catch them all!

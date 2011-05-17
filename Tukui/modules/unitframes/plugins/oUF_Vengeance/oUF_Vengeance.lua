@@ -27,7 +27,7 @@ local addon, ns = ...
 local oUF = oUF or ns.oUF
 
 local _, class = UnitClass("player")
-local vengeance = GetSpellInfo(93098)
+local vengeance = GetSpellInfo(93098) or GetSpellInfo(76691)
 
 local tooltip = CreateFrame("GameTooltip", "VengeanceTooltip", UIParent, "GameTooltipTemplate")
 tooltip:SetOwner(UIParent, "ANCHOR_NONE")				

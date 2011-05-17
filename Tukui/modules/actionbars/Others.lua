@@ -1,4 +1,4 @@
-local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
+local T, C, L, DB = unpack(select(2, ...)) -- Import Functions/Constants, Config, Locales
 
 if not C["actionbar"].enable == true then return end
 
@@ -41,13 +41,3 @@ TukuiOnLogon:SetScript("OnEvent", function(self, event)
 		end
 	end
 end)
-
-
-local vehicle = CreateFrame("Button", "TukuiExitVehicleButton", UIParent, "SecureHandlerClickTemplate")
-vehicle:CreatePanel("Default", T.buttonsize * 2, T.buttonsize + 1, "BOTTOMRIGHT", TukuiInfoRightLButton, "BOTTOMLEFT", -3, 0)
-vehicle:RegisterForClicks("AnyUp")
-vehicle:SetScript("OnClick", function() VehicleExit() end)
-vehicle.text = T.SetFontString(vehicle, C["media"].font, C["general"].fontscale, "OUTLINE")
-vehicle.text:Point("CENTER", 1, 1)
-vehicle.text:SetText(T.cStart .. "Exit")
-RegisterStateDriver(vehicle, "visibility", "[target=vehicle,exists] show;hide")

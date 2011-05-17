@@ -40,3 +40,9 @@ C["classtimer"].proccolor = {T.UnpackColors(C["classtimer"].proccolor)}
 
 C["classtimer"].gen_font = LSM:Fetch("font", C["classtimer"].gen_font)
 C["classtimer"].stack_font = LSM:Fetch("font", C["classtimer"].stack_font)
+
+C["actionbar"].expiringcolor = {T.UnpackColors(C["actionbar"].expiringcolor)}
+C["actionbar"].secondscolor = {T.UnpackColors(C["actionbar"].secondscolor)}
+C["actionbar"].minutescolor = {T.UnpackColors(C["actionbar"].minutescolor)}
+C["actionbar"].hourscolor = {T.UnpackColors(C["actionbar"].hourscolor)}
+C["actionbar"].dayscolor = {T.UnpackColors(C["actionbar"].dayscolor)}

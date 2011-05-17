@@ -62,27 +62,6 @@ T.PostUpdatePower = function(element, unit, min, max)
 	element:GetParent().Health:SetHeight(max ~= 0 and 20 or 22)
 end
 
-local ShortValue = function(value)
-	if value >= 1e6 then
-		return ("%.1fm"):format(value / 1e6):gsub("%.?0+([km])$", "%1")
-	elseif value >= 1e3 or value <= -1e3 then
-		return ("%.1fk"):format(value / 1e3):gsub("%.?0+([km])$", "%1")
-	else
-		return value
-	end
-end
-
-local ShortValueNegative = function(v)
-	if v <= 999 then return v end
-	if v >= 1000000 then
-		local value = string.format("%.1fm", v/1000000)
-		return value
-	elseif v >= 1000 then
-		local value = string.format("%.1fk", v/1000)
-		return value
-	end
-end
-
 T.AuraFilter = function(icons, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID)	
 	local inInstance, instanceType = IsInInstance()
 	icon.owner = caster
@@ -174,13 +153,13 @@ T.PostUpdateHealth = function(health, unit, min, max)
 				if C["unitframes"].percentage then
 					health.percent:SetFormattedText("|cff%02x%02x%02x%d%%|r", r * 255, g * 255, b * 255, floor(min / max * 100))
 				end
-				health.value:SetFormattedText("|cffAF5050%s|r |cffD7BEA5|||r |cff559655%s|r", ShortValue(min), ShortValue(max))
+				health.value:SetFormattedText("|cffAF5050%s|r |cffD7BEA5|||r |cff559655%s|r", T.ShortValue(min), T.ShortValue(max))
 			elseif (unit and unit:find("arena%d")) or (unit and unit:find("boss%d")) then
 				if C["unitframes"].percentage then
 					health.percent:SetFormattedText("|cff%02x%02x%02x%d%%|r", r * 255, g * 255, b * 255, floor(min / max * 100))
 				end
 			else
-				health.value:SetText("|cff559655-"..ShortValueNegative(max-min).."|r")
+				health.value:SetText("|cff559655-"..T.ShortValueNegative(max-min).."|r")
 			end
 		elseif min == max then
 			if unit == "player" and health:GetAttribute("normalUnit") ~= "pet" or unit == "target" then
@@ -219,7 +198,7 @@ T.PostUpdateHealthRaid = function(health, unit, min, max)
 		end
 		
 		if min ~= max then
-			health.value:SetText("|cff559655-"..ShortValueNegative(max-min).."|r")
+			health.value:SetText("|cff559655-"..T.ShortValueNegative(max-min).."|r")
 		else
 			health.value:SetText(" ")
 		end
@@ -286,7 +265,7 @@ T.PostUpdatePower = function(power, unit, min, max)
 					if C["unitframes"].percentage then
 						power.percent:SetFormattedText("%d%%", floor(min / max * 100))
 					end
-					power.value:SetFormattedText("%s |cffD7BEA5|||r %s", ShortValue(max - (max - min)), ShortValue(max))
+					power.value:SetFormattedText("%s |cffD7BEA5|||r %s", T.ShortValue(max - (max - min)), T.ShortValue(max))
 				elseif (unit and unit:find("arena%d")) or (unit and unit:find("boss%d")) then
 					if C["unitframes"].percentage then
 						power.percent:SetText(" ")
@@ -296,7 +275,7 @@ T.PostUpdatePower = function(power, unit, min, max)
 					if C["unitframes"].percentage then
 						power.percent:SetText(" ")
 					end
-					power.value:SetText(ShortValue(min))
+					power.value:SetText(T.ShortValue(min))
 				end
 			else
 				if C["unitframes"].percentage then
@@ -315,18 +294,18 @@ T.PostUpdatePower = function(power, unit, min, max)
 					if C["unitframes"].percentage then
 						power.percent:SetText(" ")
 					end
-					power.value:SetText(ShortValue(min))
+					power.value:SetText(T.ShortValue(min))
 				else
 					if C["unitframes"].percentage then
 						power.percent:SetText(" ")
 					end
-					power.value:SetText(ShortValue(min))
+					power.value:SetText(T.ShortValue(min))
 				end
 			else
 				if C["unitframes"].percentage then
 					power.percent:SetText(" ")
 				end
-				power.value:SetText(ShortValue(min))
+				power.value:SetText(T.ShortValue(min))
 			end
 		end
 	end
@@ -357,7 +336,8 @@ local FormatTime = function(s)
 	return format("%.1f", s)
 end
 
-local CreateAuraTimer = function(self, elapsed)
+local abs = math.abs --faster
+local CreateAuraTimer = function(self, elapsed)	
 	if self.timeLeft then
 		self.elapsed = (self.elapsed or 0) + elapsed
 		if self.elapsed >= 0.1 then
@@ -369,56 +349,70 @@ local CreateAuraTimer = function(self, elapsed)
 			end
 			if self.timeLeft > 0 then
 				local time = FormatTime(self.timeLeft)
-				self.remaining:SetText(time)
+				if self.reverse then time = FormatTime(abs(self.timeLeft - self.duration), true) end
+				self.text:SetText(time)
 				if self.timeLeft <= 5 then
-					self.remaining:SetTextColor(0.99, 0.31, 0.31)
+					self.text:SetTextColor(0.99, 0.31, 0.31)
 				else
-					self.remaining:SetTextColor(1, 1, 1)
+					self.text:SetTextColor(1, 1, 1)
 				end
 			else
-				self.remaining:Hide()
+				self.text:Hide()
 				self:SetScript("OnUpdate", nil)
+			end
+			if (not self.debuff) and C["general"].template == "ClassColor" then
+				local r, g, b = self:GetParent():GetParent().Health.backdrop:GetBackdropBorderColor()
+				self:SetBackdropBorderColor(r, g, b)
 			end
 			self.elapsed = 0
 		end
 	end
 end
 
-T.PostCreateAura = function(element, button)
-	T.SetTemplate(button)
-	button:CreateShadow("Default")
+function T.PostCreateAura(element, button)
+	local unit = button:GetParent():GetParent().unit
+	local header = button:GetParent():GetParent():GetParent():GetName()
 	
-	button.remaining = T.SetFontString(button, C["media"].font, 12, "OUTLINE")
-	button.remaining:Point("CENTER", 1, 4)
+	if unit == "focus" or unit == "targettarget" then
+		button:FontString(nil, C["media"].font, C["unitframes"].auratextscale*0.85, "THINOUTLINE")
+	else
+		button:FontString(nil, C["media"].font, C["unitframes"].auratextscale, "THINOUTLINE")
+	end
+	
+	button:SetTemplate("Default")
+	button.text:SetPoint("CENTER", T.Scale(0), T.mult)
 	
 	button.cd.noOCC = true		 	-- hide OmniCC CDs
 	button.cd.noCooldownCount = true	-- hide CDC CDs
 	
 	button.cd:SetReverse()
-	button.icon:Point("TOPLEFT", 2, -2)
-	button.icon:Point("BOTTOMRIGHT", -2, 2)
-	button.icon:SetTexCoord(.09, .91, .09, .91)
+	button.icon:Point("TOPLEFT", 2*T.raidscale, -2*T.raidscale)
+	button.icon:Point("BOTTOMRIGHT", -2*T.raidscale, 2*T.raidscale)
+	button.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 	button.icon:SetDrawLayer('ARTWORK')
 	
-	button.count:Point("BOTTOMRIGHT", -1, 1)
+	button.count:Point("BOTTOMRIGHT", T.mult, 1.5)
 	button.count:SetJustifyH("RIGHT")
-	button.count:SetFont(C["media"].font, 12, "OUTLINE")
-	button.count:SetTextColor(0.84, 0.75, 0.65)
-	
+	button.count:SetFont(C["media"].font, C["unitframes"].auratextscale*0.8, "THINOUTLINE")
+
 	button.overlayFrame = CreateFrame("frame", nil, button, nil)
 	button.cd:SetFrameLevel(button:GetFrameLevel() + 1)
 	button.cd:ClearAllPoints()
-	button.cd:Point("TOPLEFT", button, "TOPLEFT", 2, -2)
-	button.cd:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
-	button.overlayFrame:SetFrameLevel(button.cd:GetFrameLevel() + 1)	   
+	button.cd:Point("TOPLEFT", button, "TOPLEFT", 2*T.raidscale, -2*T.raidscale)
+	button.cd:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2*T.raidscale, 2*T.raidscale)
+	button.overlayFrame:SetFrameLevel(button.cd:GetFrameLevel() + 2)	   
 	button.overlay:SetParent(button.overlayFrame)
 	button.count:SetParent(button.overlayFrame)
-	button.remaining:SetParent(button.overlayFrame)
+	button.text:SetParent(button.overlayFrame)
+	
+	local highlight = button:CreateTexture(nil, "HIGHLIGHT")
+	highlight:SetTexture(1,1,1,0.45)
+	highlight:SetAllPoints(button.icon)	
 end
 
-T.PostUpdateAura = function(icons, unit, icon, index, offset, filter, isDebuff, duration, timeLeft)
-	local _, _, _, _, dtype, duration, expirationTime, unitCaster, _ = UnitAura(unit, index, icon.filter)
-
+function T.PostUpdateAura(icons, unit, icon, index, offset, filter, isDebuff, duration, timeLeft)
+	local name, _, _, _, dtype, duration, expirationTime, unitCaster, _, _, spellID = UnitAura(unit, index, icon.filter)
+	
 	if(icon.debuff) then
 		if(not UnitIsFriend("player", unit) and icon.owner ~= "player" and icon.owner ~= "vehicle") and (not T.DebuffWhiteList[name]) then
 			icon:SetBackdropBorderColor(unpack(C["media"].bordercolor))
@@ -436,23 +430,36 @@ T.PostUpdateAura = function(icons, unit, icon, index, offset, filter, isDebuff, 
 		if (icon.isStealable or ((T.myclass == "PRIEST" or T.myclass == "SHAMAN") and dtype == "Magic")) and not UnitIsFriend("player", unit) then
 			icon:SetBackdropBorderColor(237/255, 234/255, 142/255)
 		else
-			icon:SetBackdropBorderColor(unpack(C["media"].bordercolor))		
+			if C["general"].template == "ClassColor" then
+				local r, g, b = icon:GetParent():GetParent().Health.backdrop:GetBackdropBorderColor()
+				icon:SetBackdropBorderColor(r, g, b)
+			else
+				icon:SetBackdropBorderColor(unpack(C["media"].bordercolor))
+			end			
 		end
 	end
 	
 	if duration and duration > 0 then
 		if C["unitframes"].auratimer == true then
-			icon.remaining:Show()
+			icon.text:Show()
 		else
-			icon.remaining:Hide()
+			icon.text:Hide()
 		end
 	else
-		icon.remaining:Hide()
+		icon.text:Hide()
 	end
- 
+	
 	icon.duration = duration
 	icon.timeLeft = expirationTime
 	icon.first = true
+	
+	
+	if T.ReverseTimer and T.ReverseTimer[spellID] then 
+		icon.reverse = true 
+	else
+		icon.reverse = false
+	end
+
 	icon:SetScript("OnUpdate", CreateAuraTimer)
 end
 

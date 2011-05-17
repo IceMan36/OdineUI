@@ -4,9 +4,11 @@ DB["general"] = {
 	["autoscale"] = true,                               -- mainly enabled for users that don't want to mess with the config file
 	["uiscale"] = 0.71,                                 -- set your value (between 0.64 and 1) of your uiscale if autoscale is off
 	["fontscale"] = 12,									-- global font scale most aspect of the ui (UNFINISHED)m
-	["overridelowtohigh"] = "NONE",                      -- EXPERIMENTAL ONLY! override lower version to higher version on a lower reso.
+	["resolutionoverride"] = "NONE",					--override lowversion (Low, High)
 	["multisampleprotect"] = true,                      -- i don't recommend this because of shitty border but, voila!
-	["sharpborders"] = true,
+	["sharpborders"] = true,							-- Enable use of sharper borders
+	["classcolortheme"] = false,						--class colored theme for panels
+	["panelheight"] = 23,								-- Height of datatext panels
 }
 
 DB["media"] = {
@@ -23,18 +25,16 @@ DB["media"] = {
 	["glossTex"] = "Tukui Glossy",
 	["blank"] = "Tukui Blank",
 	
-	["hTex"] = [[Interface\AddOns\Tukui\medias\textures\Glamour2]], -- texture used for health bars
 	["panTex"] = [[Interface\AddOns\Tukui\medias\textures\Glamour7]], -- texture used for datatext panels
 	
 	["striped"] = [[Interface\AddOns\Tukui\medias\textures\Striped]], -- unitframes combo points
 	["copyicon"] = [[Interface\AddOns\Tukui\medias\textures\copy]], -- copy icon
 	["buttonhover"] = [[Interface\AddOns\Tukui\medias\textures\button_hover]],
 
-	--["bordercolor"] = { .05, .05, .05, 1 }, -- border color of tukui panels
 	["bordercolor"] = { .2, .2, .2, 1 }, -- border color of tukui panels 
 	["altbordercolor"] = { .2, .2, .2 }, -- alternative border color, mainly for unitframes text panels.
 
-	["backdropcolor"] = { .1, .1, .1, 1 }, -- background color of Elvui panels
+	["backdropcolor"] = { .1, .1, .1, 1 }, -- background color of panels
 	["backdropfadecolor"] = { .1, .1, .1, 0.8 }, --this is always the same as the backdrop color with an alpha of 0.9, see colors.lua
 	
 	
@@ -48,10 +48,11 @@ DB["media"] = {
 DB["unitframes"] = {
 	-- Gen.
 	["enable"] = true,                                  -- do i really need to explain this?
+	["fontsize"] = 12,									-- font size for most unitframes
 	
 	-- Colors
 	["enemyhcolor"] = false,                            -- enemy target (players) color by hostility, very useful for healer.
-	["healthColor"] = { .1, .1, .1 },					-- option only works if theme is NOT set to classcolor
+	["healthColor"] = { .07, .07, .07 },					-- option only works if theme is NOT set to classcolor
 	["healthBgColor"] = { .7, .1, .1 },					-- see above derp
 	
 	-- Castbar
@@ -80,8 +81,7 @@ DB["unitframes"] = {
 	["bossbuffs"] = true,								-- enable boss buffs
 	["bossdebuffs"] = true,								-- enable boss debuffs
 	["buffsperrow"] = 8,                  				-- set amount of buffs shown (player/target only)
-	["debuffsperrow"] = 7,								-- set amount of debuffs shown (player/target only)
-	
+	["debuffsperrow"] = 7,								-- set amount of debuffs shown (player/target only)	
 	
 	-- Misc.
 	["charportrait"] = true,                           -- do i really need to explain this?
@@ -115,12 +115,6 @@ DB["unitframes"] = {
 		
 		-- Dps
 		["hidepower"] = false,
-		
-	-- Frame Sizes
-	["playtarframe"] = 215,								-- size of player/target frame
-	["otherframe"] = 130,								-- size of tot/focus/pet frames
-	["baframe"] = 200,									-- size of boss/arena frames
-	
 
 	-- Extra Frames
 	["maintank"] = false,                               -- enable maintank
@@ -132,13 +126,6 @@ DB["unitframes"] = {
 	
 	-- class bar
 	["classbar"] = true,                                -- enable tukui classbar over player unit, false disables all classes
-	
-	--[[["gradienthealth"] = true,                          -- change raid health color based on health percent.
-	["gradient"] = {                                    -- health gradient color if unicolor is true.
-		1.0, 0.3, 0.3, -- R, G, B (low HP)
-		0.6, 0.3, 0.3, -- R, G, B (medium HP)
-		0.3, 0.3, 0.3, -- R, G, B (high HP)
-	},--]]
 }
 
 DB["arena"] = {
@@ -150,17 +137,27 @@ DB["auras"] = {
 }
 
 DB["actionbar"] = {
-	["enable"] = true,                                  -- enable tukui action bars
-	["hotkey"] = true,                                 -- enable hotkey display because it was a lot requested
-	["hideshapeshift"] = false,                         -- hide shapeshift or totembar because it was a lot requested.
-	["shapeshiftmouseover"] = false,					-- hide shapeshift or totembar unless moused over.
-	--["rightbarmouseover"] = true,						-- mouseover on rightbars
-	["showgrid"] = true,                                -- show grid on empty button
-	["buttonsize"] = 27,                                -- normal buttons size 27
-	["petbuttonsize"] = 29,                             -- pet & stance buttons size
-	["stancebuttonsize"] = 29,                             -- pet & stance buttons size
-	["buttonspacing"] = 4,                              -- buttons spacing 4
-	["vertical_rightbars"] = true,						-- enables vertical rightbars
+	["enable"] = true,                     -- enable elvui action bars
+	["hotkey"] = true,                     -- enable hotkey display because it was a lot requested
+	["rightbarmouseover"] = false,         -- enable right bars on mouse over
+	["shapeshiftmouseover"] = false,       -- enable shapeshift or totembar on mouseover
+	["hideshapeshift"] = false,            -- hide shapeshift or totembar because it was a lot requested.
+	["showgrid"] = true,                   -- show grid on empty button
+	["bottompetbar"] = false,				-- position petbar below the actionbars instead of the right side
+	["buttonsize"] = 30,					--size of action buttons
+	["buttonspacing"] = 4,					--spacing of action buttons
+	["petbuttonsize"] = 30,					--size of pet/stance buttons
+	["swaptopbottombar"] = false,			--swap the main actionbar position with the bottom actionbar
+	["macrotext"] = false,					--show macro text on actionbuttons
+	["verticalstance"] = false,				--make stance bar vertical
+	
+	["enablecd"] = true,                     -- do i really need to explain this?
+	["treshold"] = 3,                      -- show decimal under X seconds and text turn red
+	["expiringcolor"] = { r = 1, g = 0, b = 0 },		--color of expiring seconds turns to 
+	["secondscolor"] = { r = 1, g = 1, b = 0 },			--seconds color
+	["minutescolor"] = { r = 1, g = 1, b = 1 },			-- minutes color
+	["hourscolor"] = { r = 0.4, g = 1, b = 1 },			-- hours color
+	["dayscolor"] = { r = 0.4, g = 0.4, b = 1 },		-- days color	
 }
 
 DB["bags"] = {
@@ -250,6 +247,7 @@ DB["nameplate"] = {
 DB["tooltip"] = {
 	["enable"] = true,                                  -- true to enable this mod, false to disable
 	["hidecombat"] = false,                             -- hide bottom-right tooltip when in combat
+	["hidecombatraid"] = false,							-- only hide in combat in a raid instance
 	["hidebuttons"] = false,                            -- always hide action bar buttons tooltip.
 	["hideuf"] = false,                                 -- hide tooltip on unitframes
 	["cursor"] = false,                                 -- tooltip via cursor only

@@ -1,3 +1,15 @@
+V6.3 - [05/16/2011]
+* added calendar to game menu/minimap
+* class color theme available again
+* actionbars have been updated to latest V13 code via Tukz/Elv edit (want old style? force low resolution in general config section)
+* reworked entire "theme layout"
+* new resolution override wasnt working properly.. now is!
+* tooltip anchor should function properly i believe now =P
+* horizontal right bars are no longer an option, but im considering re-adding this in the near future
+
+BUGS/KNOWN ISSUES:
+* swingbar and vengeance bar arent functioning properly. believe this is Patch 4.1 related but i'm looking into the issue
+
 V6.2.3 - [05/15/2011]
 * updated to Tukz new configuration style. (everyone needs to do config again sorry)
 * more commands to reset certain aspect of the UI instead of being forced to reset it all or nothing
@@ -8,16 +20,6 @@ V6.2.3 - [05/15/2011]
 * slighly adjust chat window settings
 * more skinning related changes. (map, greeting, achievements, item box etc)
 * removed theme options.. just wasnt going in the direction I had thought out originally.. (tweaked layout of my UI slightly)
-
-BUGS/KNOWN ISSUES:
-* actionbar "movement functionality" is crap. I have been working on this no worries!
-* tooltip anchor isnt correct in some situations.
-
-TODO:
-* fix actionbar movement stuff
-* rework combo stuff
-* classcolor theme options put back in
-
 
 V6.2 - [05/13/2011]
 * added option to change templates ingame config. This allows for people to change the overall look n feel to those of other popular edits out there (default tukui, dajova, eclipse, etc)

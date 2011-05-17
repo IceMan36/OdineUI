@@ -11,15 +11,6 @@
 
 local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
 
--- pixel perfect script of custom ui scale.
-local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/C["general"].uiscale
-local scale = function(x)
-    return mult*math.floor(x/mult+.5)
-end
-
-T.Scale = function(x) return scale(x) end
-T.mult = mult
-
 --[[
 		You have 1 month after r13 release to make changes to your addons with Tukui API.
 		All these functions will disapear from Tukui at the start of marsh 2011
@@ -27,8 +18,8 @@ T.mult = mult
 --]]
 
 T.CreatePanel = function(f, w, h, a1, p, a2, x, y)
-	local sh = scale(h)
-	local sw = scale(w)
+	local sh = T.Scale(h)
+	local sw = T.Scale(w)
 	f:SetFrameLevel(1)
 	f:SetHeight(sh)
 	f:SetWidth(sw)
@@ -37,8 +28,8 @@ T.CreatePanel = function(f, w, h, a1, p, a2, x, y)
 	f:SetBackdrop({
 	  bgFile = C["media"].blank, 
 	  edgeFile = C["media"].blank, 
-	  tile = false, tileSize = 0, edgeSize = mult, 
-	  insets = { left = -mult, right = -mult, top = -mult, bottom = -mult}
+	  tile = false, tileSize = 0, edgeSize = T.mult, 
+	  insets = { left = -T.mult, right = -T.mult, top = -T.mult, bottom = -T.mult}
 	})
 	f:SetBackdropColor(unpack(C["media"].backdropcolor))
 	f:SetBackdropBorderColor(unpack(C["media"].bordercolor))
@@ -46,8 +37,8 @@ end
 
 T.CreateTransparentPanel = function(f, w, h, a1, p, a2, x, y)
 	if t == "Tukui" then
-		local sh = Scale(h)
-		local sw = Scale(w)
+		local sh = T.Scale(h)
+		local sw = T.Scale(w)
 		f:SetFrameLevel(1)
 		f:SetHeight(sh)
 		f:SetWidth(sw)
@@ -81,7 +72,7 @@ T.SetTemplate = function(f)
 	  bgFile = C["media"].blank, 
 	  edgeFile = C["media"].blank, 
 	  tile = false, tileSize = 0, edgeSize = mult, 
-	  insets = { left = -mult, right = -mult, top = -mult, bottom = -mult}
+	  insets = { left = -T.mult, right = -T.mult, top = -T.mult, bottom = -T.mult}
 	})
 	f:SetBackdropColor(unpack(C["media"].backdropcolor))
 	f:SetBackdropBorderColor(unpack(C["media"].bordercolor))

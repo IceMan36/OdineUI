@@ -199,6 +199,188 @@ TukuiSkin:RegisterEvent("ADDON_LOADED")
 TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	if IsAddOnLoaded("Skinner") or IsAddOnLoaded("Aurora") then return end
 	
+	if addon == "Blizzard_ReforgingUI" then
+		ReforgingFrame:StripTextures()
+		ReforgingFrame:SetTemplate("Transparent")
+
+		ReforgingFrameTopInset:StripTextures()
+		ReforgingFrameInset:StripTextures()
+		ReforgingFrameBottomInset:StripTextures()
+
+		SkinButton(ReforgingFrameRestoreButton, true)
+		SkinButton(ReforgingFrameReforgeButton, true)
+
+		SkinDropDownBox(ReforgingFrameFilterOldStat, 180)
+		SkinDropDownBox(ReforgingFrameFilterNewStat, 180)
+
+		ReforgingFrameItemButton:StripTextures()
+		ReforgingFrameItemButton:SetTemplate("Default", true)
+		ReforgingFrameItemButton:StyleButton()
+		ReforgingFrameItemButtonIconTexture:ClearAllPoints()
+		ReforgingFrameItemButtonIconTexture:Point("TOPLEFT", 2, -2)
+		ReforgingFrameItemButtonIconTexture:Point("BOTTOMRIGHT", -2, 2)
+
+		hooksecurefunc("ReforgingFrame_Update", function(self)
+			local currentReforge, icon, name, quality, bound, cost = GetReforgeItemInfo()
+			if icon then
+				ReforgingFrameItemButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+			else
+				ReforgingFrameItemButtonIconTexture:SetTexture(nil)
+			end
+		end)
+
+			SkinCloseButton(ReforgingFrameCloseButton)
+		end
+	
+	if addon == "Blizzard_Calendar" then
+		local frames = {
+			"CalendarFrame",
+		}
+		
+		for _, frame in pairs(frames) do
+			_G[frame]:StripTextures()
+		end
+		
+		CalendarFrame:SetTemplate("Transparent")
+		SkinCloseButton(CalendarCloseButton)
+		CalendarCloseButton:Point("TOPRIGHT", CalendarFrame, "TOPRIGHT", -4, -4)
+		
+		SkinNextPrevButton(CalendarPrevMonthButton)
+		SkinNextPrevButton(CalendarNextMonthButton)
+		
+		do --Handle drop down button, this one is differant than the others
+			local frame = CalendarFilterFrame
+			local button = CalendarFilterButton
+
+			frame:StripTextures()
+			frame:Width(155)
+			
+			_G[frame:GetName().."Text"]:ClearAllPoints()
+			_G[frame:GetName().."Text"]:Point("RIGHT", button, "LEFT", -2, 0)
+
+			
+			button:ClearAllPoints()
+			button:Point("RIGHT", frame, "RIGHT", -10, 3)
+			button.SetPoint = T.dummy
+			
+			SkinNextPrevButton(button, true)
+			
+			frame:CreateBackdrop("Default")
+			frame.backdrop:Point("TOPLEFT", 20, 2)
+			frame.backdrop:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, -2)
+		end
+		
+		
+		--backdrop
+		local bg = CreateFrame("Frame", "CalendarFrameBackdrop", CalendarFrame)
+		bg:SetTemplate("Default")
+		bg:Point("TOPLEFT", 10, -72)
+		bg:Point("BOTTOMRIGHT", -8, 3)
+		
+		CalendarContextMenu:SetTemplate("Default")
+		CalendarContextMenu.SetBackdropColor = T.dummy
+		CalendarContextMenu.SetBackdropBorderColor = T.dummy
+		
+		--Boost frame levels
+		for i=1, 42 do
+			_G["CalendarDayButton"..i]:SetFrameLevel(_G["CalendarDayButton"..i]:GetFrameLevel() + 1)
+		end
+		
+		--CreateEventFrame
+		CalendarCreateEventFrame:StripTextures()
+		CalendarCreateEventFrame:SetTemplate("Transparent")
+		CalendarCreateEventFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", 3, -24)
+		CalendarCreateEventTitleFrame:StripTextures()
+		
+		SkinButton(CalendarCreateEventCreateButton, true)
+		SkinButton(CalendarCreateEventMassInviteButton, true)
+		SkinButton(CalendarCreateEventInviteButton, true)
+		CalendarCreateEventInviteButton:Point("TOPLEFT", CalendarCreateEventInviteEdit, "TOPRIGHT", 4, 1)
+		CalendarCreateEventInviteEdit:Width(CalendarCreateEventInviteEdit:GetWidth() - 2)
+		
+		CalendarCreateEventInviteList:StripTextures()
+		CalendarCreateEventInviteList:SetTemplate("Default")
+		
+		SkinEditBox(CalendarCreateEventInviteEdit)
+		SkinEditBox(CalendarCreateEventTitleEdit)
+		SkinDropDownBox(CalendarCreateEventTypeDropDown, 120)
+		
+		CalendarCreateEventDescriptionContainer:StripTextures()
+		CalendarCreateEventDescriptionContainer:SetTemplate("Default")
+		
+		SkinCloseButton(CalendarCreateEventCloseButton)
+		
+		SkinCheckBox(CalendarCreateEventLockEventCheck)
+		
+		SkinDropDownBox(CalendarCreateEventHourDropDown, 68)
+		SkinDropDownBox(CalendarCreateEventMinuteDropDown, 68)
+		SkinDropDownBox(CalendarCreateEventAMPMDropDown, 68)
+		SkinDropDownBox(CalendarCreateEventRepeatOptionDropDown, 120)
+		CalendarCreateEventIcon:SetTexCoord(.08, .92, .08, .92)
+		CalendarCreateEventIcon.SetTexCoord = T.dummy
+		
+		CalendarCreateEventInviteListSection:StripTextures()
+		
+		CalendarClassButtonContainer:HookScript("OnShow", function()
+			for i, class in ipairs(CLASS_SORT_ORDER) do
+				local button = _G["CalendarClassButton"..i]
+				button:StripTextures()
+				button:CreateBackdrop("Default")
+				
+				local tcoords = CLASS_ICON_TCOORDS[class]
+				local buttonIcon = button:GetNormalTexture()
+				buttonIcon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes")
+				buttonIcon:SetTexCoord(tcoords[1] + 0.015, tcoords[2] - 0.02, tcoords[3] + 0.018, tcoords[4] - 0.02) --F U C K I N G H A X
+			end
+			
+			CalendarClassButton1:Point("TOPLEFT", CalendarClassButtonContainer, "TOPLEFT", 5, 0)
+			
+			CalendarClassTotalsButton:StripTextures()
+			CalendarClassTotalsButton:CreateBackdrop("Default")
+		end)
+		
+		--Texture Picker Frame
+		CalendarTexturePickerFrame:StripTextures()
+		CalendarTexturePickerTitleFrame:StripTextures()
+		
+		CalendarTexturePickerFrame:SetTemplate("Transparent")
+		
+		SkinScrollBar(CalendarTexturePickerScrollBar)
+		SkinButton(CalendarTexturePickerAcceptButton, true)
+		SkinButton(CalendarTexturePickerCancelButton, true)
+		SkinButton(CalendarCreateEventInviteButton, true)
+		SkinButton(CalendarCreateEventRaidInviteButton, true)
+		
+		--Mass Invite Frame
+		CalendarMassInviteFrame:StripTextures()
+		CalendarMassInviteFrame:SetTemplate("Transparent")
+		CalendarMassInviteTitleFrame:StripTextures()
+		
+		SkinCloseButton(CalendarMassInviteCloseButton)
+		SkinButton(CalendarMassInviteGuildAcceptButton)
+		SkinButton(CalendarMassInviteArenaButton2)
+		SkinButton(CalendarMassInviteArenaButton3)
+		SkinButton(CalendarMassInviteArenaButton5)
+		SkinDropDownBox(CalendarMassInviteGuildRankMenu, 130)
+		
+		SkinEditBox(CalendarMassInviteGuildMinLevelEdit)
+		SkinEditBox(CalendarMassInviteGuildMaxLevelEdit)
+		
+		--Raid View
+		CalendarViewRaidFrame:StripTextures()
+		CalendarViewRaidFrame:SetTemplate("Transparent")
+		CalendarViewRaidFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", 3, -24)
+		CalendarViewRaidTitleFrame:StripTextures()
+		SkinCloseButton(CalendarViewRaidCloseButton)
+		
+		--Holiday View
+		CalendarViewHolidayFrame:StripTextures(true)
+		CalendarViewHolidayFrame:SetTemplate("Transparent")
+		CalendarViewHolidayFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", 3, -24)
+		CalendarViewHolidayTitleFrame:StripTextures()
+		SkinCloseButton(CalendarViewHolidayCloseButton)
+	end
+	
 	if addon == "Blizzard_AchievementUI" then
 		local frames = {
 			"AchievementFrame",
@@ -322,7 +504,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 				frame:StripTextures()
 				
 				
-				_G["AchievementFrameSummaryAchievement"..i.."Description"]:SetTextColor(1, 1, 0)
+				_G["AchievementFrameSummaryAchievement"..i.."Description"]:SetTextColor(0.6, 0.6, 0.6)
 				
 				if not frame.backdrop then
 					frame:CreateBackdrop("Default", true)
@@ -364,6 +546,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			_G["AchievementFrameAchievementsContainerButton"..i.."Icon"]:SetParent(frame.backdrop)
 			_G["AchievementFrameAchievementsContainerButton"..i.."Shield"]:SetParent(frame.backdrop)
 			_G["AchievementFrameAchievementsContainerButton"..i.."Label"]:SetParent(frame.backdrop)
+			_G["AchievementFrameAchievementsContainerButton"..i.."Reward"]:SetParent(frame.backdrop)
 			
 			_G["AchievementFrameAchievementsContainerButton"..i.."IconBling"]:Kill()
 			_G["AchievementFrameAchievementsContainerButton"..i.."IconOverlay"]:Kill()
@@ -2263,11 +2446,17 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 
 		for i=1,8 do
 			_G["ClassTrainerScrollFrameButton"..i]:StripTextures()
+			_G["ClassTrainerScrollFrameButton"..i]:StyleButton()
 			_G["ClassTrainerScrollFrameButton"..i.."Icon"]:SetTexCoord(.08, .92, .08, .92)
 			_G["ClassTrainerScrollFrameButton"..i]:CreateBackdrop()
 			_G["ClassTrainerScrollFrameButton"..i].backdrop:Point("TOPLEFT", _G["ClassTrainerScrollFrameButton"..i.."Icon"], "TOPLEFT", -2, 2)
 			_G["ClassTrainerScrollFrameButton"..i].backdrop:Point("BOTTOMRIGHT", _G["ClassTrainerScrollFrameButton"..i.."Icon"], "BOTTOMRIGHT", 2, -2)
 			_G["ClassTrainerScrollFrameButton"..i.."Icon"]:SetParent(_G["ClassTrainerScrollFrameButton"..i].backdrop)
+			
+			_G["ClassTrainerScrollFrameButton"..i].selectedTex:SetTexture(1, 1, 1, 0.3)
+			_G["ClassTrainerScrollFrameButton"..i].selectedTex:ClearAllPoints()
+			_G["ClassTrainerScrollFrameButton"..i].selectedTex:Point("TOPLEFT", 2, -2)
+			_G["ClassTrainerScrollFrameButton"..i].selectedTex:Point("BOTTOMRIGHT", -2, 2)
 		end
 
 		for _, object in pairs(StripAllTextures) do
@@ -2902,7 +3091,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			local function SmallSkin()
 				WorldMapLevelDropDown:ClearAllPoints()
 				WorldMapLevelDropDown:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -10, -4)
-				
+
 				WorldMapFrame.backdrop:ClearAllPoints()
 				WorldMapFrame.backdrop:Point("TOPLEFT", 2, 2)
 				WorldMapFrame.backdrop:Point("BOTTOMRIGHT", 2, -2)
@@ -2969,8 +3158,8 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 					WorldMapFrameSizeDownButton:Show()
 					WorldMapFrame:SetFrameStrata("DIALOG")
 				else
-					WorldMapFrameSizeDownButton:Hide()
-					WorldMapFrameSizeUpButton:Hide()
+					WorldMapFrameSizeDownButton:Disable()
+					WorldMapFrameSizeUpButton:Disable()
 				end	
 				
 				WorldMapFrameAreaFrame:SetFrameStrata("FULLSCREEN")
@@ -2994,27 +3183,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 				ToggleFrame(WorldMapFrame)
 				ToggleFrame(WorldMapFrame)
 			end			
-	
-			WorldMapFrameSizeDownButton:RegisterEvent("PLAYER_REGEN_DISABLED")
-			WorldMapFrameSizeDownButton:RegisterEvent("PLAYER_REGEN_ENABLED")
-			WorldMapFrameSizeDownButton:SetScript("OnEvent", function(self, event)
-				if InCombatLockdown() then
-					self:Hide()
-				else
-					self:Show()
-				end
-			end)
-			
-			WorldMapFrameSizeUpButton:RegisterEvent("PLAYER_REGEN_DISABLED")
-			WorldMapFrameSizeUpButton:RegisterEvent("PLAYER_REGEN_ENABLED")
-			WorldMapFrameSizeUpButton:SetScript("OnEvent", function(self, event)
-				if InCombatLockdown() then
-					self:Hide()
-				else
-					self:Show()
-				end
-			end)
-			
+		
 			local coords = CreateFrame("Frame", "CoordsFrame", WorldMapFrame)
 			local fontheight = select(2, WorldMapQuestShowObjectivesText:GetFont())*1.1
 			coords:SetFrameLevel(90)
@@ -3022,13 +3191,33 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			coords:FontString("MouseText", C["media"].font, fontheight, "THINOUTLINE")
 			coords.PlayerText:SetTextColor(WorldMapQuestShowObjectivesText:GetTextColor())
 			coords.MouseText:SetTextColor(WorldMapQuestShowObjectivesText:GetTextColor())
-			coords.PlayerText:SetPoint("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", 5, -5)
+			coords.PlayerText:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "BOTTOMLEFT", 5, 5)
 			coords.PlayerText:SetText("Player:   0, 0")
-			coords.MouseText:SetPoint("TOPLEFT", coords.PlayerText, "BOTTOMLEFT", 0, -5)
+			coords.MouseText:SetPoint("BOTTOMLEFT", coords.PlayerText, "TOPLEFT", 0, 5)
 			coords.MouseText:SetText("Mouse:   0, 0")
-
 			local int = 0
-			coords:SetScript("OnUpdate", function(self, elapsed)
+			
+			WorldMapFrame:HookScript("OnUpdate", function(self, elapsed)
+				--For some reason these buttons aren't functioning correctly, and we can't afford for it to fuckup because toggling to a big map in combat will cause a taint.
+				if InCombatLockdown() then
+					WorldMapFrameSizeDownButton:Disable()
+					WorldMapFrameSizeUpButton:Disable()
+				else
+					WorldMapFrameSizeDownButton:Enable()
+					WorldMapFrameSizeUpButton:Enable()			
+				end
+				
+				if WORLDMAP_SETTINGS.size == WORLDMAP_FULLMAP_SIZE then
+					WorldMapFrameSizeUpButton:Hide()
+					WorldMapFrameSizeDownButton:Show()
+				elseif WORLDMAP_SETTINGS.size == WORLDMAP_WINDOWED_SIZE then
+					WorldMapFrameSizeUpButton:Show()
+					WorldMapFrameSizeDownButton:Hide()
+				elseif WORLDMAP_SETTINGS.size == WORLDMAP_QUESTLIST_SIZE then
+					WorldMapFrameSizeUpButton:Hide()
+					WorldMapFrameSizeDownButton:Show()
+				end		
+
 				int = int + 1
 				
 				if int >= 3 then
@@ -3037,9 +3226,9 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 					x = math.floor(100 * x)
 					y = math.floor(100 * y)
 					if x ~= 0 and y ~= 0 then
-						self.PlayerText:SetText(PLAYER..":   "..x..", "..y)
+						coords.PlayerText:SetText(PLAYER..":   "..x..", "..y)
 					else
-						self.PlayerText:SetText(" ")
+						coords.PlayerText:SetText(" ")
 					end
 					
 
@@ -3060,8 +3249,8 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 					end
 					
 					int = 0
-				end
-			end)			
+				end				
+			end)		
 		end
 		
 		--Item Text Frame
@@ -3419,12 +3608,15 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			local buttons = {
 				"PVPFrameLeftButton",
 				"PVPFrameRightButton",
-				"PVPHonorFrameWarGameButton",
 				"PVPColorPickerButton1",
 				"PVPColorPickerButton2",
 				"PVPColorPickerButton3",
 				"PVPBannerFrameAcceptButton",
 			}
+			
+			if not T.IsPTR() then
+				tinsert(buttons, "PVPHonorFrameWarGameButton")
+			end
 
 			for i = 1, #buttons do
 				_G[buttons[i]]:StripTextures()
@@ -3532,6 +3724,16 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			PVPColorPickerButton1:Height(PVPColorPickerButton1:GetHeight()-5)
 			PVPColorPickerButton2:Height(PVPColorPickerButton1:GetHeight())
 			PVPColorPickerButton3:Height(PVPColorPickerButton1:GetHeight())
+			
+			--War Games
+			if T.IsPTR() then
+				SkinButton(WarGameStartButton, true)
+				WarGamesFrame:StripTextures()
+				SkinScrollBar(WarGamesFrameScrollFrameScrollBar)
+
+				WarGameStartButton:ClearAllPoints()
+				WarGameStartButton:Point("LEFT", PVPFrameLeftButton, "RIGHT", 2, 0)
+			end
 
 			--Freaking gay Cancel Button FFSlocal
 			local f = PVPBannerFrameCancelButton
@@ -3548,8 +3750,14 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			f.backdrop:SetFrameLevel(f:GetFrameLevel()-1)
 			
 			--Bottom Tabs
-			for i=1,3 do
-				SkinTab(_G["PVPFrameTab"..i])
+			if not T.IsPTR() then
+				for i=1,3 do
+					SkinTab(_G["PVPFrameTab"..i])
+				end
+			else
+				for i=1,4 do
+					SkinTab(_G["PVPFrameTab"..i])
+				end
 			end
 		end	
 	

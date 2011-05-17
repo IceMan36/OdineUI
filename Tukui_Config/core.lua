@@ -539,8 +539,20 @@ function OUI.GenerateOptionsInternal()
 						desc = L["GEN_SAMPLE"],
 						type = "toggle",
 					},
-					overridelowtohigh = {
+					classcolortheme = {
 						order = 6,
+						name = L["Class Color Theme"],
+						desc = L["Style all frame borders to be your class color, color unitframes to class color"],
+						type = "toggle",
+					},
+					emptyg2511 = {
+						name = "   ",
+						width = "full",
+						type = "description",
+						order = 7,
+					},
+					resolutionoverride = {
+						order = 8,
 						name = L["Resolution Override"],
 						desc = L["OVERRIDE_DESC"],
 						type = "select",
@@ -554,7 +566,7 @@ function OUI.GenerateOptionsInternal()
 						name = "   ",
 						width = "full",
 						type = "description",
-						order = 7,
+						order = 9,
 					},
 					sharpborders = {
 						order = 10,
@@ -1165,90 +1177,176 @@ function OUI.GenerateOptionsInternal()
 				order = 6,
 				type = "group",
 				name = L["Action Bars"],
-				desc = L["Customize your actionbars"],
+				desc = L["AB_DESC"],
 				get = function(info) return db.actionbar[ info[#info] ] end,
 				set = function(info, value) db.actionbar[ info[#info] ] = value; StaticPopup_Show("RELOAD_UI") end,
 				args = {
-					enable = {
-						type = "toggle",
+					intro = {
 						order = 1,
-						name = L["Enable"],
-						desc = L["Enable using built in actionbars."],									
-					},
-					hotkey = {
-						type = "toggle",
-						order = 2,
-						name = L["Show Hotkeys"],
-						desc = L["Toggle whether you want to show keybindings on your actionbar buttons."],
-						disabled = function() return not db.actionbar.enable end,
-					},
-					hideshapeshift = {
-						type = "toggle",
-						order = 3,
-						name = L["Hide Shapeshift"],
-						desc = L["Toggle whether you want to show your shapeshift/totems."],
-						disabled = function() return not db.actionbar.enable end,
-					},
-					shapeshiftmouseover = {
-						type = "toggle",
-						order = 4,
-						name = L["Mouseover Shapeshift"],
-						desc = L["Toggle whether you want to show the shapeshift bar only when moused over."],
-						disabled = function() return (not db.actionbar.enable or db.actionbar.hideshapeshift) end,
-					},
-					showgrid = {
-						type = "toggle",
-						order = 5,
-						name = L["Show Grid"],
-						desc = L["Toggle whether you want to show a grid on empty buttons."],
-						disabled = function() return not db.actionbar.enable end,
-					},
-					vertical_rightbars = {
-						type = "toggle",
-						order = 6,
-						name = L["Vertical rightbars"],
-						desc = L["Toggle whether you want to have your rightbars vertical instead of horizontal."],
-						disabled = function() return not db.actionbar.enable end,
-					},
-					rightbarmouseover = {
-						type = "toggle",
-						order = 6.5,
-						name = L["Mouseover Rightbar"],
-						desc = L["Toggle whether you want to have your rightbars hidden unless moused over."],
-						disabled = function() return not db.actionbar.enable end,
-					},
-					empty7 = {
-						name = "   ",
-						width = "full",
 						type = "description",
-						order = 7,
+						name = L["AB_DESC"],
 					},
-					buttonsize = {
-						type = "range",
-						order = 8,
-						name = L["Button Size"],
-						desc = L["Controls the size of actionbar buttons."],
-						type = "range",
-						min = 22, max = 32, step = 1,
-						disabled = function() return not db.actionbar.enable end,
+					enable = {
+						order = 2,
+						type = "toggle",
+						name = ENABLE,
 					},
-					petbuttonsize = {
-						type = "range",
-						order = 9,
-						name = L["Pet Button Size"],
-						desc = L["Controls the size of your pets actionbar buttons."],
-						type = "range",
-						min = 22, max = 32, step = 1,
-						disabled = function() return not db.actionbar.enable end,
+					ABGroup = {
+						order = 3,
+						type = "group",
+						name = L["General Settings"],
+						guiInline = true,
+						disabled = function() return not db.actionbar.enable end,	
+						args = {
+							hotkey = {
+								type = "toggle",
+								order = 1,
+								name = L["Hotkey Text"],
+								desc = L["Display hotkey text on action buttons"],
+							},
+							rightbarmouseover = {
+								type = "toggle",
+								order = 2,
+								name = L["Right Bar on Mouseover"],
+								desc = L["Hide the right action bar unless mouseovered"],							
+							},
+							hideshapeshift = {
+								type = "toggle",
+								order = 3,
+								name = L["Shape Shift Bar"],
+								desc = L["Hide the shape shift action bar"],								
+							},
+							shapeshiftmouseover = {
+								type = "toggle",
+								order = 4,
+								name = L["Shape Shift on Mouseover"],
+								desc = L["Hide the shape shift action bar unless mouseovered"],	
+								disabled = function() return not db.actionbar.enable or db.actionbar.hideshapeshift end,
+							},
+							verticalstance = {
+								type = "toggle",
+								order = 5,
+								name = L["Vertical Shape Shift"],
+								desc = L["Make the shape shift bar grow vertically instead of horizontally"],	
+								disabled = function() return not db.actionbar.enable or db.actionbar.hideshapeshift end,							
+							},
+							showgrid = {
+								type = "toggle",
+								order = 6,
+								name = L["Display Grid"],
+								desc = L["Display grid backdrop behind empty buttons"],	
+							},
+							bottompetbar = {
+								type = "toggle",
+								order = 7,
+								name = L["Pet Bar below main actionbar"],
+								desc = L["Positions the pet bar below the main actionbar instead of to the right side of the screen"],								
+							},
+							buttonsize = {
+								type = "range",
+								order = 8,
+								name = L["Button Size"],
+								type = "range",
+								min = 20, max = 40, step = 1,									
+							},
+							buttonspacing = {
+								type = "range",
+								order = 9,
+								name = L["Button Spacing"],
+								type = "range",
+								min = 2, max = 7, step = 1,								
+							},
+							petbuttonsize = {
+								type = "range",
+								order = 10,
+								name = L["Pet Button Size"],
+								type = "range",
+								min = 20, max = 40, step = 1,								
+							},
+							swaptopbottombar = {
+								type = "toggle",
+								order = 11,
+								name = L["Main actionbar on top"],
+								desc = L["Positions the main actionbar above all other actionbars"],								
+							},
+							macrotext = {
+								type = "toggle",
+								order = 12,
+								name = L["Macro Text"],						
+							},
+						},
 					},
-					buttonspacing = {
-						type = "range",
-						order = 10,
-						name = L["Button Spacing"],
-						desc = L["Controls the spacing between buttons."],
-						type = "range",
-						min = 1, max = 7, step = 1,
-						disabled = function() return not db.actionbar.enable end,
+					CDGroup = {
+						order = 4,
+						type = "group",
+						name = L["Cooldown Text"],
+						guiInline = true,
+						disabled = function() return not db.actionbar.enablecd end,								
+						args = {
+							enablecd = {
+								type = "toggle",
+								order = 1,
+								name = ENABLE,
+								disabled = false,								
+							},
+							treshold = {
+								type = "range",
+								order = 2,
+								name = L["Threshold"],
+								desc = L["Threshold before turning text red and displaying decimal places"],
+								type = "range",
+								min = -1, max = 60, step = 1,		
+							},
+							ColorGroup = {
+								order = 3,
+								type = "group",
+								name = L["Colors"],
+								guiInline = true,
+								get = function(info)
+									local t = db.actionbar[ info[#info] ]
+									return t.r, t.g, t.b, t.a
+								end,
+								set = function(info, r, g, b)
+									db.actionbar[ info[#info] ] = {}
+									local t = db.actionbar[ info[#info] ]
+									t.r, t.g, t.b = r, g, b
+									StaticPopup_Show("RELOAD_UI")
+								end,									
+								args = {
+									expiringcolor = {
+										type = "color",
+										order = 1,
+										name = L["Expiring"],
+										desc = L["This gets displayed when your below the threshold"],
+										hasAlpha = false,		
+									},
+									secondscolor = {
+										type = "color",
+										order = 2,
+										name = L["Seconds"],
+										hasAlpha = false,												
+									},
+									minutescolor = {
+										type = "color",
+										order = 3,
+										name = L["Minutes"],
+										hasAlpha = false,													
+									},
+									hourscolor = {
+										type = "color",
+										order = 4,
+										name = L["Hours"],
+										hasAlpha = false,												
+									},
+									dayscolor = {
+										type = "color",
+										order = 5,
+										name = L["Days"],
+										hasAlpha = false,													
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -1555,7 +1653,7 @@ function OUI.GenerateOptionsInternal()
 					enable = {
 						type = "toggle",
 						order = 1,
-						name = L["Enable"],
+						name = ENABLE,
 						desc = L["Toggles whether you want to use tukui chat system."],
 					},
 					whispersound = {
@@ -1639,7 +1737,7 @@ function OUI.GenerateOptionsInternal()
 					enable = {
 						type = "toggle",
 						order = 1,
-						name = L["Enable"],
+						name = ENABLE,
 						desc = L["Toggles whether you want to use tukui tooltips."],
 					},
 					empty5t = {

@@ -1,11 +1,11 @@
-local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
 --[[
-        An edited lightweight OmniCC for Tukui
-                A featureless, 'pure' version of OmniCC.
+        An edited lightweight OmniCC for Elvui
+                A featureless, 'pure' version of OmniCDB.
                 This version should work on absolutely everything, but I've removed pretty much all of the options
 --]]
+local T, C, L, DB = unpack(select(2, ...)) -- Import Functions/Constants, Config, Locales
 
-if IsAddOnLoaded("OmniCC") or IsAddOnLoaded("ncCooldown") or C["cooldown"].enable ~= true then return end
+if C["actionbar"].enablecd ~= true or IsAddOnLoaded("OmniCC") or IsAddOnLoaded("ncCooldown") then return end
 
 --constants!
 OmniCC = true --hack to work around detection from other addons for OmniCC
@@ -15,15 +15,18 @@ local DAYISH, HOURISH, MINUTEISH = 3600 * 23.5, 60 * 59.5, 59.5 --used for forma
 local HALFDAYISH, HALFHOURISH, HALFMINUTEISH = DAY/2 + 0.5, HOUR/2 + 0.5, MINUTE/2 + 0.5 --used for calculating next update times
 
 --configuration settings
+local FONT_FACE = C["media"].font --what font to use
+local FONT_SIZE = 20 --the base font size to use at a scale of 1
 local MIN_SCALE = 0.5 --the minimum scale we want to show cooldown counts at, anything below this will be hidden
 local MIN_DURATION = 2.5 --the minimum duration to show cooldown text for
-local EXPIRING_DURATION = C["cooldown"].treshold --the minimum number of seconds a cooldown must be to use to display in the expiring format
+local EXPIRING_DURATION = C["actionbar"].treshold --the minimum number of seconds a cooldown must be to use to display in the expiring format
 
-local EXPIRING_FORMAT = T.RGBToHex(1, 0, 0)..'%.1f|r' --format for timers that are soon to expire
-local SECONDS_FORMAT = T.RGBToHex(1, 1, 0)..'%d|r' --format for timers that have seconds remaining
-local MINUTES_FORMAT = T.RGBToHex(1, 1, 1)..'%dm|r' --format for timers that have minutes remaining
-local HOURS_FORMAT = T.RGBToHex(0.4, 1, 1)..'%dh|r' --format for timers that have hours remaining
-local DAYS_FORMAT = T.RGBToHex(0.4, 0.4, 1)..'%dh|r' --format for timers that have days remaining
+
+local EXPIRING_FORMAT = T.RGBToHex(unpack(C["actionbar"].expiringcolor))..'%.1f|r' --format for timers that are soon to expire
+local SECONDS_FORMAT = T.RGBToHex(unpack(C["actionbar"].secondscolor))..'%d|r' --format for timers that have seconds remaining
+local MINUTES_FORMAT = T.RGBToHex(unpack(C["actionbar"].minutescolor))..'%dm|r' --format for timers that have minutes remaining
+local HOURS_FORMAT = T.RGBToHex(unpack(C["actionbar"].hourscolor))..'%dh|r' --format for timers that have hours remaining
+local DAYS_FORMAT = T.RGBToHex(unpack(C["actionbar"].dayscolor))..'%dh|r' --format for timers that have days remaining
 
 --local bindings!
 local floor = math.floor
@@ -79,7 +82,9 @@ local function Timer_OnSizeChanged(self, width, height)
 	if fontScale < MIN_SCALE then
 		self:Hide()
 	else
-		self.text:SetFont(C["media"].font, 15, "OUTLINE")
+		self.text:SetFont(FONT_FACE, fontScale * FONT_SIZE, 'OUTLINE')
+		self.text:SetShadowColor(0, 0, 0, 0.5)
+		self.text:SetShadowOffset(2, -2)
 		if self.enabled then
 			Timer_ForceUpdate(self)
 		end
@@ -93,7 +98,7 @@ local function Timer_OnUpdate(self, elapsed)
 		self.nextUpdate = self.nextUpdate - elapsed
 	else
 		local remain = self.duration - (GetTime() - self.start)
-		if tonumber(T.Round(remain)) > 0 then
+		if remain > 0.01 then
 			if (self.fontScale * self:GetEffectiveScale() / UIParent:GetScale()) < MIN_SCALE then
 				self.text:SetText('')
 				self.nextUpdate  = 1
@@ -120,7 +125,7 @@ local function Timer_Create(self)
 	timer:SetScript('OnUpdate', Timer_OnUpdate)
 
 	local text = timer:CreateFontString(nil, 'OVERLAY')
-	text:Point("CENTER", 2, 0)
+	text:SetPoint('CENTER', T.Scale(1), T.Scale(1))
 	text:SetJustifyH("CENTER")
 	timer.text = text
 

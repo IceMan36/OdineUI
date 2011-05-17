@@ -30,7 +30,7 @@ function T.UIScale()
 		if width >= 4080 and width < 4320 then width = 1360 end 	                -- WXGA
 		if width >= 3840 and width < 4080 then width = 1224 end 	                -- SXGA & SXGA (UVGA) & WXGA & HDTV
 		
-		-- yep, now set Elvui to lower reso if screen #1 width < 1600
+		-- yep, now set Tukui to lower reso if screen #1 width < 1600
 		if width < 1600 then
 			T.lowversion = true
 		end
@@ -53,3 +53,12 @@ function T.UIScale()
 	end
 end
 T.UIScale()
+
+-- pixel perfect script of custom ui scale.
+local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/C["general"].uiscale
+local function scale(x)
+    return mult*math.floor(x/mult+.5)
+end
+
+function T.Scale(x) return scale(x) end
+T.mult = mult

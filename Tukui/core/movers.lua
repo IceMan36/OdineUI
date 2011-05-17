@@ -163,15 +163,11 @@ local function moving()
 	
 	if T.MoveUnitFrames then T.MoveUnitFrames() end
 	
-	if enable then
-		enable = false
-		T.UILocked = false
-		TukuiInfoLeftRButton.text:SetTextColor(unpack(C["media"].txtcolor))
-	else
-		enable = true
-		T.UILocked = true
-		TukuiInfoLeftRButton.text:SetTextColor(1,1,1)
+	if C["actionbar"].enable == true then
+		T.ToggleABLock()
 	end
+	
+	if enable then enable = false else enable = true end
 end
 SLASH_MOVING1 = "/mtukui"
 SLASH_MOVING2 = "/moveui"

@@ -1,18 +1,20 @@
-local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
+local T, C, L, DB = unpack(select(2, ...)) -- Import Functions/Constants, Config, Locales
+
 if not C["actionbar"].enable == true then return end
+
 
 ---------------------------------------------------------------------------
 -- Setup Shapeshift Bar
 ---------------------------------------------------------------------------
-
 -- used for anchor totembar or shapeshiftbar
-local TukuiShift = CreateFrame("Frame", "TukuiShiftBar", TukuiInfoLeftRButton)
-TukuiShift:SetPoint("BOTTOMLEFT", TukuiInfoLeftRButton, "BOTTOMRIGHT", T.buttonspacing * 2, 0);
-TukuiShift:SetWidth((T.petbuttonsize * 5) + (T.buttonspacing * 4))
+local TukuiShift = CreateFrame("Frame","TukuiShiftBar",TukuiActionBarBackground)
+TukuiShift:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 6, -35)
+TukuiShift:SetWidth(200)
 TukuiShift:SetHeight(T.petbuttonsize)
-TukuiShift:SetFrameStrata("MEDIUM")
-TukuiShift:SetMovable(true)
-TukuiShift:SetClampedToScreen(true)
+
+if C["actionbar"].hideshapeshift == true then
+	TukuiShift:Hide()
+end
 
 -- shapeshift command to move totem or shapeshift in-game
 local ssmover = CreateFrame("Frame", "TukuiShapeShiftHolder", UIParent)
@@ -58,12 +60,21 @@ bar:SetScript("OnEvent", function(self, event, ...)
 			button = _G["ShapeshiftButton"..i]
 			button:ClearAllPoints()
 			button:SetParent(self)
-			if i == 1 then
-				button:SetPoint("BOTTOMLEFT", TukuiShift, 0, 0)
+			if C["actionbar"].verticalstance ~= true then
+				if i == 1 then
+					button:SetPoint("BOTTOMLEFT", TukuiShift, 0, 0)
+				else
+					local previous = _G["ShapeshiftButton"..i-1]
+					button:SetPoint("LEFT", previous, "RIGHT", T.buttonspacing, 0)
+				end
 			else
-				local previous = _G["ShapeshiftButton"..i-1]
-				button:SetPoint("LEFT", previous, "RIGHT", T.buttonspacing, 0)
-			end		
+				if i == 1 then
+					button:SetPoint("BOTTOMLEFT", TukuiShift, 0, 0)
+				else
+					local previous = _G["ShapeshiftButton"..i-1]
+					button:SetPoint("TOP", previous, "BOTTOM", 0, -T.buttonspacing)
+				end			
+			end
 			local _, name = GetShapeshiftFormInfo(i)
 			if name then
 				button:Show()

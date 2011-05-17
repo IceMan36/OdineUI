@@ -1,12 +1,12 @@
-local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
+local T, C, L, DB = unpack(select(2, ...)) -- Import Functions/Constants, Config, Locales
+
 if not C["actionbar"].enable == true then return end
 
 local _G = _G
 local media = C["media"]
 local securehandler = CreateFrame("Frame", nil, nil, "SecureHandlerBaseTemplate")
-local replace = string.gsub
 
-local function style(self)
+function Style(self, totem)
 	local name = self:GetName()
 	
 	if name:match("MultiCast") then return end 
@@ -20,28 +20,31 @@ local function style(self)
 	local Border  = _G[name.."Border"]
 	local Btname = _G[name.."Name"]
 	local normal  = _G[name.."NormalTexture"]
- 
+	
 	if Flash then
 		Flash:SetTexture("")
 	end
 	Button:SetNormalTexture("")
- 
+	
 	if Border then
 		Border:Hide()
 		Border = T.dummy
 	end
- 
+	
 	if Count then
 		Count:ClearAllPoints()
 		Count:SetPoint("BOTTOMRIGHT", 0, T.Scale(2))
-		Count:SetFont(C["media"].font, 12, "OUTLINE")
+		Count:SetFont(C["media"].font, C["general"].fontscale, "OUTLINE")
 	end
- 
+	
 	if Btname then
-		Btname:SetText("")
-		Btname:Kill()
+		if C["actionbar"].macrotext ~= true then
+			Btname:SetText("")
+			Btname:Hide()
+			Btname.Show = T.dummy
+		end
 	end
- 
+	
 	if not _G[name.."Panel"] then
 		if not totem then
 			self:SetWidth(T.buttonsize)
@@ -60,20 +63,21 @@ local function style(self)
 			Icon:SetPoint("BOTTOMRIGHT", Button, T.Scale(-2), T.Scale(2))
 		end
 	end
-
+	
 	if HotKey then
 		HotKey:ClearAllPoints()
 		HotKey:SetPoint("TOPRIGHT", 0, T.Scale(-3))
-		HotKey:SetFont(C["media"].font, 12, "OUTLINE")
+		HotKey:SetFont(C["media"].font, C["general"].fontscale, "THINOUTLINE")
+		HotKey:SetShadowColor(0, 0, 0, 0.3)
 		HotKey.ClearAllPoints = T.dummy
 		HotKey.SetPoint = T.dummy
 		if not C["actionbar"].hotkey == true then
 			HotKey:SetText("")
-			HotKey:Kill()
+			HotKey:Hide()
 			HotKey.Show = T.dummy
 		end
 	end
- 
+	
 	if normal then
 		normal:ClearAllPoints()
 		normal:SetPoint("TOPLEFT")
@@ -81,14 +85,14 @@ local function style(self)
 	end
 end
 
-local function stylesmallbutton(normal, button, icon, name, pet)
+local function Stylesmallbutton(normal, button, icon, name, pet)
 	local Flash	 = _G[name.."Flash"]
 	button:SetNormalTexture("")
 	
 	-- another bug fix reported by Affli in t12 beta
 	button.SetNormalTexture = T.dummy
 	
-	Flash:SetTexture(media.buttonhover)
+	Flash:SetTexture(1, 1, 1, 0.3)
 	
 	if not _G[name.."Panel"] then
 		button:SetWidth(T.petbuttonsize)
@@ -111,8 +115,8 @@ local function stylesmallbutton(normal, button, icon, name, pet)
 			shine:Size(T.petbuttonsize, T.petbuttonsize)
 			shine:ClearAllPoints()
 			shine:SetPoint("CENTER", button, 0, 0)
-			icon:Point("TOPLEFT", button, T.Scale(2), T.Scale(-2))
-			icon:Point("BOTTOMRIGHT", button, T.Scale(-2), T.Scale(2))
+			icon:Point("TOPLEFT", button, 2, -2)
+			icon:Point("BOTTOMRIGHT", button, -2, 2)
 		else
 			icon:Point("TOPLEFT", button, 2, -2)
 			icon:Point("BOTTOMRIGHT", button, -2, 2)
@@ -132,7 +136,7 @@ function T.StyleShift()
 		local button  = _G[name]
 		local icon  = _G[name.."Icon"]
 		local normal  = _G[name.."NormalTexture"]
-		stylesmallbutton(normal, button, icon, name)
+		Stylesmallbutton(normal, button, icon, name)
 	end
 end
 
@@ -142,38 +146,12 @@ function T.StylePet()
 		local button  = _G[name]
 		local icon  = _G[name.."Icon"]
 		local normal  = _G[name.."NormalTexture2"]
-		stylesmallbutton(normal, button, icon, name, true)
-	end
-end
-
-local function updatehotkey(self, actionButtonType)
-	local hotkey = _G[self:GetName() .. 'HotKey']
-	local text = hotkey:GetText()
-	
-	text = replace(text, '(s%-)', 'S')
-	text = replace(text, '(a%-)', 'A')
-	text = replace(text, '(c%-)', 'C')
-	text = replace(text, '(Mouse Button )', 'M')
-	text = replace(text, '(Middle Mouse)', 'M3')
-	text = replace(text, '(Mouse Wheel Up)', 'MU')
-	text = replace(text, '(Mouse Wheel Down)', 'MD')
-	text = replace(text, '(Num Pad )', 'N')
-	text = replace(text, '(Page Up)', 'PU')
-	text = replace(text, '(Page Down)', 'PD')
-	text = replace(text, '(Spacebar)', 'SpB')
-	text = replace(text, '(Insert)', 'Ins')
-	text = replace(text, '(Home)', 'Hm')
-	text = replace(text, '(Delete)', 'Del')
-	
-	if hotkey:GetText() == _G['RANGE_INDICATOR'] then
-		hotkey:SetText('')
-	else
-		hotkey:SetText(text)
+		Stylesmallbutton(normal, button, icon, name, true)
 	end
 end
 
 -- rescale cooldown spiral to fix texture.
-local buttonNames = { "ActionButton",  "MultiBarBottomLeftButton", "MultiBarBottomRightButton", "MultiBarLeftButton", "MultiBarRightButton", "ShapeshiftButton", "PetActionButton", "MultiCastActionButton"}
+local buttonNames = { "ActionButton",  "MultiBarBottomLeftButton", "MultiBarBottomRightButton", "MultiBarLeftButton", "MultiBarRightButton", "ShapeshiftButton", "PetActionButton"}
 for _, name in ipairs( buttonNames ) do
 	for index = 1, 12 do
 		local buttonName = name .. tostring(index)
@@ -185,8 +163,8 @@ for _, name in ipairs( buttonNames ) do
 		end
 		
 		cooldown:ClearAllPoints()
-		cooldown:Point("TOPLEFT", button, "TOPLEFT", 2, -2)
-		cooldown:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
+		cooldown:SetPoint("TOPLEFT", button, "TOPLEFT", 2, -2)
+		cooldown:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
 	end
 end
 
@@ -195,8 +173,14 @@ local function SetupFlyoutButton()
 	for i=1, buttons do
 		--prevent error if you don't have max ammount of buttons
 		if _G["SpellFlyoutButton"..i] then
-			style(_G["SpellFlyoutButton"..i])
+			Style(_G["SpellFlyoutButton"..i], false)
 			_G["SpellFlyoutButton"..i]:StyleButton(true)
+			if C["actionbar"].rightbarmouseover == true then
+				SpellFlyout:HookScript("OnEnter", function(self) RightBarMouseOver(1) end)
+				SpellFlyout:HookScript("OnLeave", function(self) RightBarMouseOver(0) end)
+				_G["SpellFlyoutButton"..i]:HookScript("OnEnter", function(self) RightBarMouseOver(1) end)
+				_G["SpellFlyoutButton"..i]:HookScript("OnLeave", function(self) RightBarMouseOver(0) end)
+			end
 		end
 	end
 end
@@ -204,7 +188,7 @@ SpellFlyout:HookScript("OnShow", SetupFlyoutButton)
 
  
 --Hide the Mouseover texture and attempt to find the ammount of buttons to be skinned
-local function styleflyout(self)
+local function StyleFlyout(self)
 	self.FlyoutBorder:SetAlpha(0)
 	self.FlyoutBorderShadow:SetAlpha(0)
 	
@@ -248,25 +232,29 @@ local function styleflyout(self)
 	end
 end
 
--- rework the mouseover, pushed, checked texture to match Tukui theme.
-do
+do	
 	for i = 1, 12 do
-		_G["ActionButton"..i]:StyleButton(true)
-		_G["MultiBarBottomLeftButton"..i]:StyleButton(true)
-		_G["MultiBarBottomRightButton"..i]:StyleButton(true)
 		_G["MultiBarLeftButton"..i]:StyleButton(true)
 		_G["MultiBarRightButton"..i]:StyleButton(true)
+		_G["MultiBarBottomRightButton"..i]:StyleButton(true)
+		_G["MultiBarBottomLeftButton"..i]:StyleButton(true)
+		_G["ActionButton"..i]:StyleButton(true)
 	end
-		 
+	 
 	for i=1, 10 do
 		_G["ShapeshiftButton"..i]:StyleButton(true)
 		_G["PetActionButton"..i]:StyleButton(true)
 	end
+	
+	for i=1, 6 do
+		_G["VehicleMenuBarActionButton"..i]:StyleButton(true)
+		Style(_G["VehicleMenuBarActionButton"..i])
+	end
 end
 
-hooksecurefunc("ActionButton_Update", style)
-hooksecurefunc("ActionButton_UpdateHotkeys", updatehotkey)
-hooksecurefunc("ActionButton_UpdateFlyout", styleflyout)
+hooksecurefunc("ActionButton_Update", Style)
+hooksecurefunc("ActionButton_UpdateHotkeys", T.UpdateHotkey)
+hooksecurefunc("ActionButton_UpdateFlyout", StyleFlyout)
 
 ---------------------------------------------------------------
 -- Totem Style, they need a lot more work than "normal" buttons
@@ -319,12 +307,12 @@ local function StyleTotemFlyout(flyout)
 		icon:SetTexCoord(.09,.91,.09,.91)
 		icon:SetDrawLayer("ARTWORK")
 		icon:Point("TOPLEFT",button,"TOPLEFT",2,-2)
-		icon:Point("BOTTOMRIGHT",button,"BOTTOMRIGHT",-2,2)			
+		icon:Point("BOTTOMRIGHT",button,"BOTTOMRIGHT",-2,2)		
 		if not InCombatLockdown() then
 			button:Size(C["actionbar"].petbuttonsize)
 			button:ClearAllPoints()
 			button:Point("BOTTOM",last,"TOP",0,4)
-		end			
+		end
 		if button:IsVisible() then last = button end
 		button:SetBackdropBorderColor(flyout.parent:GetBackdropBorderColor())
 		button:StyleButton()
@@ -332,7 +320,7 @@ local function StyleTotemFlyout(flyout)
 		if C["actionbar"].shapeshiftmouseover == true then
 			button:HookScript("OnEnter", function() MultiCastActionBarFrame:SetAlpha(1) end)
 			button:HookScript("OnLeave", function() MultiCastActionBarFrame:SetAlpha(0) end)
-		end	
+		end			
 	end
 	
 	flyout.buttons[1]:SetPoint("BOTTOM",flyout,"BOTTOM")
@@ -352,9 +340,9 @@ local function StyleTotemFlyout(flyout)
 	close:ClearAllPoints()
 	close:Point("BOTTOMLEFT",last,"TOPLEFT",0,4)
 	close:Point("BOTTOMRIGHT",last,"TOPRIGHT",0,4)	
+	close:SetBackdropBorderColor(last:GetBackdropBorderColor())
 	close:Height(8)
 	
-	close:SetBackdropBorderColor(last:GetBackdropBorderColor())
 	flyout:ClearAllPoints()
 	flyout:Point("BOTTOM",flyout.parent,"TOP",0,4)
 	
@@ -385,12 +373,12 @@ local function StyleTotemOpenButton(button, parent)
 		button.visibleBut.highlight:Point("TOPLEFT",button.visibleBut,"TOPLEFT",1,-1)
 		button.visibleBut.highlight:Point("BOTTOMRIGHT",button.visibleBut,"BOTTOMRIGHT",-1,1)
 		button.visibleBut:SetTemplate("Default")
-	end
+	end	
 	
 	if C["actionbar"].shapeshiftmouseover == true then
 		button:HookScript("OnEnter", function() MultiCastActionBarFrame:SetAlpha(1) end)
 		button:HookScript("OnLeave", function() MultiCastActionBarFrame:SetAlpha(0) end)
-	end
+	end	
 	button.visibleBut:SetBackdropBorderColor(parent:GetBackdropBorderColor())
 end
 hooksecurefunc("MultiCastFlyoutFrameOpenButton_Show",function(button,_, parent) StyleTotemOpenButton(button, parent) end)

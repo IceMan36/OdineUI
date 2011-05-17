@@ -1,7 +1,6 @@
-local T, C, L, DB = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
--- keybind feature
-local bind = CreateFrame("Frame", "TukuiHoverBind", UIParent)
+local T, C, L, DB = unpack(select(2, ...)) -- Import Functions/Constants, Config, Locales
 
+local bind = CreateFrame("Frame", "TukuiHoverBind", UIParent)
 -- SLASH COMMAND
 SlashCmdList.MOUSEOVERBIND = function()
 	if InCombatLockdown() then print(L.bind_combat) return end

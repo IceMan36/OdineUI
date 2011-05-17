@@ -21,13 +21,17 @@ L["RELOAD_UI"] = "A setting you have changed requires a Reload UI for changes to
 
 -- General Section
 L["General Settings"] = true
-	L["OUI_INTRO"] = "Complete UI replacement based off Tukui. Creditz: Dajova, Elv, Eclipse, Tukz"
+	L["OUI_INTRO"] = "Complete UI replacement based off Tukui. Creditz: Tukz, Elv, Dajova, and everyone else in the Tukui Community"
 	L["Auto Scale"] = true
 		L["GEN_ASCALE"] = "Automatically scale the UI based on your current screen resolution"
 	L["Scale"] = true
 		L["GEN_SCALE"] = "Manualy adjust the scale of your UI"
 	L["Multisample Protection"] = true
 		L["GEN_SAMPLE"] = "Force the Blizzard Multisample Option to be set to 1x. WARNING: Turning this off will lead to blurry borders"
+	L["Class Color Theme"] = true
+		L["Style all frame borders to be your class color, color unitframes to class color"] = true
+	L["Font Scale"] = true
+		L["Set the font scale for everything in UI. Note: This doesn't effect somethings that have their own seperate options (UnitFrame Font, Datatext Font, ect..)"] = true
 	L["Resolution Override"] = true
 		L["OVERRIDE_DESC"] = "Set a resolution version to use. By default any screensize > 1440 is considered a High resolution. This effects actionbar/unitframe layouts. If set to None, then it will be automatically determined by your screen size"
 			L["Low"] = true
@@ -41,7 +45,10 @@ L["General Settings"] = true
 		L["HBARBG_DESC"] = "Allows you to select a custom color for health bars BG"
 	L["Transparency"] = true
 		L["TRANS_DESC"] = "Adjusts the transparency of transparent windows. (Setting to 1 disables this function)"
-	
+	L["Theme"] = true
+		L["THEME_DESC"] = "Choose the Look 'N' Feel of the interface."
+			L["ClassColor"] = "ClassColor"
+			L["Default"] = "Default"
 		
 -- Unit Frames
 L["Unit Frames"] = true
@@ -174,27 +181,42 @@ L["Colors"] = true
 	L["Transition Color"] = true
 		L["This color is displayed when gaining/losing threat"] = true
 		
--- Action Bars
-L["Enable"] = true
-	L["Enable using built in actionbars."] = true
-L["Show Hotkeys"] = true
-	L["Toggle whether you want to show keybindings on your actionbar buttons."] = true
-L["Hide Shapeshift"] = true
-	L["Toggle whether you want to show your shapeshift/totems."] = true
-L["Mouseover Shapeshift"] = true
-	L["Toggle whether you want to show the shapeshift bar only when moused over."] = true
-L["Show Grid"] = true
-	L["Toggle whether you want to show a grid on empty buttons."] = true
-L["Vertical rightbars"] = true
-	L["Toggle whether you want to have your rightbars vertical instead of horizontal."] = true
-L["Mouseover Rightbar"] = true
-	L["Toggle whether you want to have your rightbars hidden unless moused over."] = true
-L["Button Size"] = true
-	L["Controls the size of actionbar buttons."] = true
-L["Pet Button Size"] = true
-	L["Controls the size of your pets actionbar buttons."] = true
-L["Button Spacing"] = true
-	L["Controls the spacing between buttons."] = true
+--Actionbar
+L["Action Bars"] = true
+	L["AB_DESC"] = "Adjust settings for actionbars and cooldown text on action buttons"
+	L["Hotkey Text"] = true
+		L["Display hotkey text on action buttons"] = true
+	L["Right Bar on Mouseover"] = true
+		L["Hide the right action bar unless mouseovered"] = true
+	L["Shape Shift Bar"] = true
+		L["Hide the shape shift action bar"] = true
+	L["Shape Shift on Mouseover"] = true
+		L["Hide the shape shift action bar unless mouseovered"] = true
+	L["Vertical Shape Shift"] = true
+		L["Make the shape shift bar grow vertically instead of horizontally"] = true
+	L["Display Grid"] = true
+		L["Display grid backdrop behind empty buttons"] = true
+	L["Pet Bar below main actionbar"] = true
+		L["Positions the pet bar below the main actionbar instead of to the right side of the screen"] = true
+	L["Button Size"] = true
+	L["Button Spacing"] = true
+	L["Pet Button Size"] = true
+	L["Main actionbar on top"] = true
+		L["Positions the main actionbar above all other actionbars"] = true
+	L["Macro Text"] = true
+	L["Micro Bar"] = true
+		L["Display blizzards default microbar, this will disable the right click menu on minimap"] = true
+	L["Micro Bar on Mouseover"] = true
+		L["Display blizzards default microbar when mouseovered"] = true
+	L["Cooldown Text"] = true
+	L["Threshold"] = true
+		L["Threshold before turning text red and displaying decimal places"] = true
+	L["Expiring"] = true
+		L["This gets displayed when your below the threshold"] = true
+	L["Seconds"] = true
+	L["Minutes"] = true
+	L["Hours"] = true
+	L["Days"] = true
 	
 -- Misc Settings
 

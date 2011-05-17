@@ -27,7 +27,7 @@ local function Shared(self, unit)
 	else
 		health:Height(30)
 	end
-	health:SetStatusBarTexture(C["media"].hTex)
+	health:SetStatusBarTexture(C["media"].normTex)
 	self.Health = health
 	
 	if C["unitframes"].healthvertical then
@@ -69,7 +69,7 @@ local function Shared(self, unit)
 		power.Smooth = true
 	end
 
-	if C["general"].template ~= "ClassColor" then
+	if C["general"].classcolortheme ~= true then
 		health.colorDisconnected = false
 		health.colorClass = false
 		health:SetStatusBarColor(unpack(C["unitframes"].healthColor))
@@ -117,13 +117,13 @@ local function Shared(self, unit)
 	end
 	name:SetFont(font, fonts, fontf)
 	if C["unitframes"].healthdeficit then
-		if C["general"].template ~= "ClassColor" then
+		if C["general"].classcolortheme ~= true then
 			self:Tag(name, "[Tukui:getnamecolor][Tukui:nameshort]")
 		else
 			self:Tag(name, "[Tukui:nameshort]")
 		end
 	else
-		if C["general"].template ~= "ClassColor" then
+		if C["general"].classcolortheme ~= true then
 			self:Tag(name, "[Tukui:getnamecolor][Tukui:name_short][Tukui:dead][Tukui:afk]")
 		else
 			self:Tag(name, "[Tukui:name_short][Tukui:dead][Tukui:afk]")

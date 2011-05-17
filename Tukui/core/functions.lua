@@ -22,7 +22,7 @@ T.PP = function(p, obj)
 	local TukuiInfoLeft = TukuiInfoLeft
 	local TukuiInfoRight = TukuiInfoRight
 	
-	local bottom = TukuiDataBottom
+	local bottom = TukuiBottomStats
 	local leftsplit = TukuiLeftSplitBarData
 	local rightsplit = TukuiRightSplitBarData
 	
@@ -213,11 +213,6 @@ T.TukuiPetBarUpdate = function(self, event)
 	end
 end
 
--- Define action bar buttons size
-T.buttonsize = T.Scale(C.actionbar.buttonsize)
-T.petbuttonsize = T.Scale(C.actionbar.petbuttonsize)
-T.buttonspacing = T.Scale(C.actionbar.buttonspacing)
-
 T.Round = function(number, decimals)
 	if not decimals then decimals = 0 end
     return (("%%.%df"):format(decimals)):format(number)
@@ -280,6 +275,24 @@ function T.ShortValue(v)
 	end
 end
 
+--Return short negative value of a number, example -1000 returned as string -1k
+function T.ShortValueNegative(v)
+	if v <= 999 then return v end
+	if v >= 1000000 then
+		local value = string.format("%.1fm", v/1000000)
+		return value
+	elseif v >= 1000 then
+		local value = string.format("%.1fk", v/1000)
+		return value
+	end
+end
+
+--Truncate a number off to n places
+function T.Truncate(v, decimals)
+	if not decimals then decimals = 0 end
+    return v - (v % (0.1 ^ decimals))
+end
+
 --Add time before calling a function
 --Usage E.Delay(seconds, functionToCall, ...)
 local waitTable = {}
@@ -337,4 +350,33 @@ function T.CheckAddOnShown()
 	else
 		return false
 	end
+end
+
+function T.IsPTR()
+	local _, version = GetBuildInfo()
+	if tonumber(version) > 14007 then
+		return true
+	else
+		return false
+	end
+end
+
+--Return rounded number
+function T.Round(v, decimals)
+	if not decimals then decimals = 0 end
+    return (("%%.%df"):format(decimals)):format(v)
+end
+
+--RGB to Hex
+function T.RGBToHex(r, g, b)
+	r = r <= 1 and r >= 0 and r or 0
+	g = g <= 1 and g >= 0 and g or 0
+	b = b <= 1 and b >= 0 and b or 0
+	return string.format("|cff%02x%02x%02x", r*255, g*255, b*255)
+end
+
+--Hex to RGB
+function T.HexToRGB(hex)
+	local rhex, ghex, bhex = string.sub(hex, 1, 2), string.sub(hex, 3, 4), string.sub(hex, 5, 6)
+	return tonumber(rhex, 16), tonumber(ghex, 16), tonumber(bhex, 16)
 end

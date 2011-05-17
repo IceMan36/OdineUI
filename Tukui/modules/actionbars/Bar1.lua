@@ -1,14 +1,16 @@
-local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
+local T, C, L, DB = unpack(select(2, ...)) -- Import Functions/Constants, Config, Locales
 
 if not C["actionbar"].enable == true then return end
 
 ---------------------------------------------------------------------------
 -- Setup Main Action Bar.
--- Now used for stances, Bonus, Vehicle at the same time.
--- Since t12, it's also working for druid cat stealth. (a lot requested)
+-- Now used for stances, Bonus at the same time.
 ---------------------------------------------------------------------------
 
-local bar = TukuiBar1
+local bar = CreateFrame("Frame", "TukuiMainMenuBar", TukuiActionBarBackground, "SecureHandlerStateTemplate")
+bar:ClearAllPoints()
+bar:SetAllPoints(TukuiActionBarBackground)
+
 --[[ 
 	Bonus bar classes id
 
@@ -39,8 +41,29 @@ local function GetBar()
 	return condition
 end
 
+function T.PositionMainBar()
+	MainMenuBar_UpdateKeyRing()
+	local button
+	for i = 1, 12 do
+		button = _G["ActionButton"..i]
+		button:SetSize(T.buttonsize, T.buttonsize)
+		button:SetParent(TukuiMainMenuBar)
+		button:ClearAllPoints()
+		
+		if i == 1 then
+			if C["actionbar"].swaptopbottombar == true then
+				button:SetPoint("TOPLEFT", TukuiMainMenuBar, T.buttonspacing, -T.buttonspacing)
+			else
+				button:SetPoint("BOTTOMLEFT", TukuiMainMenuBar, T.buttonspacing, T.buttonspacing)
+			end
+		else
+			local previous = _G["ActionButton"..i-1]
+			button:SetPoint("LEFT", previous, "RIGHT", T.buttonspacing, 0)
+		end
+	end
+end
+
 bar:RegisterEvent("PLAYER_LOGIN")
-bar:RegisterEvent("PLAYER_ENTERING_WORLD")
 bar:RegisterEvent("KNOWN_CURRENCY_TYPES_UPDATE")
 bar:RegisterEvent("CURRENCY_DISPLAY_UPDATE")
 bar:RegisterEvent("BAG_UPDATE")
@@ -51,6 +74,7 @@ bar:SetScript("OnEvent", function(self, event, ...)
 		for i = 1, NUM_ACTIONBAR_BUTTONS do
 			button = _G["ActionButton"..i]
 			self:SetFrameRef("ActionButton"..i, button)
+			button.SetAlpha = T.dummy --weird bug with druids spec change from boomkin to feral
 		end	
 
 		self:Execute([[
@@ -67,24 +91,6 @@ bar:SetScript("OnEvent", function(self, event, ...)
 		]])
 		
 		RegisterStateDriver(self, "page", GetBar())
-		RegisterStateDriver(self, "vehicleupdate", "[vehicleui] s2;s1")
-	elseif event == "PLAYER_ENTERING_WORLD" then
-		MainMenuBar_UpdateKeyRing()
-		local button
-		for i = 1, 12 do
-			button = _G["ActionButton"..i]
-			button:SetSize(T.buttonsize, T.buttonsize)
-			button:ClearAllPoints()
-			button:SetParent(bar)
-			button:SetFrameStrata("BACKGROUND")
-			button:SetFrameLevel(15)
-			if i == 1 then
-				button:SetPoint("BOTTOMLEFT", T.buttonspacing, T.buttonspacing)
-			else
-				local previous = _G["ActionButton"..i-1]
-				button:SetPoint("LEFT", previous, "RIGHT", T.buttonspacing, 0)
-			end
-		end
 	elseif event == "ACTIVE_TALENT_GROUP_CHANGED" then
 		-- attempt to fix blocked glyph change after switching spec.
 		LoadAddOn("Blizzard_GlyphUI")

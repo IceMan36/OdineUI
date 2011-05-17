@@ -73,7 +73,7 @@ local function Shared(self, unit)
 		health:Height(30)
 		health:SetPoint("TOPLEFT", T.mult, -T.mult)
 		health:SetPoint("TOPRIGHT", -T.mult, T.mult)
-		health:SetStatusBarTexture(C["media"].hTex)
+		health:SetStatusBarTexture(C["media"].normTex)
 		health:GetStatusBarTexture():SetHorizTile(false)
 		self.Health = health
 		
@@ -147,7 +147,7 @@ local function Shared(self, unit)
 			power.Smooth = true
 		end
 		
-		if C["general"].template ~= "ClassColor" then
+		if C["general"].classcolortheme ~= true then
 			health.colorTapping = false
 			health.colorDisconnected = false
 			health.colorClass = false
@@ -263,16 +263,15 @@ local function Shared(self, unit)
 			self:RegisterEvent("PARTY_MEMBERS_CHANGED", T.MLAnchorUpdate)
 			
 			-- Vengeance Bar
-
 			if C["unitframes"].vengeance == true then
-				local Vengeance = CreateFrame("StatusBar", self:GetName()..'_Vengeance', TukuiDataBottom)
+				local Vengeance = CreateFrame("StatusBar", self:GetName()..'_Vengeance', TukuiBottomStats)
 				Vengeance:SetFrameStrata("TOOLTIP")
-				Vengeance:SetFrameLevel(TukuiDataBottom:GetFrameLevel() + 2)
-				Vengeance:SetPoint("TOPLEFT", TukuiDataBottom, T.Scale(2), T.Scale(-2))
-				Vengeance:SetPoint("BOTTOMRIGHT", TukuiDataBottom, T.Scale(-2), T.Scale(2))
+				Vengeance:SetFrameLevel(TukuiBottomStats:GetFrameLevel() + 2)
+				Vengeance:SetPoint("TOPLEFT", TukuiBottomStats, T.Scale(2), T.Scale(-2))
+				Vengeance:SetPoint("BOTTOMRIGHT", TukuiBottomStats, T.Scale(-2), T.Scale(2))
 				Vengeance:SetStatusBarTexture(normTex)
 				Vengeance:GetStatusBarTexture():SetHorizTile(false)
-				Vengeance:SetStatusBarColor(unpack(TukuiCF["unitframes"].healthBgColor))
+				Vengeance:SetStatusBarColor(unpack(C["unitframes"].healthBgColor))
 				Vengeance:SetBackdrop(backdrop)
 				Vengeance:SetBackdropColor(0, 0, 0, 0)
 				
@@ -286,13 +285,12 @@ local function Shared(self, unit)
 				self.Vengeance = Vengeance
 			end
 			
-			-- Swing Bar
-				
+			-- Swing Bar				
 			if C["unitframes"].swingbar == true then
-				local Swing = CreateFrame("StatusBar", self:GetName().."_SwingBar", TukuiBar1)
-				Swing:SetPoint("BOTTOMLEFT", TukuiBar1, "TOPLEFT", T.Scale(2), T.Scale(T.buttonsize+8))
-				Swing:SetPoint("BOTTOMRIGHT", TukuiBar1, "TOPRIGHT", T.Scale(-2), T.Scale(T.buttonsize+8))
-				Swing:SetHeight(T.Scale(20 / 3.5))
+				local Swing = CreateFrame("StatusBar", self:GetName().."_SwingBar", TukuiMainMenuBar)
+				Swing:SetPoint("BOTTOMLEFT", TukuiMainMenuBar, "TOPLEFT", T.Scale(2), T.Scale(T.buttonsize+8))
+				Swing:SetPoint("BOTTOMRIGHT", TukuiMainMenuBar, "TOPRIGHT", T.Scale(-2), T.Scale(T.buttonsize+8))
+				Swing:SetHeight(T.Scale(5))
 				Swing:SetStatusBarTexture(C["media"].normTex)
 				Swing:GetStatusBarTexture():SetHorizTile(false)
 				Swing:SetStatusBarColor(unpack(C["unitframes"].healthBgColor))
@@ -303,11 +301,26 @@ local function Shared(self, unit)
 				self.Swing.bg:SetPoint("BOTTOMRIGHT", T.Scale(2), T.Scale(-2))
 				self.Swing.bg:SetFrameStrata("BACKGROUND")
 				self.Swing.bg:SetFrameLevel(Swing:GetFrameLevel() - 1)
-				self.Swing.bg:SetTemplate("Default", true)
+				self.Swing.bg:SetTemplate("Default")
 				
 				self.Swing.disableMelee = false
 				self.Swing.disableRanged = false
 				self.Swing.hideOoc = true
+				
+				-- Patch 4.1 seems to have broken the oUF swingbar plugin.. hax until its fixed
+				local ChatCombatHider = CreateFrame("Frame")
+				ChatCombatHider:RegisterEvent("PLAYER_REGEN_ENABLED")
+				ChatCombatHider:RegisterEvent("PLAYER_REGEN_DISABLED")
+				ChatCombatHider:RegisterEvent("PLAYER_ENTERING_WORLD")
+				ChatCombatHider:SetScript("OnEvent", function(self, event)
+					if event == "PLAYER_REGEN_ENABLED" then
+						Swing:Hide()
+					elseif event == "PLAYER_ENTERING_WORLD" then
+						Swing:Hide()
+					else
+						Swing:Show()
+					end
+				end)
 			end
 			
 			-- show druid mana when shapeshifted in bear, cat or whatever
@@ -654,13 +667,13 @@ local function Shared(self, unit)
 					if C["unitframes"].large_player == true then
 						castbar:SetHeight(T.buttonsize - 4)
 						if C["unitframes"].cbicons == true then
-							castbar:SetWidth(TukuiBar1:GetWidth() - T.buttonsize - (T.buttonspacing + 5) )
-							castbar:SetPoint("BOTTOMLEFT", TukuiBar1, "TOPLEFT", T.buttonsize + 5, 5)
+							castbar:SetWidth(TukuiMainMenuBar:GetWidth() - T.buttonsize - (T.buttonspacing + 5) )
+							castbar:SetPoint("BOTTOMLEFT", TukuiMainMenuBar, "TOPLEFT", T.buttonsize + 5, 5)
 							--castbar:SetWidth(583)
 							--castbar:SetPoint("BOTTOMLEFT", TukuiSplitBarLeft, "TOPLEFT", T.buttonsize + 5, 5)
 						else
-							castbar:SetWidth(TukuiBar1:GetWidth() - 5)
-							castbar:SetPoint("BOTTOMLEFT", TukuiBar1, "TOPLEFT", 2, 5)
+							castbar:SetWidth(TukuiMainMenuBar:GetWidth() - 5)
+							castbar:SetPoint("BOTTOMLEFT", TukuiMainMenuBar, "TOPLEFT", 2, 5)
 						end
 					else
 						castbar:Point("BOTTOM", TukuiPlayer, "TOP", T.buttonspacing, 295)
@@ -812,7 +825,7 @@ local function Shared(self, unit)
 		health:Height(20)
 		health:SetPoint("TOPLEFT", T.mult, -T.mult)
 		health:SetPoint("TOPRIGHT", -T.mult, T.mult)
-		health:SetStatusBarTexture(C["media"].hTex)
+		health:SetStatusBarTexture(C["media"].normTex)
 		self.Health = health
 		
 		local healthBg = health:CreateTexture(nil, "BORDER")
@@ -867,7 +880,7 @@ local function Shared(self, unit)
 			health.Smooth = true
 		end
 		
-		if C["general"].template ~= "ClassColor" then
+		if C["general"].classcolortheme ~= true then
 			health.colorTapping = false
 			health.colorDisconnected = false
 			health.colorClass = false
@@ -989,7 +1002,7 @@ local function Shared(self, unit)
 		health:Height(20*1.5)
 		health:SetPoint("TOPLEFT")
 		health:SetPoint("TOPRIGHT")
-		health:SetStatusBarTexture(C["media"].hTex)
+		health:SetStatusBarTexture(C["media"].normTex)
 		self.Health = health
 		
 		local healthBg = health:CreateTexture(nil, "BORDER")
@@ -1053,7 +1066,7 @@ local function Shared(self, unit)
 			power.Smooth = true
 		end
 		
-		if C["general"].template ~= "ClassColor" then
+		if C["general"].classcolortheme ~= true then
 			health.colorTapping = false
 			health.colorDisconnected = false
 			health.colorClass = false

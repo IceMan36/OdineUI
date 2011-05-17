@@ -450,11 +450,7 @@ function Stuffing:CreateBagFrame(w)
 						if C["actionbar"].vertical_rightbars then
 							f:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", 0, 3)
 						else
-							if TukuiSaved.rightbars >= 1 then
-								f:SetPoint("BOTTOMRIGHT", TukuiRightBar, "TOPRIGHT", 0, 3)
-							else
-								f:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", 0, 3)
-							end
+							f:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", 0, 3)
 						end
 					end
 				end
