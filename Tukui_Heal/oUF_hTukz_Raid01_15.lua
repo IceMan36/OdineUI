@@ -232,7 +232,7 @@ local function Shared(self, unit)
 
 	if C["unitframes"].raidunitdebuffwatch == true then
 		-- AuraWatch (corner icon)
-		T.createAuraWatch(self,unit)heh
+		T.createAuraWatch(self,unit)
 		
 		-- Raid Debuffs (big middle icon)
 		local RaidDebuffs = CreateFrame('Frame', nil, self)
