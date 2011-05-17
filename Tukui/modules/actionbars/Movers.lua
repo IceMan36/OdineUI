@@ -119,7 +119,7 @@ barloader:SetScript("OnEvent", function(self, addon)
 		RightSplit:SetPoint("BOTTOMRIGHT", TukuiMainMenuBar, "BOTTOMRIGHT", T.Scale(19), 0)
 	end
 	
-	if T.lowversion == true then
+	if T.lowversion == true or C["actionbar"].v12 then
 		if T["actionbar"].bottomrows == 3 then
 			TopMainBar.Text:SetText("-")
 		else
@@ -216,38 +216,31 @@ do
 			LeftSplit:SetPoint("TOPRIGHT", TukuiSplitActionBarLeftBackground, "TOPLEFT", T.Scale(-4), 0)
 			LeftSplit:SetPoint("BOTTOMLEFT", TukuiSplitActionBarLeftBackground, "BOTTOMLEFT", T.Scale(-19), 0)
 			
-			--TukuiLeftSplitBarData:Show()
-			
 			RightSplit.Text:SetText("<")
 			RightSplit:ClearAllPoints()
 			RightSplit:SetPoint("TOPLEFT", TukuiSplitActionBarRightBackground, "TOPRIGHT", T.Scale(4), 0)
 			RightSplit:SetPoint("BOTTOMRIGHT", TukuiSplitActionBarRightBackground, "BOTTOMRIGHT", T.Scale(19), 0)
 
-			--TukuiRightSplitBarData:Show()
 		else
 			SaveBars("splitbar", false)
 			LeftSplit.Text:SetText("<")
 			LeftSplit:ClearAllPoints()
 			LeftSplit:SetPoint("TOPRIGHT", TukuiMainMenuBar, "TOPLEFT", T.Scale(-4), 0)
 			LeftSplit:SetPoint("BOTTOMLEFT", TukuiMainMenuBar, "BOTTOMLEFT", T.Scale(-19), 0)
-			
-			--TukuiLeftSplitBarData:Hide()
-			
+	
 			RightSplit.Text:SetText(">")
 			RightSplit:ClearAllPoints()
 			RightSplit:SetPoint("TOPLEFT", TukuiMainMenuBar, "TOPRIGHT", T.Scale(4), 0)
 			RightSplit:SetPoint("BOTTOMRIGHT", TukuiMainMenuBar, "BOTTOMRIGHT", T.Scale(19), 0)
-			
-			--TukuiRightSplitBarData:Hide()
 		end
 		
-		if T.lowversion ~= true and T["actionbar"].rightbars > 2 and T["actionbar"].splitbar == true and T["actionbar"].bottomrows == 1 then
+		if (T.lowversion ~= true and C["actionbar"].v12 ~= true) and T["actionbar"].rightbars > 2 and T["actionbar"].splitbar == true and T["actionbar"].bottomrows == 1 then
 			SaveBars("rightbars", 2)
-		elseif T.lowversion ~= true and T["actionbar"].rightbars > 1 and T["actionbar"].splitbar == true and T["actionbar"].bottomrows == 2 then
+		elseif (T.lowversion ~= true and C["actionbar"].v12 ~= true) and T["actionbar"].rightbars > 1 and T["actionbar"].splitbar == true and T["actionbar"].bottomrows == 2 then
 			SaveBars("rightbars", 1)
 		end	
 		
-		if T.lowversion == true and T["actionbar"].splitbar ~= true and T.actionbar.bottomrows == 3 then
+		if (T.lowversion == true or C["actionbar"].v12) and T["actionbar"].splitbar ~= true and T.actionbar.bottomrows == 3 then
 			SaveBars("rightbars", 0)	
 			RightBarBig:Show()
 			RightBarBig:ClearAllPoints()
@@ -290,13 +283,13 @@ do
 			RightSplit:SetPoint("BOTTOMRIGHT", TukuiMainMenuBar, "BOTTOMRIGHT", T.Scale(19), 0)
 		end
 			
-		if T.lowversion ~= true and T["actionbar"].rightbars > 2 and T["actionbar"].splitbar == true and T["actionbar"].bottomrows == 1 then
+		if (T.lowversion ~= true and C["actionbar"].v12 ~= true) and T["actionbar"].rightbars > 2 and T["actionbar"].splitbar == true and T["actionbar"].bottomrows == 1 then
 			SaveBars("rightbars", 2)
-		elseif T.lowversion ~= true and T["actionbar"].rightbars > 1 and T["actionbar"].splitbar == true and T["actionbar"].bottomrows == 2 then
+		elseif (T.lowversion ~= true and C["actionbar"].v12 ~= true) and T["actionbar"].rightbars > 1 and T["actionbar"].splitbar == true and T["actionbar"].bottomrows == 2 then
 			SaveBars("rightbars", 1)
-		end		
+		end
 		
-		if T.lowversion == true and T["actionbar"].splitbar ~= true and T.actionbar.bottomrows == 3 then
+		if (T.lowversion == true or C["actionbar"].v12) and T["actionbar"].splitbar ~= true and T.actionbar.bottomrows == 3 then
 			SaveBars("rightbars", 0)	
 			RightBarBig:Show()
 			RightBarBig:ClearAllPoints()
@@ -316,7 +309,7 @@ do
 	TopMainBar:SetScript("OnMouseDown", function(self)
 		if InCombatLockdown() then return end
 		
-		if T.lowversion == true then
+		if T.lowversion == true or C["actionbar"].v12 then
 			if T["actionbar"].bottomrows == 1 then
 				SaveBars("bottomrows", 2)
 				TopMainBar.Text:SetText("+")
@@ -372,7 +365,7 @@ do
 	RightBarInc:SetScript("OnMouseDown", function(self)
 		if InCombatLockdown() then return end
 		
-		if T.lowversion == true then
+		if T.lowversion == true or C["actionbar"].v12 then
 			if T["actionbar"].rightbars == 1 then
 				SaveBars("rightbars", 2)
 			elseif T["actionbar"].rightbars == 2 then
@@ -437,7 +430,7 @@ do
 	RightBarDec:SetScript("OnMouseDown", function(self)
 		if InCombatLockdown() then return end
 		
-		if T.lowversion == true then
+		if T.lowversion == true or C["actionbar"].v12 then
 			if T["actionbar"].rightbars == 1 then
 				SaveBars("rightbars", 0)
 				RightBarBig:Show()

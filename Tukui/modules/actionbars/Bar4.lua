@@ -19,7 +19,7 @@ function T.PositionBar4()
 		b:SetAlpha(1)
 		b:Show()
 		
-		if T.lowversion ~= true then
+		if T.lowversion ~= true and C["actionbar"].v12 ~= true then
 			if T["actionbar"].splitbar == true then
 				if i == 1 then
 					b:SetPoint("BOTTOMLEFT", TukuiSplitActionBarLeftBackground, "BOTTOMLEFT", T.buttonspacing, T.buttonspacing)
@@ -70,7 +70,7 @@ function T.PositionBar4()
 	end
 
 	-- hide it if needed
-	if T.lowversion ~= true then
+	if T.lowversion ~= true and C["actionbar"].v12 ~= true then
 		if T["actionbar"].splitbar == true or T["actionbar"].rightbars > 2 then
 			TukuiBar4:Show()
 		else

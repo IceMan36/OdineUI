@@ -62,7 +62,7 @@ function RightBarMouseOver(alpha)
 		TukuiPetActionBarBackground:SetAlpha(alpha)
 	end
 	
-	if T.lowversion ~= true then
+	if T.lowversion ~= true and C["actionbar"].v12 ~= true then
 		if T["actionbar"].rightbars > 0 and MultiBarLeft:IsShown() then
 			for i=1, 12 do
 				local pb = _G["MultiBarLeftButton"..i]

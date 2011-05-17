@@ -136,6 +136,7 @@ DB["auras"] = {
 
 DB["actionbar"] = {
 	["enable"] = true,                     -- enable elvui action bars
+	["v12"] = false,							-- enable V12 actionbar style
 	["hotkey"] = true,                     -- enable hotkey display because it was a lot requested
 	["rightbarmouseover"] = false,         -- enable right bars on mouse over
 	["shapeshiftmouseover"] = false,       -- enable shapeshift or totembar on mouseover

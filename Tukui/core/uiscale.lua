@@ -48,6 +48,7 @@ function T.UIScale()
 	--Set a value for unitframe scaling
 	if T.lowversion == true then
 		T.raidscale = 0.9
+		C["actionbar"].v12 = false -- disable v12 as they are enabled by default if lowres to not cause problems
 	else
 		T.raidscale = 1
 	end

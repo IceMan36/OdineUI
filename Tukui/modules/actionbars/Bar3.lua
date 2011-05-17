@@ -22,7 +22,7 @@ function T.PositionBar3()
 		b:Show()
 		b:SetParent(MultiBarLeft)
 		b:SetAlpha(1)
-		if T.lowversion ~= true then
+		if T.lowversion ~= true and C["actionbar"].v12 ~= true then
 			if i == 1 then
 				b:SetPoint("TOPRIGHT", TukuiActionBarBackgroundRight, "TOPRIGHT", -T.buttonspacing, -T.buttonspacing)
 			else
@@ -67,7 +67,7 @@ function T.PositionBar3()
 	end
 	
 	-- hide it if needed
-	if T.lowversion ~= true then
+	if T.lowversion ~= true and C["actionbar"].v12 ~= true then
 		if T["actionbar"].rightbars > 0 then
 			TukuiBar3:Show()
 		else

@@ -215,7 +215,7 @@ bcPanel:SetFrameLevel(2)
 bcPanel:SetTemplate("Default", true)
 
 local leftsd = CreateFrame("Frame", "TukuiLeftSplitBarData", UIParent)
-if T.lowversion == true then
+if T.lowversion == true or C["actionbar"].v12 then
 	leftsd:CreatePanel("Default", (T.buttonsize * 3 + T.buttonspacing * 4) + 2, 23, "RIGHT", TukuiBottomStats, "LEFT", T.Scale(-4), 0)
 else
 	leftsd:CreatePanel("Default", (T.buttonsize * 6 + T.buttonspacing * 7) + 2, 23, "RIGHT", TukuiBottomStats, "LEFT", T.Scale(-4), 0)
@@ -224,7 +224,7 @@ leftsd:SetFrameLevel(2)
 leftsd:SetTemplate("Default", true)
 
 local rightsd = CreateFrame("Frame", "TukuiRightSplitBarData", UIParent)
-if T.lowversion == true then
+if T.lowversion == true or C["actionbar"].v12 then
 	rightsd:CreatePanel("Default", (T.buttonsize * 3 + T.buttonspacing * 4) + 2, 23, "LEFT", TukuiBottomStats, "RIGHT", T.Scale(4), 0)
 else
 	rightsd:CreatePanel("Default", (T.buttonsize * 6 + T.buttonspacing * 7) + 2, 23, "LEFT", TukuiBottomStats, "RIGHT", T.Scale(4), 0)

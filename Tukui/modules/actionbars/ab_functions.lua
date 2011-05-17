@@ -142,7 +142,7 @@ function T.PositionAllPanels()
 		TukuiLineToPetActionBarBackground:SetPoint("BOTTOM", TukuiPetActionBarBackground, "TOP", 0, 0)
 	end
 	
-	if T.lowversion == true then
+	if T.lowversion == true or C["actionbar"].v12 then
 		if T["actionbar"].bottomrows == 3 then
 			TukuiActionBarBackground:SetHeight((T.buttonsize * 3) + (T.buttonspacing * 4))
 		elseif T["actionbar"].bottomrows == 2 then
@@ -169,7 +169,7 @@ function T.PositionAllPanels()
 		TukuiSplitActionBarRightBackground:Hide()	
 	end
 	
-	if T.lowversion == true then
+	if T.lowversion == true or C["actionbar"].v12 then
 		if T["actionbar"].bottomrows < 3 then
 			TukuiSplitActionBarLeftBackground:SetWidth((T.buttonsize * 3) + (T.buttonspacing * 4))
 			TukuiSplitActionBarRightBackground:SetWidth((T.buttonsize * 3) + (T.buttonspacing * 4))			
@@ -187,7 +187,7 @@ function T.PositionAllPanels()
 	--RightBar
 	TukuiActionBarBackgroundRight:Show()
 	
-	if T.lowversion == true then
+	if T.lowversion == true or C["actionbar"].v12 then
 		if T["actionbar"].rightbars == 1 then
 			TukuiActionBarBackgroundRight:SetWidth(T.buttonsize + (T.buttonspacing * 2))
 		elseif T["actionbar"].rightbars == 2 then
@@ -209,7 +209,7 @@ function T.PositionAllPanels()
 end
 
 function T.PositionAllBars()
-	if T.lowversion == true then
+	if T.lowversion == true or C["actionbar"].v12 then
 		if T.actionbar.rightbars > 2 then
 			T.actionbar.rightbars = 2
 		end

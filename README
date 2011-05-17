@@ -1,6 +1,8 @@
 V6.3.2 - [05/17/2011]
 * fixed altpowerbar not displaying in its new location (inforight)
 * bottom split info panels will size properly based on resolution
+* fixed bugs with worldmap, some PTR 4.2 support added
+* added option to use old style actionbars without having to force low reso
 
 
 V6.3.1 - [05/17/2011]

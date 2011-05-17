@@ -19,7 +19,7 @@ function T.PositionBar5()
 		b:SetAlpha(1)
 		b:Show()
 		
-		if T.lowversion ~= true then
+		if T.lowversion ~= true and C["actionbar"].v12 ~= true then
 			if T["actionbar"].splitbar == true and T["actionbar"].bottomrows == 2 then
 				if i == 1 then
 					b:SetPoint("TOPLEFT", TukuiSplitActionBarLeftBackground, "TOPLEFT", T.buttonspacing, -T.buttonspacing)
@@ -68,7 +68,7 @@ function T.PositionBar5()
 	end
 
 	-- hide it if needed
-	if T.lowversion ~= true then
+	if T.lowversion ~= true and C["actionbar"].v12 ~= true then
 		if (T["actionbar"].splitbar == true and T["actionbar"].bottomrows == 2) or T["actionbar"].rightbars > 1 then
 			TukuiBar5:Show()
 		else
