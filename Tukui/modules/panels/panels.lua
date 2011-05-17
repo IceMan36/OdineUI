@@ -80,10 +80,11 @@ end
 -- VEHICLE BAR
 if C["actionbar"].enable == true then
 	local vbarbg = CreateFrame("Frame", "TukuiVehicleBarBackground", UIParent)
-	vbarbg:CreatePanel("Default", 1, 1, "BOTTOM", UIParent, "BOTTOM", 0, T.Scale(4))
+	vbarbg:CreatePanel("Default", 1, 1, "BOTTOM", UIParent, "BOTTOM", 0, C["general"].panelheight+7)
 	vbarbg:SetWidth((T.buttonsize * 12) + (T.buttonspacing * 13))
 	vbarbg:SetHeight(T.buttonsize + (T.buttonspacing * 2))
 	vbarbg:CreateShadow("Default")
+	vbarbg:SetFrameLevel(barbg:GetFrameLevel())
 end
 
 -- CHAT BACKGROUND LEFT (MOVES)

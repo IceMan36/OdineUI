@@ -235,8 +235,8 @@ local function Shared(self, unit)
 		RaidDebuffs:Height(22)
 		RaidDebuffs:Width(22)
 		RaidDebuffs:Point('CENTER', health, 1,0)
-		RaidDebuffs:SetFrameStrata(health:GetFrameStrata())
-		RaidDebuffs:SetFrameLevel(health:GetFrameLevel() + 2)
+		RaidDebuffs:SetFrameStrata("MEDIUM")
+		RaidDebuffs:SetFrameLevel(50)
 		
 		RaidDebuffs:SetTemplate("Default")
 		

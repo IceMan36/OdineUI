@@ -574,6 +574,13 @@ function OUI.GenerateOptionsInternal()
 						desc = "Enable sharper borders around UI panels.",
 						type = "toggle",
 					},
+					panelheight = {
+						order = 12,
+						type = "range",
+						name = L["Datatext Height"],
+						desc = L["Adjust the height of the datatext panels."],
+						min = 18, max = 23, step = 1,
+					},
 				},
 			},
 			unitframes = {

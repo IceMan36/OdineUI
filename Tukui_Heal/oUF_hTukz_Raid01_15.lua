@@ -232,15 +232,15 @@ local function Shared(self, unit)
 
 	if C["unitframes"].raidunitdebuffwatch == true then
 		-- AuraWatch (corner icon)
-		T.createAuraWatch(self,unit)
+		T.createAuraWatch(self,unit)heh
 		
 		-- Raid Debuffs (big middle icon)
 		local RaidDebuffs = CreateFrame('Frame', nil, self)
 		RaidDebuffs:Height(22)
 		RaidDebuffs:Width(22)
 		RaidDebuffs:Point('CENTER', health, 1,0)
-		RaidDebuffs:SetFrameStrata(health:GetFrameStrata())
-		RaidDebuffs:SetFrameLevel(health:GetFrameLevel() + 2)
+		RaidDebuffs:SetFrameStrata("MEDIUM")
+		RaidDebuffs:SetFrameLevel(50)
 		
 		RaidDebuffs:SetTemplate("Default")
 		

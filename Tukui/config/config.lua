@@ -25,8 +25,6 @@ DB["media"] = {
 	["glossTex"] = "Tukui Glossy",
 	["blank"] = "Tukui Blank",
 	
-	["panTex"] = [[Interface\AddOns\Tukui\medias\textures\Glamour7]], -- texture used for datatext panels
-	
 	["striped"] = [[Interface\AddOns\Tukui\medias\textures\Striped]], -- unitframes combo points
 	["copyicon"] = [[Interface\AddOns\Tukui\medias\textures\copy]], -- copy icon
 	["buttonhover"] = [[Interface\AddOns\Tukui\medias\textures\button_hover]],

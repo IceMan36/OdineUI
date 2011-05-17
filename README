@@ -1,3 +1,9 @@
+V6.3.1 - [05/17/2011]
+* altpowerbar has been moved to Right Info Panel
+* actionbar was bugged when entering vehicle
+* added missing vehicle texture
+
+
 V6.3 - [05/16/2011]
 * added calendar to game menu/minimap
 * class color theme available again

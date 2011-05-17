@@ -105,7 +105,7 @@ T.AuraFilter = function(icons, unit, icon, name, rank, texture, count, dtype, du
 			return true
 		end
 	else --Everything else
-		if unit ~= "player" and unit ~= "targettarget" and unit ~= "focus" and C["unitframes"].arenadebuffs == true and inInstance and (instanceType == "pvp" or instanceType == "arena") then
+		if unit ~= "player" and unit ~= "targettarget" and unit ~= "focus" and inInstance and (instanceType == "pvp" or instanceType == "arena") then
 			if T.DebuffWhiteList[name] or T.TargetPVPOnly[name] then
 				return true
 			else

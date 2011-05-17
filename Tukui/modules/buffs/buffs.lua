@@ -1,5 +1,5 @@
 local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
-if not C["auras"].player then return end
+if (C.auras.player ~= true) or (C.unitframes.playerauras and not C.unitframes.playershowonlydebuffs) then return end
 
 local font, fonts, fontf = C["media"].uffont, 14, "OUTLINE"
 
@@ -86,11 +86,11 @@ local function UpdateAuras(header, button, weapon)
 
 		button.count = button:CreateFontString(nil, "ARTWORK")
 		button.count:SetPoint("BOTTOMRIGHT", -1, 1)
-		button.count:SetFont(C.media.font, 12, "OUTLINE")
+		button.count:SetFont(C.media.font, C["general"].fontscale, "THINOUTLINE")
 
 		button.time = button:CreateFontString(nil, "ARTWORK")
 		button.time:SetPoint("BOTTOM", 0, -17)
-		button.time:SetFont(C.media.font, 12, "OUTLINE")
+		button.time:SetFont(C.media.font, C["general"].fontscale, "THINOUTLINE")
 
 		button:SetScript("OnUpdate", UpdateTime)
 		
@@ -228,7 +228,7 @@ start:SetScript("OnEvent", function(self)
 			frame:SetAttribute("wrapYOffset", 64)
 		end
 		if T.lowversion then
-			frame:SetAttribute("wrapAfter", 8)
+			frame:SetAttribute("wrapAfter", 10)
 		end
 	end
 end)

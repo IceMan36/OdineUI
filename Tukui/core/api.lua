@@ -108,12 +108,11 @@ local function CreateBorder(f, i, o)
 end
 
 local function SetTemplate(f, t, texture)
-	if texture then myTex = C.media.panTex else myTex = C.media.blank end
 	GetTemplate(t)
 		
 	f:SetBackdrop({
-	  bgFile = myTex, 
-	  edgeFile = C["media"].blank, 
+	  bgFile =C["media"].blank,
+	  edgeFile = C["media"].blank,
 	  tile = false, tileSize = 0, edgeSize = T.mult, 
 	  insets = { left = -T.mult, right = -T.mult, top = -T.mult, bottom = -T.mult}
 	})

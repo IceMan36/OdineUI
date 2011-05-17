@@ -379,6 +379,29 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		CalendarViewHolidayFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", 3, -24)
 		CalendarViewHolidayTitleFrame:StripTextures()
 		SkinCloseButton(CalendarViewHolidayCloseButton)
+		
+		-- Event View
+		CalendarViewEventFrame:StripTextures()
+		CalendarViewEventFrame:SetTemplate("Transparent")
+		CalendarViewEventFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", 3, -24)
+		CalendarViewEventTitleFrame:StripTextures()
+		CalendarViewEventDescriptionContainer:StripTextures()
+		CalendarViewEventDescriptionContainer:SetTemplate("Transparent")
+		CalendarViewEventInviteList:StripTextures()
+		CalendarViewEventInviteList:SetTemplate("Transparent")
+		CalendarViewEventInviteListSection:StripTextures()
+		SkinCloseButton(CalendarViewEventCloseButton)
+		
+		local buttons = {
+		    "CalendarViewEventAcceptButton",
+		    "CalendarViewEventTentativeButton",
+		    "CalendarViewEventRemoveButton",
+			"CalendarViewEventDeclineButton",
+		}
+
+		for _, button in pairs(buttons) do
+			SkinButton(_G[button])
+		end
 	end
 	
 	if addon == "Blizzard_AchievementUI" then
@@ -3179,10 +3202,15 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			hooksecurefunc("WorldMapFrame_SetQuestMapView", QuestSkin)
 			hooksecurefunc("WorldMap_ToggleSizeUp", FixSkin)
 			
-			if not GetCVarBool("miniWorldMap") then
-				ToggleFrame(WorldMapFrame)
-				ToggleFrame(WorldMapFrame)
-			end			
+			WorldMapFrame:RegisterEvent("PLAYER_LOGIN")
+				WorldMapFrame:HookScript("OnEvent", function(self, event)
+					if event == "PLAYER_LOGIN" then
+						if not GetCVarBool("miniWorldMap") then
+							ToggleFrame(WorldMapFrame)
+							ToggleFrame(WorldMapFrame)
+						end
+					end
+			end)		
 		
 			local coords = CreateFrame("Frame", "CoordsFrame", WorldMapFrame)
 			local fontheight = select(2, WorldMapQuestShowObjectivesText:GetFont())*1.1

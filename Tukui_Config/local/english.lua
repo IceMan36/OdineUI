@@ -37,8 +37,6 @@ L["General Settings"] = true
 			L["Low"] = true
 			L["High"] = true
 	L["Color Options"] = true
-	L["Unicolor Theme"] = true
-		L["UNICOLOR_DESC"] = "When checked allows you to choose health and bg colors below, unchecked will use class colors"
 	L["Healthbar Color"] = true
 		L["HBAR_DESC"] = "Allows you to select a custom color for health bars"
 	L["Healthbar BG Color"] = true
@@ -49,6 +47,8 @@ L["General Settings"] = true
 		L["THEME_DESC"] = "Choose the Look 'N' Feel of the interface."
 			L["ClassColor"] = "ClassColor"
 			L["Default"] = "Default"
+	L["Datatext Height"] = true
+		L["Adjust the height of the datatext panels."] = true
 		
 -- Unit Frames
 L["Unit Frames"] = true

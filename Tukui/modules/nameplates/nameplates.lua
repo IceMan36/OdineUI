@@ -211,9 +211,8 @@ local function UpdateAuraIcon(button, unit, index, filter)
 end
 
 --Filter auras on nameplate, and determine if we need to update them or not.
-local tab = CLASS_FILTERS[T.myclass].target
 local function OnAura(frame, unit)
-	if not frame.icons or not tab or not frame.unit then return end
+	if not frame.icons or not frame.unit then return end
 	local i = 1
 	for index = 1,40 do
 		if i > 5 then return end
@@ -221,10 +220,7 @@ local function OnAura(frame, unit)
 		local name,_,_,_,_,duration,_,caster,_,_,spellid = UnitAura(frame.unit,index,"HARMFUL")
 		
 		if C["nameplate"].trackdebuffs == true then
-			for _, tab in pairs(tab) do
-				local id = tab.id
-				if caster == "player" then match = true end
-			end
+			if caster == "player" then match = true end
 		end
 		
 		if C["nameplate"].trackcc == true then
