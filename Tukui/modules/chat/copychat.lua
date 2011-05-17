@@ -14,9 +14,9 @@ local function CreatCopyFrame()
 	frame = CreateFrame("Frame", "CopyFrame", UIParent)
 	frame:SetTemplate("Default")
 	if T.lowversion then
-		frame:Width(TukuiBar1:GetWidth() + 10)
+		frame:Width(TukuiMainMenuBar:GetWidth() + 10)
 	else
-		frame:Width((TukuiBar1:GetWidth() * 2) + 20)
+		frame:Width((TukuiMainMenuBar:GetWidth() * 2) + 20)
 	end
 	frame:Height(250)
 	frame:SetScale(1)
@@ -35,9 +35,9 @@ local function CreatCopyFrame()
 	editBox:SetAutoFocus(false)
 	editBox:SetFontObject(ChatFontNormal)
 	if T.lowversion then
-		editBox:Width(TukuiBar1:GetWidth() + 10)
+		editBox:Width(TukuiMainMenuBar:GetWidth() + 10)
 	else
-		editBox:Width((TukuiBar1:GetWidth() * 2) + 20)
+		editBox:Width((TukuiMainMenuBar:GetWidth() * 2) + 20)
 	end
 	editBox:Height(250)
 	editBox:SetScript("OnEscapePressed", function() frame:Hide() end)

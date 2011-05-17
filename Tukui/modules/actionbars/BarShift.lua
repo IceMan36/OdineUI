@@ -11,6 +11,8 @@ local TukuiShift = CreateFrame("Frame","TukuiShiftBar",TukuiActionBarBackground)
 TukuiShift:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 6, -35)
 TukuiShift:SetWidth(200)
 TukuiShift:SetHeight(T.petbuttonsize)
+TukuiShift:SetMovable(true)
+TukuiShift:SetClampedToScreen(true)
 
 if C["actionbar"].hideshapeshift == true then
 	TukuiShift:Hide()
