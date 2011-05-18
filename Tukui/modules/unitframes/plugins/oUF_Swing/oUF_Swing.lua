@@ -308,6 +308,7 @@ end
 
 local function ParryHaste(self, event, _, subevent, _, _, _, _, _, tarGUID, _, missType)
 	if UnitGUID("player") ~= tarGUID then return end
+	
 	if not meleeing then return end
 	if not string.find(subevent, "MISSED") then return end
 	if missType ~= "PARRY" then return end
@@ -362,17 +363,9 @@ local function ParryHaste(self, event, _, subevent, _, _, _, _, _, tarGUID, _, m
 end
 
 local function Ooc(self)
-	local bar = self.Swing
-	
-	-- strange behaviour sometimes...
-	meleeing = false
-	rangeing = false
-	
-	if not bar.hideOoc then return end
-	
-	bar.Twohand:Hide()
-	bar.Mainhand:Hide()
-	bar.Offhand:Hide()
+	self.Swing.Twohand:Hide()
+	self.Swing.Mainhand:Hide()
+	self.Swing.Offhand:Hide()
 end
 
 local function Enable(self, unit)
@@ -413,7 +406,7 @@ local function Enable(self, unit)
 		if not bar.Mainhand then
 			bar.Mainhand = CreateFrame("StatusBar", nil, bar)
 			bar.Mainhand:SetPoint("TOPLEFT")
-			bar.Mainhand:SetPoint("BOTTOMRIGHT", bar, "RIGHT")
+			bar.Mainhand:SetPoint("RIGHT")
 			bar.Mainhand:SetStatusBarTexture(normTex)
 			bar.Mainhand:SetStatusBarColor(r, g, b, a)
 			bar.Mainhand:SetFrameLevel(20)
@@ -427,7 +420,7 @@ local function Enable(self, unit)
 		
 		if not bar.Offhand then
 			bar.Offhand = CreateFrame("StatusBar", nil, bar)
-			bar.Offhand:SetPoint("TOPLEFT", bar, "LEFT")
+			bar.Offhand:SetPoint("LEFT")
 			bar.Offhand:SetPoint("BOTTOMRIGHT")
 			bar.Offhand:SetStatusBarTexture(normTex)
 			bar.Offhand:SetStatusBarColor(r, g, b, a)
@@ -469,7 +462,9 @@ local function Enable(self, unit)
 			self:RegisterEvent("UNIT_ATTACK_SPEED", MeleeChange)
 		end
 		
-		self:RegisterEvent("PLAYER_REGEN_ENABLED", Ooc)
+		if not bar.hideOoc then
+			self:RegisterEvent("PLAYER_REGEN_ENABLED", Ooc)
+		end
 		
 		return true
 	end
@@ -489,7 +484,9 @@ local function Disable(self)
 			self:UnregisterEvent("UNIT_ATTACK_SPEED", MeleeChange)
 		end
 		
-		self:UnregisterEvent("PLAYER_REGEN_ENABLED", Ooc)
+		if not bar.hideOoc then
+			self:UnregisterEvent("PLAYER_REGEN_ENABLED", Ooc)
+		end
 	end
 end
 

@@ -1,46 +1,17 @@
-﻿------------------------------------------------------------------------
--- Launch Tukui Script
-------------------------------------------------------------------------
+﻿--This file contains the Install process and everything we do after PLAYER_ENTERING_WORLD event.
+
 local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
 
 -- this install Tukui with default settings.
 function T.Install()
 	local CURRENT_PAGE = 0
 	local MAX_PAGE = 7
-
-	local function SetupCVars()
-		SetCVar("buffDurations", 1)
-		SetCVar("mapQuestDifficulty", 1)
-		SetCVar("scriptErrors", 1)
-		SetCVar("ShowClassColorInNameplate", 1)
-		SetCVar("screenshotQuality", 10)
-		SetCVar("cameraDistanceMax", 50)
-		SetCVar("cameraDistanceMaxFactor", 3.4)
-		SetCVar("chatMouseScroll", 1)
-		SetCVar("chatStyle", "classic")
-		SetCVar("WholeChatWindowClickable", 0)
-		SetCVar("ConversationMode", "inline")
-		SetCVar("showTutorials", 0)
-		SetCVar("showNewbieTips", 0)
-		SetCVar("autoQuestWatch", 1)
-		SetCVar("autoQuestProgress", 1)
-		SetCVar("showLootSpam", 1)
-		SetCVar("UberTooltips", 1)
-		SetCVar("removeChatDelay", 1)
-		SetCVar("gxTextureCacheSize", 512)
-		print(L.TukuiInstall_CVarSet)
-	end
 	
-	local function ResetAll()
-		InstallNextButton:Disable()
-		InstallPrevButton:Disable()
-		InstallOption1Button:Hide()
-		InstallOption1Button:SetScript("OnClick", nil)
-		InstallOption1Button:SetText("")
-		TukuiInstallFrame.SubTitle:SetText("")
-		TukuiInstallFrame.Desc1:SetText("")
-		TukuiInstallFrame.Desc2:SetText("")
-		TukuiInstallFrame.Desc3:SetText("")
+	local function InstallComplete()
+		TukuiData[T.myrealm][T.myname].v2installed = true
+		
+	
+		ReloadUI()
 	end
 	
 	local function ResetUFPos()
@@ -50,12 +21,6 @@ function T.Install()
 			TukuiData.ufpos = {}
 		end	
 		print(L.TukuiInstall_UFSet)
-	end
-	
-	local function InstallComplete()
-		TukuiData[T.myrealm][T.myname].v2installed = true
-	
-		ReloadUI()
 	end
 	
 	local function SetupChat()
@@ -179,6 +144,41 @@ function T.Install()
 			ToggleChatColorNamesByClassGroup(true, "CHANNEL10")
 			ToggleChatColorNamesByClassGroup(true, "CHANNEL11")
 		end
+	end
+	
+	local function SetupCVars()
+		SetCVar("buffDurations", 1)
+		SetCVar("mapQuestDifficulty", 1)
+		SetCVar("scriptErrors", 1) -- enable while ptr 4.2 in testing
+		SetCVar("ShowClassColorInNameplate", 1)
+		SetCVar("screenshotQuality", 10)
+		SetCVar("cameraDistanceMax", 50)
+		SetCVar("cameraDistanceMaxFactor", 3.4)
+		SetCVar("chatMouseScroll", 1)
+		SetCVar("chatStyle", "classic")
+		SetCVar("WholeChatWindowClickable", 0)
+		SetCVar("ConversationMode", "inline")
+		SetCVar("showTutorials", 0)
+		SetCVar("showNewbieTips", 0)
+		SetCVar("autoQuestWatch", 1)
+		SetCVar("autoQuestProgress", 1)
+		SetCVar("showLootSpam", 1)
+		SetCVar("UberTooltips", 1)
+		SetCVar("removeChatDelay", 1)
+		SetCVar("gxTextureCacheSize", 512)
+		print(L.TukuiInstall_CVarSet)
+	end
+	
+	local function ResetAll()
+		InstallNextButton:Disable()
+		InstallPrevButton:Disable()
+		InstallOption1Button:Hide()
+		InstallOption1Button:SetScript("OnClick", nil)
+		InstallOption1Button:SetText("")
+		TukuiInstallFrame.SubTitle:SetText("")
+		TukuiInstallFrame.Desc1:SetText("")
+		TukuiInstallFrame.Desc2:SetText("")
+		TukuiInstallFrame.Desc3:SetText("")
 	end
 	
 	local function SetPage(PageNum)

@@ -7,7 +7,7 @@ local FONTFLAG = "THINOUTLINE"
 
 
 local function SetModifiedBackdrop(self)
-	if C["general"].template == "ClassColor" then
+	if C["general"].classcolortheme == true then
 		self:SetBackdropBorderColor(unpack(C["media"].bordercolor))		
 	else
 		self:SetBackdropBorderColor(unpack(C["media"].txtcolor))	
@@ -16,7 +16,7 @@ end
 
 local function SetOriginalBackdrop(self)
 	local color = RAID_CLASS_COLORS[T.myclass]
-	if C["general"].template == "ClassColor" then
+	if C["general"].classcolortheme == true then
 		self:SetBackdropBorderColor(color.r, color.g, color.b)
 	else
 		self:SetTemplate("Default", true)
@@ -3236,14 +3236,21 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			hooksecurefunc("WorldMap_ToggleSizeUp", FixSkin)
 			
 			WorldMapFrame:RegisterEvent("PLAYER_LOGIN")
-				WorldMapFrame:HookScript("OnEvent", function(self, event)
-					if event == "PLAYER_LOGIN" then
-						if not GetCVarBool("miniWorldMap") then
-							ToggleFrame(WorldMapFrame)
-							ToggleFrame(WorldMapFrame)
-						end
+			WorldMapFrame:HookScript("OnEvent", function(self, event)
+				if event == "PLAYER_LOGIN" then
+					if not GetCVarBool("miniWorldMap") then
+						ToggleFrame(WorldMapFrame)
+						WorldMapFrameSizeDownButton:Click()	
+						WorldMapFrameSizeUpButton:Click()					
+						ToggleFrame(WorldMapFrame)
+					else
+						ToggleFrame(WorldMapFrame)
+						WorldMapFrameSizeUpButton:Click()
+						WorldMapFrameSizeDownButton:Click()
+						ToggleFrame(WorldMapFrame)
 					end
-			end)		
+				end
+			end)	
 		
 			local coords = CreateFrame("Frame", "CoordsFrame", WorldMapFrame)
 			local fontheight = select(2, WorldMapQuestShowObjectivesText:GetFont())*1.1
@@ -4566,6 +4573,18 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 				_G[ChatMenus[i]]:HookScript("OnShow", function(self) self:SetTemplate("Default", true) self:SetBackdropColor(unpack(C["media"].backdropfadecolor)) end)
 			end
 		end
+		
+		--LFD Role Picker frame
+		LFDRoleCheckPopup:StripTextures()
+		LFDRoleCheckPopup:SetTemplate("Transparent")
+		SkinButton(LFDRoleCheckPopupAcceptButton)
+		SkinButton(LFDRoleCheckPopupDeclineButton)
+		SkinCheckBox(LFDRoleCheckPopupRoleButtonTank:GetChildren())
+		SkinCheckBox(LFDRoleCheckPopupRoleButtonDPS:GetChildren())
+		SkinCheckBox(LFDRoleCheckPopupRoleButtonHealer:GetChildren())
+		LFDRoleCheckPopupRoleButtonTank:GetChildren():SetFrameLevel(LFDRoleCheckPopupRoleButtonTank:GetChildren():GetFrameLevel() + 1)
+		LFDRoleCheckPopupRoleButtonDPS:GetChildren():SetFrameLevel(LFDRoleCheckPopupRoleButtonDPS:GetChildren():GetFrameLevel() + 1)
+		LFDRoleCheckPopupRoleButtonHealer:GetChildren():SetFrameLevel(LFDRoleCheckPopupRoleButtonHealer:GetChildren():GetFrameLevel() + 1)
 		
 		-- reskin popup buttons
 		for i = 1, 2 do

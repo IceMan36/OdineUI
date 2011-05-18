@@ -226,7 +226,7 @@ local function Shared(self, unit)
 			local Resting = health:CreateTexture(nil, "OVERLAY")
 			Resting:SetHeight(25/1.5)
 			Resting:SetWidth(25/1.5)
-			Resting:SetPoint("CENTER", 0, 2)
+			Resting:SetPoint("CENTER", 0, 12)
 			Resting:SetTexture([=[Interface\CharacterFrame\UI-StateIcon]=])
 			Resting:SetTexCoord(0, 0.5, 0, 0.421875)
 			self.Resting = Resting
@@ -288,9 +288,9 @@ local function Shared(self, unit)
 			-- Swing Bar				
 			if C["unitframes"].swingbar == true then
 				local Swing = CreateFrame("StatusBar", self:GetName().."_SwingBar", TukuiMainMenuBar)
-				Swing:SetPoint("BOTTOMLEFT", TukuiMainMenuBar, "TOPLEFT", T.Scale(2), T.Scale(T.buttonsize+8))
-				Swing:SetPoint("BOTTOMRIGHT", TukuiMainMenuBar, "TOPRIGHT", T.Scale(-2), T.Scale(T.buttonsize+8))
-				Swing:SetHeight(T.Scale(5))
+				Swing:SetPoint("BOTTOMLEFT", TukuiMainMenuBar, "TOPLEFT", T.Scale(2), T.Scale(T.buttonsize+6))
+				Swing:SetPoint("BOTTOMRIGHT", TukuiMainMenuBar, "TOPRIGHT", T.Scale(-2), T.Scale(T.buttonsize+6))
+				Swing:SetHeight(T.Scale(4))
 				Swing:SetStatusBarTexture(C["media"].normTex)
 				Swing:GetStatusBarTexture():SetHorizTile(false)
 				Swing:SetStatusBarColor(unpack(C["unitframes"].healthBgColor))
@@ -307,7 +307,7 @@ local function Shared(self, unit)
 				self.Swing.disableRanged = false
 				self.Swing.hideOoc = true
 				
-				-- Patch 4.1 seems to have broken the oUF swingbar plugin.. hax until its fixed
+				-- sigh hacks to hide swingbar when OOC
 				local ChatCombatHider = CreateFrame("Frame")
 				ChatCombatHider:RegisterEvent("PLAYER_REGEN_ENABLED")
 				ChatCombatHider:RegisterEvent("PLAYER_REGEN_DISABLED")
@@ -665,9 +665,9 @@ local function Shared(self, unit)
 				castbar:SetHeight(20)
 				if unit == "player" then
 					if C["unitframes"].large_player == true then
-						castbar:SetHeight(T.buttonsize - 4)
+						castbar:SetHeight(T.buttonsize - 5)
 						if C["unitframes"].cbicons == true then
-							castbar:SetWidth(TukuiMainMenuBar:GetWidth() - T.buttonsize - (T.buttonspacing + 5) )
+							castbar:SetWidth(TukuiMainMenuBar:GetWidth() - T.buttonsize - (T.buttonspacing + 3) )
 							castbar:SetPoint("BOTTOMLEFT", TukuiMainMenuBar, "TOPLEFT", T.buttonsize + 5, 5)
 							--castbar:SetWidth(583)
 							--castbar:SetPoint("BOTTOMLEFT", TukuiSplitBarLeft, "TOPLEFT", T.buttonsize + 5, 5)
@@ -1272,8 +1272,8 @@ f:SetScript("OnEvent", function(self, event, addon)
 	elseif addon == "Tukui_Heal" then
 		--[ HEAL ]--
 		-- points
-		player:Point("TOP", UIParent, "BOTTOM", -325 , 230)
-		target:Point("TOP", UIParent, "BOTTOM", 325, 230)
+		player:Point("TOP", UIParent, "BOTTOM", -345 , 230)
+		target:Point("TOP", UIParent, "BOTTOM", 345, 230)
 		tot:Point("TOPRIGHT", TukuiTarget, "BOTTOMRIGHT", 0, -5)
 		pet:Point("TOPLEFT", TukuiPlayer, "BOTTOMLEFT", 0, -5)
 
@@ -1310,7 +1310,7 @@ if C["unitframes"].showboss then
 	for i = 1, MAX_BOSS_FRAMES do
 		boss[i] = oUF:Spawn("boss"..i, "TukuiBoss"..i)
 		if i == 1 then
-			boss[i]:SetPoint("BOTTOMLEFT", ChatRBackground2, "TOPLEFT", 10, 150)
+			boss[i]:SetPoint("BOTTOMLEFT", ChatRBackground2, "TOPLEFT", 10, 180)
 		else
 			boss[i]:SetPoint('BOTTOM', boss[i-1], 'TOP', 0, T.Scale(80))             
 		end

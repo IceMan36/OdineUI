@@ -1,15 +1,18 @@
+V6.3.3 - [05/18/2011]
+* large player castbar wasnt sized up perfectly.... now it is! =P
+* swingbar hacked to be hidden when not in combat for now
+* strata messed up on new world map. should be ok now
+
 V6.3.2 - [05/17/2011]
 * fixed altpowerbar not displaying in its new location (inforight)
 * bottom split info panels will size properly based on resolution
 * fixed bugs with worldmap, some PTR 4.2 support added
 * added option to use old style actionbars without having to force low reso
 
-
 V6.3.1 - [05/17/2011]
 * altpowerbar has been moved to Right Info Panel
 * actionbar was bugged when entering vehicle
 * added missing vehicle texture
-
 
 V6.3 - [05/16/2011]
 * added calendar to game menu/minimap
