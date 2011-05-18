@@ -24,7 +24,7 @@ DB["media"] = {
 	["glowTex"] = "Tukui Glow",
 	["glossTex"] = "Tukui Glossy",
 	["blank"] = "Tukui Blank",
-	
+
 	["striped"] = [[Interface\AddOns\Tukui\medias\textures\Striped]], -- unitframes combo points
 	["copyicon"] = [[Interface\AddOns\Tukui\medias\textures\copy]], -- copy icon
 	["buttonhover"] = [[Interface\AddOns\Tukui\medias\textures\button_hover]],

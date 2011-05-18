@@ -86,7 +86,7 @@ local function Shared(self, unit)
 		healthB:SetFrameLevel(health:GetFrameLevel() - 1)
 		healthB:Point("TOPLEFT", -2, 2)
 		healthB:Point("BOTTOMRIGHT", 2, -2)
-		healthB:SetTemplate("Default", true)
+		healthB:SetTemplate("Default")
 		healthB:CreateShadow("Default")
 		self.Health.border = healthB
 		

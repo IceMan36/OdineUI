@@ -57,6 +57,34 @@ local function Point(obj, arg1, arg2, arg3, arg4, arg5)
 	obj:SetPoint(arg1, arg2, arg3, arg4, arg5)
 end
 
+local function CreateShadow(f, t)
+	if f.shadow then return end -- we seriously don't want to create shadow 2 times in a row on the same frame.
+	
+	borderr, borderg, borderb = 0, 0, 0
+	backdropr, backdropg, backdropb = 0, 0, 0
+	
+	if t == "ClassColor" then
+		local c = T.oUF_colors.class[class]
+		borderr, borderg, borderb = c[1], c[2], c[3]
+		backdropr, backdropg, backdropb = unpack(C["media"].backdropcolor)
+	end
+	
+	local shadow = CreateFrame("Frame", nil, f)
+	shadow:SetFrameLevel(1)
+	shadow:SetFrameStrata(f:GetFrameStrata())
+	shadow:Point("TOPLEFT", -3, 3)
+	shadow:Point("BOTTOMLEFT", -3, -3)
+	shadow:Point("TOPRIGHT", 3, 3)
+	shadow:Point("BOTTOMRIGHT", 3, -3)
+	shadow:SetBackdrop( { 
+		edgeFile = C["media"].glowTex, edgeSize = T.Scale(3),
+		insets = {left = T.Scale(5), right = T.Scale(5), top = T.Scale(5), bottom = T.Scale(5)},
+	})
+	shadow:SetBackdropColor(backdropr, backdropg, backdropb, 0)
+	shadow:SetBackdropBorderColor(borderr, borderg, borderb, 0.9)
+	f.shadow = shadow
+end
+
 local function SetTemplate(f, t, texture)
 	GetTemplate(t)
 		
@@ -141,34 +169,6 @@ local function CreateBackdrop(f, t, tex)
 	end
 	
 	f.backdrop = b
-end
-
-local function CreateShadow(f, t)
-	if f.shadow then return end -- we seriously don't want to create shadow 2 times in a row on the same frame.
-	
-	borderr, borderg, borderb = 0, 0, 0
-	backdropr, backdropg, backdropb = 0, 0, 0
-	
-	if t == "ClassColor" then
-		local c = T.oUf.colors.class[class]
-		borderr, borderg, borderb = c[1], c[2], c[3]
-		backdropr, backdropg, backdropb = unpack(C["media"].backdropcolor)
-	end
-	
-	local shadow = CreateFrame("Frame", nil, f)
-	shadow:SetFrameLevel(1)
-	shadow:SetFrameStrata(f:GetFrameStrata())
-	shadow:Point("TOPLEFT", -3, 3)
-	shadow:Point("BOTTOMLEFT", -3, -3)
-	shadow:Point("TOPRIGHT", 3, 3)
-	shadow:Point("BOTTOMRIGHT", 3, -3)
-	shadow:SetBackdrop( { 
-		edgeFile = C["media"].glowTex, edgeSize = T.Scale(3),
-		insets = {left = T.Scale(5), right = T.Scale(5), top = T.Scale(5), bottom = T.Scale(5)},
-	})
-	shadow:SetBackdropColor(backdropr, backdropg, backdropb, 0)
-	shadow:SetBackdropBorderColor(borderr, borderg, borderb, 0.9)
-	f.shadow = shadow
 end
 
 local function Kill(object)
