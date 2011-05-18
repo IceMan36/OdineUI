@@ -184,7 +184,8 @@ if C["datatext"].friends and C["datatext"].friends > 0 then
 			local totalfriends = total + BNtotal					
 
 			if online > 0 or BNonline > 0 then
-				GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, T.Scale(6));
+				local anchor, panel, xoff, yoff = T.DataTextTooltipAnchor(Text)
+				GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 				GameTooltip:ClearAllPoints()
 				GameTooltip:ClearLines()
 				GameTooltip:AddDoubleLine(L.datatext_friendlist, format("%s/%s",totalonline,totalfriends),tthead.r,tthead.g,tthead.b,tthead.r,tthead.g,tthead.b)

@@ -4,13 +4,14 @@ local FONT = C["media"].font
 local FONTSIZE = 18
 local FONTFLAG = "THINOUTLINE"
 
-
+if C["addonskins"].enable ~= true then return end
 
 local function SetModifiedBackdrop(self)
+	local color = RAID_CLASS_COLORS[T.myclass]
 	if C["general"].classcolortheme == true then
 		self:SetBackdropBorderColor(unpack(C["media"].bordercolor))		
 	else
-		self:SetBackdropBorderColor(unpack(C["media"].txtcolor))	
+		self:SetBackdropBorderColor(color.r, color.g, color.b)
 	end
 end
 
@@ -19,7 +20,7 @@ local function SetOriginalBackdrop(self)
 	if C["general"].classcolortheme == true then
 		self:SetBackdropBorderColor(color.r, color.g, color.b)
 	else
-		self:SetTemplate("Default")
+		self:SetTemplate("Default", true)
 	end
 end
 
@@ -178,7 +179,13 @@ local function SkinCheckBox(frame)
 		frame:SetCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check")
 	end
 	
-	frame:SetDisabledTexture("Interface\\Buttons\\UI-CheckBox-Check-Disabled")
+	if frame.SetDisabledTexture then
+		frame:SetDisabledTexture("Interface\\Buttons\\UI-CheckBox-Check-Disabled")
+	end
+	
+	frame.SetNormalTexture = T.dummy
+	frame.SetPushedTexture = T.dummy
+	frame.SetHighlightTexture = T.dummy
 end
 
 local function SkinCloseButton(f, point)
@@ -186,6 +193,10 @@ local function SkinCloseButton(f, point)
 		local region = select(i, f:GetRegions())
 		if region:GetObjectType() == "Texture" then
 			region:SetDesaturated(1)
+			
+			if region:GetTexture() == "Interface\\DialogFrame\\UI-DialogBox-Corner" then
+				region:Kill()
+			end
 		end
 	end	
 	
@@ -199,7 +210,7 @@ TukuiSkin:RegisterEvent("ADDON_LOADED")
 TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	if IsAddOnLoaded("Skinner") or IsAddOnLoaded("Aurora") then return end
 	
-	if addon == "Blizzard_ReforgingUI" then
+	if addon == "Blizzard_ReforgingUI" and C["addonskins"].reforge == true then
 		ReforgingFrame:StripTextures()
 		ReforgingFrame:SetTemplate("Transparent")
 
@@ -228,11 +239,11 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 				ReforgingFrameItemButtonIconTexture:SetTexture(nil)
 			end
 		end)
-
-			SkinCloseButton(ReforgingFrameCloseButton)
-		end
+		
+		SkinCloseButton(ReforgingFrameCloseButton)
+	end
 	
-	if addon == "Blizzard_Calendar" then
+	if addon == "Blizzard_Calendar" and C["addonskins"].calendar == true then
 		local frames = {
 			"CalendarFrame",
 		}
@@ -404,7 +415,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 	end
 	
-	if addon == "Blizzard_AchievementUI" then
+	if addon == "Blizzard_AchievementUI" and C["addonskins"].achievement == true then
 		local frames = {
 			"AchievementFrame",
 			"AchievementFrameCategories",
@@ -443,9 +454,10 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		AchievementFrame:CreateBackdrop("Transparent")
 		AchievementFrame.backdrop:Point("TOPLEFT", 0, 6)
 		AchievementFrame.backdrop:SetPoint("BOTTOMRIGHT")
-		AchievementFrameHeader:CreateBackdrop("Transparent")
-		AchievementFrameHeader.backdrop:Point("TOPLEFT", 300, -18)
-		AchievementFrameHeader.backdrop:Point("BOTTOMRIGHT", -250, 46)
+		AchievementFrameHeaderTitle:ClearAllPoints()
+		AchievementFrameHeaderTitle:Point("TOPLEFT", AchievementFrame.backdrop, "TOPLEFT", -30, -8)
+		AchievementFrameHeaderPoints:ClearAllPoints()
+		AchievementFrameHeaderPoints:Point("LEFT", AchievementFrameHeaderTitle, "RIGHT", 2, 0)
 		
 		--Backdrops
 		AchievementFrameCategoriesContainer:CreateBackdrop("Default")
@@ -661,6 +673,8 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 					frame:SetStatusBarColor(4/255, 179/255, 30/255)
 					frame:SetFrameLevel(frame:GetFrameLevel() + 3)
 					
+					frame:Height(frame:GetHeight() - 2)
+					
 					--Initiate fucked up method of creating a backdrop
 					frame.bg1 = frame:CreateTexture(nil, "BACKGROUND")
 					frame.bg1:SetDrawLayer("BACKGROUND", -7)
@@ -681,8 +695,16 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 					frame.bg3:Point("BOTTOMRIGHT", T.mult, -T.mult)		
 					
 					frame.text:ClearAllPoints()
-					frame.text:SetPoint("CENTER", frame, "CENTER", 0, -2)
+					frame.text:SetPoint("CENTER", frame, "CENTER", 0, -1)
 					frame.text:SetJustifyH("CENTER")
+					
+					if index > 1 then
+						frame:ClearAllPoints()
+						frame:Point("TOP", _G["AchievementFrameProgressBar"..index-1], "BOTTOM", 0, -5)
+						frame.SetPoint = T.dummy
+						frame.ClearAllPoints = T.dummy
+					end
+					
 					frame.skinned = true
 				end
 
@@ -727,7 +749,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	end	
 	
 	-- LF guild UI
-	if addon == "Blizzard_LookingForGuildUI" then
+	if addon == "Blizzard_LookingForGuildUI" and C["addonskins"].lfguild == true then
 		local checkbox = {
 			"LookingForGuildPvPButton",
 			"LookingForGuildWeekendsButton",
@@ -777,7 +799,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	end	
 	
 	--Inspect Frame
-	if addon == "Blizzard_InspectUI" then
+	if addon == "Blizzard_InspectUI" and C["addonskins"].inspect == true then
 		InspectFrame:StripTextures(true)
 		InspectFrameInset:StripTextures(true)
 		InspectTalentFramePointsBar:StripTextures()
@@ -885,7 +907,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	end
 	
 	--Keybinds
-	if addon == "Blizzard_BindingUI" then
+	if addon == "Blizzard_BindingUI" and C["addonskins"].binding == true then
 		local buttons = {
 			"KeyBindingFrameDefaultButton",
 			"KeyBindingFrameUnbindButton",
@@ -920,7 +942,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	end	
 	
 	--GBANK
-	if addon == "Blizzard_GuildBankUI" then
+	if addon == "Blizzard_GuildBankUI" and C["addonskins"].gbank == true then
 		GuildBankFrame:StripTextures()
 		GuildBankFrame:SetTemplate("Transparent")
 		GuildBankEmblemFrame:StripTextures(true)
@@ -986,7 +1008,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	end
 	
 	--Archaeology
-	if addon == "Blizzard_ArchaeologyUI" then
+	if addon == "Blizzard_ArchaeologyUI" and C["addonskins"].archaeology == true then
 		ArchaeologyFrame:StripTextures(true)
 		ArchaeologyFrameInset:StripTextures(true)
 		ArchaeologyFrame:SetTemplate("Transparent")
@@ -1064,7 +1086,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	end
 	
 	--Guild Control
-	if addon == "Blizzard_GuildControlUI" then
+	if addon == "Blizzard_GuildControlUI" and C["addonskins"].guildcontrol == true then
 		GuildControlUI:StripTextures()
 		GuildControlUIHbar:StripTextures()
 		GuildControlUI:SetTemplate("Transparent")
@@ -1138,7 +1160,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	end
 	
 	--Guild
-	if addon == "Blizzard_GuildUI" then
+	if addon == "Blizzard_GuildUI" and C["addonskins"].guild == true then
 		GuildFrame:StripTextures(true)
 		GuildFrame:SetTemplate("Transparent")
 		GuildFrame:CreateShadow("Default")
@@ -1404,7 +1426,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	end
 	
 	--TradeSkill
-	if addon == "Blizzard_TradeSkillUI" then
+	if addon == "Blizzard_TradeSkillUI" and C["addonskins"].tradeskill == true then
 		TradeSkillFrame:StripTextures(true)
 		TradeSkillListScrollFrame:StripTextures()
 		TradeSkillDetailScrollFrame:StripTextures()
@@ -1491,7 +1513,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	end
 
 	--Raid Frame
-	if addon == "Blizzard_RaidUI" then
+	if addon == "Blizzard_RaidUI" and C["addonskins"].raid == true then
 		local buttons = {
 			"RaidFrameRaidBrowserButton",
 			"RaidFrameRaidInfoButton",
@@ -1537,7 +1559,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	end	
 	
 	-- Talent Trees
-	if addon == "Blizzard_TalentUI" then
+	if addon == "Blizzard_TalentUI" and C["addonskins"].talent == true then
 		--PLAYER TALENTS
 		local buttons = {
 			"PlayerTalentFrameToggleSummariesButton",
@@ -1603,7 +1625,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 		
 		for i=1, 3 do
-			_G["PlayerTalentFramePanel"..i.."Arrow"]:SetFrameStrata("HIGH")
+			_G["PlayerTalentFramePanel"..i.."Arrow"]:SetFrameLevel(_G["PlayerTalentFramePanel"..i.."Arrow"]:GetFrameLevel() + 2)
 		end
 		PlayerTalentFramePetPanelArrow:SetFrameStrata("HIGH")
 		
@@ -1717,6 +1739,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		
 		local function TalentSummaryClean(i)
 			frame = _G["PlayerTalentFramePanel"..i.."Summary"]
+			frame:SetFrameLevel(frame:GetFrameLevel() + 2)
 			frame:CreateBackdrop("Default")
 			frame:SetFrameLevel(frame:GetFrameLevel() +1)
 			local a,b,_,d,_,_,_,_,_,_,_,_,m,_ = frame:GetRegions()
@@ -1888,7 +1911,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 
 	end
 	
-	if addon == "Blizzard_GlyphUI" then
+	if addon == "Blizzard_GlyphUI" and C["addonskins"].glyph == true then
 
 		--GLYPHS TAB
 		GlyphFrameSparkleFrame:CreateBackdrop("Default")
@@ -1952,7 +1975,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	end
 	
 	--Auction House
-	if addon == "Blizzard_AuctionUI" then
+	if addon == "Blizzard_AuctionUI" and C["addonskins"].auctionhouse == true then
 		SkinCloseButton(AuctionFrameCloseButton)
 		AuctionFrame:StripTextures(true)
 		AuctionFrame:SetTemplate("Transparent")
@@ -2231,7 +2254,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	end
 	
 	--BarberShop
-	if addon == "Blizzard_BarbershopUI" then
+	if addon == "Blizzard_BarbershopUI" and C["addonskins"].barber == true then
 		local buttons = {
 			"BarberShopFrameOkayButton",
 			"BarberShopFrameCancelButton",
@@ -2285,7 +2308,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	end
 	
 	--Macro Frame
-	if addon == "Blizzard_MacroUI" then
+	if addon == "Blizzard_MacroUI" and C["addonskins"].macro == true then
 		SkinCloseButton(MacroFrameCloseButton)
 		
 		MacroFrame:Width(360)
@@ -2392,7 +2415,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 	end	
 	
-	if addon == "Blizzard_DebugTools" then
+	if addon == "Blizzard_DebugTools" and C["addonskins"].debug == true then
 		local noscalemult = T.mult * C["general"].uiscale
 		local bg = {
 		  bgFile = C["media"].blank, 
@@ -2444,7 +2467,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end	
 	end
 	
-	if addon == "Blizzard_TrainerUI" then
+	if addon == "Blizzard_TrainerUI" and C["addonskins"].trainer == true then
 
 		--Class Trainer Frame
 		local StripAllTextures = {
@@ -2513,7 +2536,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	end
 	
 	-- Socketing UI
-	if addon == "Blizzard_ItemSocketingUI" then	
+	if addon == "Blizzard_ItemSocketingUI" and C["addonskins"].socket == true then
 		ItemSocketingFrame:StripTextures()
 		ItemSocketingFrame:SetTemplate("Transparent")
 		ItemSocketingScrollFrame:StripTextures()
@@ -2550,8 +2573,55 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	
 	-- stuff not in Blizzard load-on-demand
 	if addon == "Tukui" then
+	
+		--Achievement Popup Frames
+		if C["addonskins"].achievement_popup == true then		
+			local function SkinAchievePopUp()
+				for i = 1, MAX_ACHIEVEMENT_ALERTS do
+					local frame = _G["AchievementAlertFrame"..i]
+					
+					if frame then
+						frame:SetAlpha(1)
+						frame.SetAlpha = T.dummy
+						if not frame.backdrop then
+							frame:CreateBackdrop("Default")
+							frame.backdrop:Point("TOPLEFT", _G[frame:GetName().."Background"], "TOPLEFT", -2, -6)
+							frame.backdrop:Point("BOTTOMRIGHT", _G[frame:GetName().."Background"], "BOTTOMRIGHT", -2, 6)		
+						end
+						
+						-- Background
+						_G["AchievementAlertFrame"..i.."Background"]:SetTexture(nil)
+
+						_G["AchievementAlertFrame"..i.."Glow"]:Kill()
+						_G["AchievementAlertFrame"..i.."Shine"]:Kill()
+						
+						-- Text
+						_G["AchievementAlertFrame"..i.."Unlocked"]:SetFont(C.media.font, 12)
+						_G["AchievementAlertFrame"..i.."Unlocked"]:SetTextColor(1, 1, 1)
+						_G["AchievementAlertFrame"..i.."Name"]:SetFont(C.media.font, 14)
+
+						-- Icon
+						_G["AchievementAlertFrame"..i.."IconTexture"]:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+						_G["AchievementAlertFrame"..i.."IconOverlay"]:Kill()
+						
+						_G["AchievementAlertFrame"..i.."IconTexture"]:ClearAllPoints()
+						_G["AchievementAlertFrame"..i.."IconTexture"]:Point("LEFT", frame, 7, 0)
+						
+						if not _G["AchievementAlertFrame"..i.."IconTexture"].b then
+							_G["AchievementAlertFrame"..i.."IconTexture"].b = CreateFrame("Frame", nil, _G["AchievementAlertFrame"..i])
+							_G["AchievementAlertFrame"..i.."IconTexture"].b:SetFrameLevel(0)
+							_G["AchievementAlertFrame"..i.."IconTexture"].b:SetTemplate("Default")
+							_G["AchievementAlertFrame"..i.."IconTexture"].b:Point("TOPLEFT", _G["AchievementAlertFrame"..i.."IconTexture"], "TOPLEFT", -2, 2)
+							_G["AchievementAlertFrame"..i.."IconTexture"].b:Point("BOTTOMRIGHT", _G["AchievementAlertFrame"..i.."IconTexture"], "BOTTOMRIGHT", 2, -2)
+						end
+					end
+				end
+			end
+			hooksecurefunc("AchievementAlertFrame_FixAnchors", SkinAchievePopUp)		
+		end
+	
 		-- bg score frame
-		do 
+		if C["addonskins"].bgscore == true then	
 			WorldStateScoreScrollFrame:StripTextures()
 			WorldStateScoreFrame:StripTextures()
 			WorldStateScoreFrame:SetTemplate("Transparent")
@@ -2572,7 +2642,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 		
 		-- Merchant Frame
-		do
+		if C["addonskins"].merchant == true then
 			local frames = {
 				"MerchantBuyBackItem",
 				"MerchantFrame",
@@ -2659,7 +2729,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 		
 		-- mail frame
-		do
+		if C["addonskins"].mail == true then
 			MailFrame:StripTextures(true)
 			MailFrame:CreateBackdrop("Transparent")
 			MailFrame.backdrop:Point("TOPLEFT", 4, 0)
@@ -2796,7 +2866,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 	
 		--Help Frame
-		do
+		if C["addonskins"].help == true then
 			local frames = {
 				"HelpFrameLeftInset",
 				"HelpFrameMainInset",
@@ -2926,7 +2996,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 	
 		--Trade Frame
-		do
+		if C["addonskins"].trade == true then
 			TradeFrame:StripTextures(true)
 			TradeFrame:CreateBackdrop("Transparent")
 			TradeFrame.backdrop:Point("TOPLEFT", 10, -4)
@@ -3004,7 +3074,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 
 		end
 		--Gossip Frame
-		do
+		if C["addonskins"].gossip == true then
 
 			local StripAllTextures = {
 				"GossipFrameGreetingPanel",
@@ -3059,7 +3129,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 		
 		--Greeting Frame
-		do
+		if C["addonskins"].greeting == true then
 			QuestFrameGreetingPanel:HookScript("OnShow", function()
 				QuestFrameGreetingPanel:StripTextures()
 				SkinButton(QuestFrameGreetingGoodbyeButton, true)
@@ -3090,6 +3160,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			OpacityFrame:SetTemplate("Transparent")
 		end
 		
+		
 		--Encounter Journal
 		if T.IsPTR() then
 			do
@@ -3119,7 +3190,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 		
 		--WorldMap
-		do
+		if C["addonskins"].worldmap == true then
 			WorldMapFrame:CreateBackdrop("Transparent")
 			WorldMapDetailFrame:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel() + 1)
 			WorldMapDetailFrame.backdrop = CreateFrame("Frame", nil, WorldMapFrame)
@@ -3138,6 +3209,8 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			SkinDropDownBox(WorldMapZoneDropDown)
 			SkinButton(WorldMapZoomOutButton)
 			WorldMapZoomOutButton:Point("LEFT", WorldMapZoneDropDown, "RIGHT", 0, 4)
+			WorldMapLevelUpButton:Point("TOPLEFT", WorldMapLevelDropDown, "TOPRIGHT", -2, 8)
+			WorldMapLevelDownButton:Point("BOTTOMLEFT", WorldMapLevelDropDown, "BOTTOMRIGHT", -2, 2)
 			
 			SkinCheckBox(WorldMapTrackQuest)
 			SkinCheckBox(WorldMapQuestShowObjectives)
@@ -3322,7 +3395,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 		
 		--Item Text Frame
-		do
+		if C["addonskins"].gossip == true then
 			ItemTextFrame:StripTextures(true)
 			ItemTextScrollFrame:StripTextures()
 			ItemTextFrame:SetTemplate("Transparent")
@@ -3332,7 +3405,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 		
 		--Taxi Frame
-		do
+		if C["addonskins"].taxi == true then
 			TaxiFrame:StripTextures()
 			TaxiFrame:CreateBackdrop("Transparent")
 			TaxiRouteMap:CreateBackdrop("Default")
@@ -3340,8 +3413,76 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			SkinCloseButton(TaxiFrameCloseButton)
 		end
 		
+		--LFR frame
+		if C["addonskins"].lfr == true then
+			local buttons = {
+			  "LFRQueueFrameFindGroupButton",
+			  "LFRQueueFrameAcceptCommentButton",
+			  "LFRBrowseFrameSendMessageButton",
+			  "LFRBrowseFrameInviteButton",
+			  "LFRBrowseFrameRefreshButton",
+			}
+
+			LFRParentFrame:StripTextures()
+			LFRParentFrame:SetTemplate("Transparent")
+			LFRQueueFrame:StripTextures()
+			LFRBrowseFrame:StripTextures()
+
+
+			for i=1, #buttons do
+			  SkinButton(_G[buttons[i]])
+			end
+
+			--Close button doesn't have a fucking name, extreme hackage
+			for i=1, LFRParentFrame:GetNumChildren() do
+			  local child = select(i, LFRParentFrame:GetChildren())
+			  if child.GetPushedTexture and child:GetPushedTexture() and not child:GetName() then
+				SkinCloseButton(child)
+			  end
+			end
+
+			SkinTab(LFRParentFrameTab1)
+			SkinTab(LFRParentFrameTab2)
+
+			SkinDropDownBox(LFRBrowseFrameRaidDropDown)
+
+			for i=1, 20 do
+			  local button = _G["LFRQueueFrameSpecificListButton"..i.."ExpandOrCollapseButton"]
+
+			  if button then
+				button:HookScript("OnClick", function()
+				  SkinCloseButton(button)
+				end)
+				SkinCloseButton(button)
+			  end
+			end
+
+			LFRQueueFrameCommentTextButton:CreateBackdrop("Default")
+			LFRQueueFrameCommentTextButton:Height(35)
+
+			for i=1, 7 do
+				local button = "LFRBrowseFrameColumnHeader"..i
+				_G[button.."Left"]:Kill()
+				_G[button.."Middle"]:Kill()
+				_G[button.."Right"]:Kill()
+			end		
+			
+			for i=1, NUM_LFR_CHOICE_BUTTONS do
+				local button = _G["LFRQueueFrameSpecificListButton"..i]
+				SkinCheckBox(button.enableButton)
+			end
+			
+			--DPS, Healer, Tank check button's don't have a name, use it's parent as a referance.
+			SkinCheckBox(LFRQueueFrameRoleButtonTank:GetChildren())
+			SkinCheckBox(LFRQueueFrameRoleButtonHealer:GetChildren())
+			SkinCheckBox(LFRQueueFrameRoleButtonDPS:GetChildren())
+			LFRQueueFrameRoleButtonTank:GetChildren():SetFrameLevel(LFRQueueFrameRoleButtonTank:GetChildren():GetFrameLevel() + 2)
+			LFRQueueFrameRoleButtonHealer:GetChildren():SetFrameLevel(LFRQueueFrameRoleButtonHealer:GetChildren():GetFrameLevel() + 2)
+			LFRQueueFrameRoleButtonDPS:GetChildren():SetFrameLevel(LFRQueueFrameRoleButtonDPS:GetChildren():GetFrameLevel() + 2)
+		end
+		
 		--LFD frame
-		do
+		if C["addonskins"].lfd == true then
 			local StripAllTextures = {
 				"LFDParentFrame",
 				"LFDQueueFrame",
@@ -3454,7 +3595,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 		
 		--Quest Frame
-		do
+		if C["addonskins"].quest == true then
 			QuestFrame:StripTextures(true)
 			QuestFrameDetailPanel:StripTextures(true)
 			QuestDetailScrollFrame:StripTextures(true)
@@ -3514,7 +3655,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 		
 		--Petition Frame
-		do
+		if C["addonskins"].petition == true then
 			PetitionFrame:StripTextures(true)
 			PetitionFrame:SetTemplate("Transparent")
 			PetitionFrame:CreateShadow("Default")
@@ -3545,7 +3686,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 		
 		--Quest Log
-		do
+		if C["addonskins"].quest == true then
 			SkinCloseButton(QuestLogFrameCloseButton)
 			QuestLogFrame:StripTextures()
 			QuestLogFrame:SetTemplate("Transparent")
@@ -3586,6 +3727,20 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 				_G["QuestInfoItem"..i]:SetTemplate("Default")
 				_G["QuestInfoItem"..i.."Count"]:SetDrawLayer("OVERLAY")
 			end
+			
+			QuestInfoSkillPointFrame:StripTextures()
+			QuestInfoSkillPointFrame:StyleButton()
+			QuestInfoSkillPointFrame:Width(QuestInfoSkillPointFrame:GetWidth() - 4)
+			QuestInfoSkillPointFrame:SetFrameLevel(QuestInfoSkillPointFrame:GetFrameLevel() + 2)
+			QuestInfoSkillPointFrameIconTexture:SetTexCoord(.08, .92, .08, .92)
+			QuestInfoSkillPointFrameIconTexture:SetDrawLayer("OVERLAY")
+			QuestInfoSkillPointFrameIconTexture:Point("TOPLEFT", 2, -2)
+			QuestInfoSkillPointFrameIconTexture:Size(QuestInfoSkillPointFrameIconTexture:GetWidth() - 2, QuestInfoSkillPointFrameIconTexture:GetHeight() - 2)
+			QuestInfoSkillPointFrame:SetTemplate("Default")
+			QuestInfoSkillPointFrameCount:SetDrawLayer("OVERLAY")
+			QuestInfoSkillPointFramePoints:ClearAllPoints()
+			QuestInfoSkillPointFramePoints:Point("BOTTOMRIGHT", QuestInfoSkillPointFrameIconTexture, "BOTTOMRIGHT")
+			
 			QuestInfoItemHighlight:StripTextures()
 			QuestInfoItemHighlight:SetTemplate("Default")
 			QuestInfoItemHighlight:SetBackdropBorderColor(1, 1, 0)
@@ -3655,7 +3810,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		
 		
 		--Dressing Room Frame
-		do
+		if C["addonskins"].dressingroom == true then
 			DressUpFrame:StripTextures(true)
 			DressUpFrame:CreateBackdrop("Transparent")
 			DressUpFrame.backdrop:CreateShadow("Default")
@@ -3672,7 +3827,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 		
 		--Honor/Conquest Pane
-		do
+		if C["addonskins"].pvp == true then
 			local buttons = {
 				"PVPFrameLeftButton",
 				"PVPFrameRightButton",
@@ -3763,9 +3918,11 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			PVPTeamManagementFrameInvalidTeamFrame.backdrop:Point( "BOTTOMRIGHT", PVPTeamManagementFrameInvalidTeamFrame, "BOTTOMRIGHT")
 			PVPTeamManagementFrameInvalidTeamFrame.backdrop:SetFrameLevel(PVPTeamManagementFrameInvalidTeamFrame:GetFrameLevel())
 			PVPFrameConquestBar:StripTextures()
+			
 			if not T.IsPTR() then
 				PVPFrameConquestBar:SetStatusBarTexture(C["media"].normTex)
 			end
+			
 			PVPFrameConquestBar:CreateBackdrop("Default")
 			PVPBannerFrame:CreateBackdrop("Transparent")
 			PVPBannerFrame.backdrop:Point( "TOPLEFT", PVPBannerFrame, "TOPLEFT")
@@ -3832,7 +3989,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end	
 	
 		--NonRaid Frame
-		do
+		if C["addonskins"].nonraid == true then
 			local StripAllTextures = {
 				"RaidInfoFrame",
 				"RaidInfoInstanceLabel",
@@ -3888,7 +4045,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		--Friends/Social Pane
-		do
+		if C["addonskins"].friends == true then
 			local StripAllTextures = {
 				"FriendsFrame",
 				"FriendsListFrame",
@@ -4029,7 +4186,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 	
 		--Spellbook
-		do
+		if C["addonskins"].spellbook == true then
 			SkinCloseButton(SpellBookFrameCloseButton)
 			
 			local StripAllTextures = {
@@ -4241,7 +4398,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		end
 	
 		--Character Frame
-		do
+		if C["addonskins"].character == true then
 			SkinCloseButton(CharacterFrameCloseButton)
 			
 			local slots = {
@@ -4350,7 +4507,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 					object.BgMiddle:SetTexture(nil)
 
 					object.Check:SetTexture(nil)
-					object.text:SetFont(C["media"].font, 12)
+					object.text:SetFont(C["media"].font, C["general"].fontscale)
 					object.text.SetFont = T.dummy
 				end
 			end)
@@ -4526,270 +4683,266 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			PetPaperDollPetInfo:Size(24, 24)
 		end
 		
-	
-		-- Blizzard frame we want to reskin
-		local skins = {
-			"StaticPopup1",
-			"StaticPopup2",
-			"StaticPopup3",
-			"GameMenuFrame",
-			"InterfaceOptionsFrame",
-			"VideoOptionsFrame",
-			"AudioOptionsFrame",
-			"LFDDungeonReadyStatus",
-			"BNToastFrame",
-			"TicketStatusFrameButton",
-			"DropDownList1MenuBackdrop",
-			"DropDownList2MenuBackdrop",
-			"DropDownList1Backdrop",
-			"DropDownList2Backdrop",
-			"LFDSearchStatus",
-			"AutoCompleteBox",
-			"ConsolidatedBuffsTooltip",
-			"ReadyCheckFrame",
-			"StackSplitFrame",
-			"CharacterFrame",
-		}
 		
-		for i = 1, getn(skins) do
-			_G[skins[i]]:SetTemplate("Transparent")
-			if _G[skins[i]] ~= _G["GhostFrameContentsFrame"] or _G[skins[i]] ~= _G["AutoCompleteBox"] then -- frame to blacklist from create shadow function
-				_G[skins[i]]:CreateShadow("Default")
-			end
-		end
-	
-		
-		local ChatMenus = {
-			"ChatMenu",
-			"EmoteMenu",
-			"LanguageMenu",
-			"VoiceMacroMenu",		
-		}
-		--
-		for i = 1, getn(ChatMenus) do
-			if _G[ChatMenus[i]] == _G["ChatMenu"] then
-				_G[ChatMenus[i]]:HookScript("OnShow", function(self) self:SetTemplate("Default", true) self:SetBackdropColor(unpack(C["media"].backdropfadecolor)) self:ClearAllPoints() self:SetPoint("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 0, T.Scale(30)) end)
-			else
-				_G[ChatMenus[i]]:HookScript("OnShow", function(self) self:SetTemplate("Default", true) self:SetBackdropColor(unpack(C["media"].backdropfadecolor)) end)
-			end
-		end
-		
-		--LFD Role Picker frame
-		LFDRoleCheckPopup:StripTextures()
-		LFDRoleCheckPopup:SetTemplate("Transparent")
-		SkinButton(LFDRoleCheckPopupAcceptButton)
-		SkinButton(LFDRoleCheckPopupDeclineButton)
-		SkinCheckBox(LFDRoleCheckPopupRoleButtonTank:GetChildren())
-		SkinCheckBox(LFDRoleCheckPopupRoleButtonDPS:GetChildren())
-		SkinCheckBox(LFDRoleCheckPopupRoleButtonHealer:GetChildren())
-		LFDRoleCheckPopupRoleButtonTank:GetChildren():SetFrameLevel(LFDRoleCheckPopupRoleButtonTank:GetChildren():GetFrameLevel() + 1)
-		LFDRoleCheckPopupRoleButtonDPS:GetChildren():SetFrameLevel(LFDRoleCheckPopupRoleButtonDPS:GetChildren():GetFrameLevel() + 1)
-		LFDRoleCheckPopupRoleButtonHealer:GetChildren():SetFrameLevel(LFDRoleCheckPopupRoleButtonHealer:GetChildren():GetFrameLevel() + 1)
-		
-		-- reskin popup buttons
-		for i = 1, 2 do
-			for j = 1, 3 do
-				SkinButton(_G["StaticPopup"..i.."Button"..j])
-				SkinEditBox(_G["StaticPopup"..i.."EditBox"])
-				SkinEditBox(_G["StaticPopup"..i.."MoneyInputFrameGold"])
-				SkinEditBox(_G["StaticPopup"..i.."MoneyInputFrameSilver"])
-				SkinEditBox(_G["StaticPopup"..i.."MoneyInputFrameCopper"])
-				_G["StaticPopup"..i.."EditBox"].backdrop:Point("TOPLEFT", -2, -4)
-				_G["StaticPopup"..i.."EditBox"].backdrop:Point("BOTTOMRIGHT", 2, 4)
-				_G["StaticPopup"..i.."ItemFrameNameFrame"]:Kill()
-				_G["StaticPopup"..i.."ItemFrame"]:GetNormalTexture():Kill()
-				_G["StaticPopup"..i.."ItemFrame"]:SetTemplate("Default")
-				_G["StaticPopup"..i.."ItemFrame"]:StyleButton()
-				_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetTexCoord(.08, .92, .08, .92)
-				_G["StaticPopup"..i.."ItemFrameIconTexture"]:ClearAllPoints()
-				_G["StaticPopup"..i.."ItemFrameIconTexture"]:Point("TOPLEFT", 2, -2)
-				_G["StaticPopup"..i.."ItemFrameIconTexture"]:Point("BOTTOMRIGHT", -2, 2)
-			end
-		end
-		
-		-- reskin all esc/menu buttons
-		local BlizzardMenuButtons = {
-			"Options", 
-			"SoundOptions", 
-			"UIOptions", 
-			"Keybindings", 
-			"Macros",
-			"Ratings",
-			"AddOns", 
-			"Logout", 
-			"Quit", 
-			"Continue", 
-			"MacOptions",
-			"Help"
-		}
-		
-		for i = 1, getn(BlizzardMenuButtons) do
-			local TukuiMenuButtons = _G["GameMenuButton"..BlizzardMenuButtons[i]]
-			if TukuiMenuButtons then
-				SkinButton(TukuiMenuButtons)
-			end
-		end
-		
-		-- skin return to graveyard button
-		do
-			SkinButton(GhostFrame)
-			GhostFrame:SetBackdropColor(0,0,0,0)
-			GhostFrame:SetBackdropBorderColor(0,0,0,0)
-			GhostFrame.SetBackdropColor = T.dummy
-			GhostFrame.SetBackdropBorderColor = T.dummy
-			GhostFrame:ClearAllPoints()
-			GhostFrame:SetPoint("TOP", UIParent, "TOP", 0, -75)
-			SkinButton(GhostFrameContentsFrame)
-			GhostFrameContentsFrameIcon:SetTexture(nil)
-			local x = CreateFrame("Frame", nil, GhostFrame)
-			x:SetFrameStrata("MEDIUM")
-			x:SetTemplate("Default")
-			x:SetPoint("TOPLEFT", GhostFrameContentsFrameIcon, "TOPLEFT", T.Scale(-2), T.Scale(2))
-			x:SetPoint("BOTTOMRIGHT", GhostFrameContentsFrameIcon, "BOTTOMRIGHT", T.Scale(2), T.Scale(-2))
-			local tex = x:CreateTexture(nil, "OVERLAY")
-			tex:SetTexture("Interface\\Icons\\spell_holy_guardianspirit")
-			tex:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-			tex:SetPoint("TOPLEFT", x, "TOPLEFT", T.Scale(2), T.Scale(-2))
-			tex:SetPoint("BOTTOMRIGHT", x, "BOTTOMRIGHT", T.Scale(-2), T.Scale(2))
-		end
-		
-		-- hide header textures and move text/buttons.
-		local BlizzardHeader = {
-			"GameMenuFrame", 
-			"InterfaceOptionsFrame", 
-			"AudioOptionsFrame", 
-			"VideoOptionsFrame",
-		}
-		
-		for i = 1, getn(BlizzardHeader) do
-			local title = _G[BlizzardHeader[i].."Header"]			
-			if title then
-				title:SetTexture("")
-				title:ClearAllPoints()
-				if title == _G["GameMenuFrameHeader"] then
-					title:SetPoint("TOP", GameMenuFrame, 0, 7)
-				else
-					title:SetPoint("TOP", BlizzardHeader[i], 0, 0)
+		if C["addonskins"].misc == true then
+			-- Blizzard frame we want to reskin
+			local skins = {
+				"StaticPopup1",
+				"StaticPopup2",
+				"StaticPopup3",
+				"GameMenuFrame",
+				"InterfaceOptionsFrame",
+				"VideoOptionsFrame",
+				"AudioOptionsFrame",
+				"LFDDungeonReadyStatus",
+				"BNToastFrame",
+				"TicketStatusFrameButton",
+				"DropDownList1MenuBackdrop",
+				"DropDownList2MenuBackdrop",
+				"DropDownList1Backdrop",
+				"DropDownList2Backdrop",
+				"LFDSearchStatus",
+				"AutoCompleteBox",
+				"ConsolidatedBuffsTooltip",
+				"ReadyCheckFrame",
+				"StackSplitFrame",
+				"CharacterFrame",
+			}
+			
+			for i = 1, getn(skins) do
+				_G[skins[i]]:SetTemplate("Transparent")
+				if _G[skins[i]] ~= _G["GhostFrameContentsFrame"] or _G[skins[i]] ~= _G["AutoCompleteBox"] then -- frame to blacklist from create shadow function
+					_G[skins[i]]:CreateShadow("Default")
 				end
 			end
-		end
 		
-		-- here we reskin all "normal" buttons
-		local BlizzardButtons = {
-			"VideoOptionsFrameOkay", 
-			"VideoOptionsFrameCancel", 
-			"VideoOptionsFrameDefaults", 
-			"VideoOptionsFrameApply", 
-			"AudioOptionsFrameOkay", 
-			"AudioOptionsFrameCancel", 
-			"AudioOptionsFrameDefaults", 
-			"InterfaceOptionsFrameDefaults", 
-			"InterfaceOptionsFrameOkay", 
-			"InterfaceOptionsFrameCancel",
-			"ReadyCheckFrameYesButton",
-			"ReadyCheckFrameNoButton",
-			"StackSplitOkayButton",
-			"StackSplitCancelButton",
-			"RolePollPopupAcceptButton"
-		}
-		
-		for i = 1, getn(BlizzardButtons) do
-		local TukuiButtons = _G[BlizzardButtons[i]]
-			if TukuiButtons then
-				SkinButton(TukuiButtons)
+			
+			local ChatMenus = {
+				"ChatMenu",
+				"EmoteMenu",
+				"LanguageMenu",
+				"VoiceMacroMenu",		
+			}
+			--
+			for i = 1, getn(ChatMenus) do
+				if _G[ChatMenus[i]] == _G["ChatMenu"] then
+					_G[ChatMenus[i]]:HookScript("OnShow", function(self) self:SetTemplate("Default", true) self:SetBackdropColor(unpack(C["media"].backdropfadecolor)) self:ClearAllPoints() self:SetPoint("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 0, T.Scale(30)) end)
+				else
+					_G[ChatMenus[i]]:HookScript("OnShow", function(self) self:SetTemplate("Default", true) self:SetBackdropColor(unpack(C["media"].backdropfadecolor)) end)
+				end
 			end
-		end
-		
-		-- if a button position or text is not really where we want, we move it here
-		_G["VideoOptionsFrameCancel"]:ClearAllPoints()
-		_G["VideoOptionsFrameCancel"]:SetPoint("RIGHT",_G["VideoOptionsFrameApply"],"LEFT",-4,0)		 
-		_G["VideoOptionsFrameOkay"]:ClearAllPoints()
-		_G["VideoOptionsFrameOkay"]:SetPoint("RIGHT",_G["VideoOptionsFrameCancel"],"LEFT",-4,0)	
-		_G["AudioOptionsFrameOkay"]:ClearAllPoints()
-		_G["AudioOptionsFrameOkay"]:SetPoint("RIGHT",_G["AudioOptionsFrameCancel"],"LEFT",-4,0)
-		_G["InterfaceOptionsFrameOkay"]:ClearAllPoints()
-		_G["InterfaceOptionsFrameOkay"]:SetPoint("RIGHT",_G["InterfaceOptionsFrameCancel"],"LEFT", -4,0)
-		_G["ReadyCheckFrameYesButton"]:SetParent(_G["ReadyCheckFrame"])
-		_G["ReadyCheckFrameNoButton"]:SetParent(_G["ReadyCheckFrame"]) 
-		_G["ReadyCheckFrameYesButton"]:SetPoint("RIGHT", _G["ReadyCheckFrame"], "CENTER", -1, 0)
-		_G["ReadyCheckFrameNoButton"]:SetPoint("LEFT", _G["ReadyCheckFrameYesButton"], "RIGHT", 3, 0)
-		_G["ReadyCheckFrameText"]:SetParent(_G["ReadyCheckFrame"])	
-		_G["ReadyCheckFrameText"]:ClearAllPoints()
-		_G["ReadyCheckFrameText"]:SetPoint("TOP", 0, -12)	
-		
-		-- others
-		_G["ReadyCheckListenerFrame"]:SetAlpha(0)
-		_G["ReadyCheckFrame"]:HookScript("OnShow", function(self) if UnitIsUnit("player", self.initiator) then self:Hide() end end) -- bug fix, don't show it if initiator
-		_G["StackSplitFrame"]:GetRegions():Hide()
-		_G["StaticPopup1EditBoxLeft"]:SetTexture(nil)
-		_G["StaticPopup1EditBoxMid"]:SetTexture(nil)
-		_G["StaticPopup1EditBoxRight"]:SetTexture(nil)
-		
-		--Create backdrop for static popup editbox	
-		local bg = CreateFrame("Frame", nil, StaticPopup1EditBox)
-		bg:Point("TOPLEFT", StaticPopup1EditBox, "TOPLEFT", -2, -2)
-		bg:Point("BOTTOMRIGHT", StaticPopup1EditBox, "BOTTOMRIGHT", 2, 2)
-		bg:SetFrameLevel(StaticPopup1EditBox:GetFrameLevel())
-		bg:SetTemplate("Default")
-		
-		RolePollPopup:SetTemplate("Transparent")
-		RolePollPopup:CreateShadow("Default")
-		LFDDungeonReadyDialog:SetTemplate("Transparent")
-		LFDDungeonReadyDialog:CreateShadow("Default")
-		SkinButton(LFDDungeonReadyDialogEnterDungeonButton)
-		SkinButton(LFDDungeonReadyDialogLeaveQueueButton)
+			
+			--LFD Role Picker frame
+			LFDRoleCheckPopup:StripTextures()
+			LFDRoleCheckPopup:SetTemplate("Transparent")
+			SkinButton(LFDRoleCheckPopupAcceptButton)
+			SkinButton(LFDRoleCheckPopupDeclineButton)
+			SkinCheckBox(LFDRoleCheckPopupRoleButtonTank:GetChildren())
+			SkinCheckBox(LFDRoleCheckPopupRoleButtonDPS:GetChildren())
+			SkinCheckBox(LFDRoleCheckPopupRoleButtonHealer:GetChildren())
+			LFDRoleCheckPopupRoleButtonTank:GetChildren():SetFrameLevel(LFDRoleCheckPopupRoleButtonTank:GetChildren():GetFrameLevel() + 1)
+			LFDRoleCheckPopupRoleButtonDPS:GetChildren():SetFrameLevel(LFDRoleCheckPopupRoleButtonDPS:GetChildren():GetFrameLevel() + 1)
+			LFDRoleCheckPopupRoleButtonHealer:GetChildren():SetFrameLevel(LFDRoleCheckPopupRoleButtonHealer:GetChildren():GetFrameLevel() + 1)
+			
+			-- reskin popup buttons
+			for i = 1, 2 do
+				for j = 1, 3 do
+					SkinButton(_G["StaticPopup"..i.."Button"..j])
+					SkinEditBox(_G["StaticPopup"..i.."EditBox"])
+					SkinEditBox(_G["StaticPopup"..i.."MoneyInputFrameGold"])
+					SkinEditBox(_G["StaticPopup"..i.."MoneyInputFrameSilver"])
+					SkinEditBox(_G["StaticPopup"..i.."MoneyInputFrameCopper"])
+					_G["StaticPopup"..i.."EditBox"].backdrop:Point("TOPLEFT", -2, -4)
+					_G["StaticPopup"..i.."EditBox"].backdrop:Point("BOTTOMRIGHT", 2, 4)
+					_G["StaticPopup"..i.."ItemFrameNameFrame"]:Kill()
+					_G["StaticPopup"..i.."ItemFrame"]:GetNormalTexture():Kill()
+					_G["StaticPopup"..i.."ItemFrame"]:SetTemplate("Default")
+					_G["StaticPopup"..i.."ItemFrame"]:StyleButton()
+					_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetTexCoord(.08, .92, .08, .92)
+					_G["StaticPopup"..i.."ItemFrameIconTexture"]:ClearAllPoints()
+					_G["StaticPopup"..i.."ItemFrameIconTexture"]:Point("TOPLEFT", 2, -2)
+					_G["StaticPopup"..i.."ItemFrameIconTexture"]:Point("BOTTOMRIGHT", -2, 2)
+				end
+			end
+			
+			-- reskin all esc/menu buttons
+			local BlizzardMenuButtons = {
+				"Options", 
+				"SoundOptions", 
+				"UIOptions", 
+				"Keybindings", 
+				"Macros",
+				"Ratings",
+				"AddOns", 
+				"Logout", 
+				"Quit", 
+				"Continue", 
+				"MacOptions",
+				"Help"
+			}
+			
+			for i = 1, getn(BlizzardMenuButtons) do
+				local TukuiMenuButtons = _G["GameMenuButton"..BlizzardMenuButtons[i]]
+				if TukuiMenuButtons then
+					SkinButton(TukuiMenuButtons)
+				end
+			end
+			
+			if IsAddOnLoaded("OptionHouse") then
+				SkinButton(GameMenuButtonOptionHouse)
+			end
+			
+			-- skin return to graveyard button
+			do
+				SkinButton(GhostFrame)
+				GhostFrame:SetBackdropColor(0,0,0,0)
+				GhostFrame:SetBackdropBorderColor(0,0,0,0)
+				GhostFrame.SetBackdropColor = T.dummy
+				GhostFrame.SetBackdropBorderColor = T.dummy
+				GhostFrame:ClearAllPoints()
+				GhostFrame:SetPoint("TOP", UIParent, "TOP", 0, -75)
+				SkinButton(GhostFrameContentsFrame)
+				GhostFrameContentsFrameIcon:SetTexture(nil)
+				local x = CreateFrame("Frame", nil, GhostFrame)
+				x:SetFrameStrata("MEDIUM")
+				x:SetTemplate("Default")
+				x:SetPoint("TOPLEFT", GhostFrameContentsFrameIcon, "TOPLEFT", T.Scale(-2), T.Scale(2))
+				x:SetPoint("BOTTOMRIGHT", GhostFrameContentsFrameIcon, "BOTTOMRIGHT", T.Scale(2), T.Scale(-2))
+				local tex = x:CreateTexture(nil, "OVERLAY")
+				tex:SetTexture("Interface\\Icons\\spell_holy_guardianspirit")
+				tex:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+				tex:SetPoint("TOPLEFT", x, "TOPLEFT", T.Scale(2), T.Scale(-2))
+				tex:SetPoint("BOTTOMRIGHT", x, "BOTTOMRIGHT", T.Scale(-2), T.Scale(2))
+			end
+			
+			-- hide header textures and move text/buttons.
+			local BlizzardHeader = {
+				"GameMenuFrame", 
+				"InterfaceOptionsFrame", 
+				"AudioOptionsFrame", 
+				"VideoOptionsFrame",
+			}
+			
+			for i = 1, getn(BlizzardHeader) do
+				local title = _G[BlizzardHeader[i].."Header"]			
+				if title then
+					title:SetTexture("")
+					title:ClearAllPoints()
+					if title == _G["GameMenuFrameHeader"] then
+						title:SetPoint("TOP", GameMenuFrame, 0, 7)
+					else
+						title:SetPoint("TOP", BlizzardHeader[i], 0, 0)
+					end
+				end
+			end
+			
+			-- here we reskin all "normal" buttons
+			local BlizzardButtons = {
+				"VideoOptionsFrameOkay", 
+				"VideoOptionsFrameCancel", 
+				"VideoOptionsFrameDefaults", 
+				"VideoOptionsFrameApply", 
+				"AudioOptionsFrameOkay", 
+				"AudioOptionsFrameCancel", 
+				"AudioOptionsFrameDefaults", 
+				"InterfaceOptionsFrameDefaults", 
+				"InterfaceOptionsFrameOkay", 
+				"InterfaceOptionsFrameCancel",
+				"ReadyCheckFrameYesButton",
+				"ReadyCheckFrameNoButton",
+				"StackSplitOkayButton",
+				"StackSplitCancelButton",
+				"RolePollPopupAcceptButton"
+			}
+			
+			for i = 1, getn(BlizzardButtons) do
+				local TukuiButtons = _G[BlizzardButtons[i]]
+				if TukuiButtons then
+					SkinButton(TukuiButtons)
+				end
+			end
+			
+			-- if a button position or text is not really where we want, we move it here
+			_G["VideoOptionsFrameCancel"]:ClearAllPoints()
+			_G["VideoOptionsFrameCancel"]:SetPoint("RIGHT",_G["VideoOptionsFrameApply"],"LEFT",-4,0)		 
+			_G["VideoOptionsFrameOkay"]:ClearAllPoints()
+			_G["VideoOptionsFrameOkay"]:SetPoint("RIGHT",_G["VideoOptionsFrameCancel"],"LEFT",-4,0)	
+			_G["AudioOptionsFrameOkay"]:ClearAllPoints()
+			_G["AudioOptionsFrameOkay"]:SetPoint("RIGHT",_G["AudioOptionsFrameCancel"],"LEFT",-4,0)
+			_G["InterfaceOptionsFrameOkay"]:ClearAllPoints()
+			_G["InterfaceOptionsFrameOkay"]:SetPoint("RIGHT",_G["InterfaceOptionsFrameCancel"],"LEFT", -4,0)
+			_G["ReadyCheckFrameYesButton"]:SetParent(_G["ReadyCheckFrame"])
+			_G["ReadyCheckFrameNoButton"]:SetParent(_G["ReadyCheckFrame"]) 
+			_G["ReadyCheckFrameYesButton"]:SetPoint("RIGHT", _G["ReadyCheckFrame"], "CENTER", -1, 0)
+			_G["ReadyCheckFrameNoButton"]:SetPoint("LEFT", _G["ReadyCheckFrameYesButton"], "RIGHT", 3, 0)
+			_G["ReadyCheckFrameText"]:SetParent(_G["ReadyCheckFrame"])	
+			_G["ReadyCheckFrameText"]:ClearAllPoints()
+			_G["ReadyCheckFrameText"]:SetPoint("TOP", 0, -12)	
+			
+			-- others
+			_G["ReadyCheckListenerFrame"]:SetAlpha(0)
+			_G["ReadyCheckFrame"]:HookScript("OnShow", function(self) if UnitIsUnit("player", self.initiator) then self:Hide() end end) -- bug fix, don't show it if initiator
+			_G["StackSplitFrame"]:GetRegions():Hide()
+			
+			RolePollPopup:SetTemplate("Transparent")
+			RolePollPopup:CreateShadow("Default")
+			LFDDungeonReadyDialog:SetTemplate("Transparent")
+			LFDDungeonReadyDialog:CreateShadow("Default")
+			SkinButton(LFDDungeonReadyDialogEnterDungeonButton)
+			SkinButton(LFDDungeonReadyDialogLeaveQueueButton)
 	end
-	
-	-- mac menu/option panel, made by affli.
-	if IsMacClient() then
-		-- Skin main frame and reposition the header
-		MacOptionsFrame:SetTemplate("Default", true)
-		MacOptionsFrameHeader:SetTexture("")
-		MacOptionsFrameHeader:ClearAllPoints()
-		MacOptionsFrameHeader:SetPoint("TOP", MacOptionsFrame, 0, 0)
- 
-		--Skin internal frames
-		MacOptionsFrameMovieRecording:SetTemplate("Default", true)
-		MacOptionsITunesRemote:SetTemplate("Default", true)
- 
-		--Skin buttons
-		SkinButton(_G["MacOptionsFrameCancel"])
-		SkinButton(_G["MacOptionsFrameOkay"])
-		SkinButton(_G["MacOptionsButtonKeybindings"])
-		SkinButton(_G["MacOptionsFrameDefaults"])
-		SkinButton(_G["MacOptionsButtonCompress"])
- 
-		--Reposition and resize buttons
-		local tPoint, tRTo, tRP, tX, tY =  _G["MacOptionsButtonCompress"]:GetPoint()
-		_G["MacOptionsButtonCompress"]:SetWidth(136)
-		_G["MacOptionsButtonCompress"]:ClearAllPoints()
-		_G["MacOptionsButtonCompress"]:Point(tPoint, tRTo, tRP, 4, tY)
- 
-		_G["MacOptionsFrameCancel"]:SetWidth(96)
-		_G["MacOptionsFrameCancel"]:SetHeight(22)
-		tPoint, tRTo, tRP, tX, tY =  _G["MacOptionsFrameCancel"]:GetPoint()
-		_G["MacOptionsFrameCancel"]:ClearAllPoints()
-		_G["MacOptionsFrameCancel"]:Point(tPoint, tRTo, tRP, -14, tY)
- 
-		_G["MacOptionsFrameOkay"]:ClearAllPoints()
-		_G["MacOptionsFrameOkay"]:SetWidth(96)
-		_G["MacOptionsFrameOkay"]:SetHeight(22)
-		_G["MacOptionsFrameOkay"]:Point("LEFT",_G["MacOptionsFrameCancel"],-99,0)
- 
-		_G["MacOptionsButtonKeybindings"]:ClearAllPoints()
-		_G["MacOptionsButtonKeybindings"]:SetWidth(96)
-		_G["MacOptionsButtonKeybindings"]:SetHeight(22)
-		_G["MacOptionsButtonKeybindings"]:Point("LEFT",_G["MacOptionsFrameOkay"],-99,0)
- 
-		_G["MacOptionsFrameDefaults"]:SetWidth(96)
-		_G["MacOptionsFrameDefaults"]:SetHeight(22)
-		
-		-- why these buttons is using game menu template? oO
-		_G["MacOptionsButtonCompressLeft"]:SetAlpha(0)
-		_G["MacOptionsButtonCompressMiddle"]:SetAlpha(0)
-		_G["MacOptionsButtonCompressRight"]:SetAlpha(0)
-		_G["MacOptionsButtonKeybindingsLeft"]:SetAlpha(0)
-		_G["MacOptionsButtonKeybindingsMiddle"]:SetAlpha(0)
-		_G["MacOptionsButtonKeybindingsRight"]:SetAlpha(0)
+			
+		-- mac menu/option panel, made by affli.
+		if IsMacClient() then
+			-- Skin main frame and reposition the header
+			MacOptionsFrame:SetTemplate("Default", true)
+			MacOptionsFrameHeader:SetTexture("")
+			MacOptionsFrameHeader:ClearAllPoints()
+			MacOptionsFrameHeader:SetPoint("TOP", MacOptionsFrame, 0, 0)
+	 
+			--Skin internal frames
+			MacOptionsFrameMovieRecording:SetTemplate("Default", true)
+			MacOptionsITunesRemote:SetTemplate("Default", true)
+	 
+			--Skin buttons
+			SkinButton(_G["MacOptionsFrameCancel"])
+			SkinButton(_G["MacOptionsFrameOkay"])
+			SkinButton(_G["MacOptionsButtonKeybindings"])
+			SkinButton(_G["MacOptionsFrameDefaults"])
+			SkinButton(_G["MacOptionsButtonCompress"])
+	 
+			--Reposition and resize buttons
+			local tPoint, tRTo, tRP, tX, tY =  _G["MacOptionsButtonCompress"]:GetPoint()
+			_G["MacOptionsButtonCompress"]:SetWidth(136)
+			_G["MacOptionsButtonCompress"]:ClearAllPoints()
+			_G["MacOptionsButtonCompress"]:SetPoint(tPoint, tRTo, tRP, T.Scale(4), tY)
+	 
+			_G["MacOptionsFrameCancel"]:SetWidth(96)
+			_G["MacOptionsFrameCancel"]:SetHeight(22)
+			tPoint, tRTo, tRP, tX, tY =  _G["MacOptionsFrameCancel"]:GetPoint()
+			_G["MacOptionsFrameCancel"]:ClearAllPoints()
+			_G["MacOptionsFrameCancel"]:SetPoint(tPoint, tRTo, tRP, T.Scale(-14), tY)
+	 
+			_G["MacOptionsFrameOkay"]:ClearAllPoints()
+			_G["MacOptionsFrameOkay"]:SetWidth(96)
+			_G["MacOptionsFrameOkay"]:SetHeight(22)
+			_G["MacOptionsFrameOkay"]:SetPoint("LEFT",_G["MacOptionsFrameCancel"],T.Scale(-99),0)
+	 
+			_G["MacOptionsButtonKeybindings"]:ClearAllPoints()
+			_G["MacOptionsButtonKeybindings"]:SetWidth(96)
+			_G["MacOptionsButtonKeybindings"]:SetHeight(22)
+			_G["MacOptionsButtonKeybindings"]:SetPoint("LEFT",_G["MacOptionsFrameOkay"],T.Scale(-99),0)
+	 
+			_G["MacOptionsFrameDefaults"]:SetWidth(96)
+			_G["MacOptionsFrameDefaults"]:SetHeight(22)
+
+			-- why these buttons is using game menu template? oO
+			_G["MacOptionsButtonCompressLeft"]:SetAlpha(0)
+			_G["MacOptionsButtonCompressMiddle"]:SetAlpha(0)
+			_G["MacOptionsButtonCompressRight"]:SetAlpha(0)
+			_G["MacOptionsButtonKeybindingsLeft"]:SetAlpha(0)
+			_G["MacOptionsButtonKeybindingsMiddle"]:SetAlpha(0)
+			_G["MacOptionsButtonKeybindingsRight"]:SetAlpha(0)
+		end
 	end
 end)

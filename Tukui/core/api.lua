@@ -86,10 +86,11 @@ local function CreateShadow(f, t)
 end
 
 local function SetTemplate(f, t, texture)
+	if texture then myTex = C.media.oTex else myTex = C.media.blank end
 	GetTemplate(t)
 		
 	f:SetBackdrop({
-	  bgFile = C["media"].blank,
+	  bgFile = myTex,
 	  edgeFile = C["media"].blank,
 	  tile = false, tileSize = 0, edgeSize = T.mult, 
 	  insets = { left = -T.mult, right = -T.mult, top = -T.mult, bottom = -T.mult}

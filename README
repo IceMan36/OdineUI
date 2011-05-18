@@ -1,3 +1,8 @@
+V6.3.4
+* fix more tooltip anchors for datatext
+* minor fixes
+* skin updates
+
 V6.3.3 - [05/18/2011]
 * large player castbar wasnt sized up perfectly.... now it is! =P
 * swingbar hacked to be hidden when not in combat for now
@@ -27,9 +32,6 @@ V6.3 - [05/16/2011]
 * new resolution override wasnt working properly.. now is!
 * tooltip anchor should function properly i believe now =P
 * horizontal right bars are no longer an option, but im considering re-adding this in the near future
-
-BUGS/KNOWN ISSUES:
-* swingbar and vengeance bar arent functioning properly. believe this is Patch 4.1 related but i'm looking into the issue
 
 V6.2.3 - [05/15/2011]
 * updated to Tukz new configuration style. (everyone needs to do config again sorry)
