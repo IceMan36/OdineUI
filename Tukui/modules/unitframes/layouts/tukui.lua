@@ -282,6 +282,8 @@ local function Shared(self, unit)
 				Vengeance.bg:SetAllPoints(Vengeance)
 				Vengeance.bg:SetTexture(unpack(C["media"].backdropcolor))
 				
+				Vengeance:SetTemplate("Default", true)
+				
 				self.Vengeance = Vengeance
 			end
 			
@@ -1263,8 +1265,8 @@ f:SetScript("OnEvent", function(self, event, addon)
 	if addon == "Tukui_DPS" then
 		--[ DPS ]--
 		-- points
-		player:Point("TOP", UIParent, "BOTTOM", -225 , 235)
-		target:Point("TOP", UIParent, "BOTTOM", 225, 235)
+		player:Point("TOP", TopMainBar, "BOTTOM", -240 , 135)
+		target:Point("TOP", TopMainBar, "BOTTOM", 240, 135)
 		tot:Point("TOPRIGHT", TukuiTarget, "BOTTOMRIGHT", 0, -5)
 		pet:Point("TOPLEFT", TukuiPlayer, "BOTTOMLEFT", 0, -5)
 
@@ -1272,8 +1274,8 @@ f:SetScript("OnEvent", function(self, event, addon)
 	elseif addon == "Tukui_Heal" then
 		--[ HEAL ]--
 		-- points
-		player:Point("TOP", UIParent, "BOTTOM", -345 , 230)
-		target:Point("TOP", UIParent, "BOTTOM", 345, 230)
+		player:Point("TOP", TopMainBar, "BOTTOM", -320 , 135)
+		target:Point("TOP", TopMainBar, "BOTTOM", 320, 135)
 		tot:Point("TOPRIGHT", TukuiTarget, "BOTTOMRIGHT", 0, -5)
 		pet:Point("TOPLEFT", TukuiPlayer, "BOTTOMLEFT", 0, -5)
 
@@ -1287,7 +1289,7 @@ if C.arena.unitframes then
 	for i = 1, 5 do
 		arena[i] = oUF:Spawn("arena"..i, "TukuiArena"..i)
 		if i == 1 then
-			arena[i]:SetPoint("BOTTOMLEFT", ChatRBackground2, "TOPLEFT", 10, 150)
+			arena[i]:SetPoint("BOTTOMLEFT", ChatRBackground2, "TOPLEFT", 10, 180)
 		else
 			arena[i]:SetPoint("BOTTOM", arena[i-1], "TOP", 0, T.Scale(80))
 		end

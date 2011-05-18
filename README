@@ -2,6 +2,12 @@ V6.3.4
 * fix more tooltip anchors for datatext
 * minor fixes
 * skin updates
+* unit frames have been adjusted to repostion based on how many actionbars are out
+* watchframe default position in a new location now
+
+TODO:
+* Redo HEALER/DPS Layouts to allow for party mode enable/disable, etc etc
+* Rework mover code can be buggy at times when moving things like watchframe, tooltip
 
 V6.3.3 - [05/18/2011]
 * large player castbar wasnt sized up perfectly.... now it is! =P

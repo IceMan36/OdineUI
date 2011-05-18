@@ -58,7 +58,7 @@ local function Shared(self, unit)
 
 	if not C["unitframes"].hidepower then
 		local tt = CreateFrame("Frame", nil, self)
-		tt:CreatePanel("Default", 60, 7, "LEFT", t, "BOTTOMLEFT", 5, 0)
+		tt:CreatePanel("Default", 75, 8, "TOPLEFT", t, "BOTTOMLEFT", 5, 4)
 		tt:SetFrameLevel(t:GetFrameLevel() + 2)
 		tt.shadow:SetFrameLevel(0)
 		self.tt = tt
@@ -164,7 +164,7 @@ oUF:Factory(function(self)
 		"groupFilter", "1,2,3,4,5,6,7,8", 
 		"groupingOrder", "1,2,3,4,5,6,7,8",
 		"groupBy", "GROUP",
-		"yOffset", T.Scale(-5), 
+		"yOffset", T.Scale(-10), 
 		"showSolo", false
 	)
 	raid:SetPoint('TOPLEFT', UIParent, 8, -320)
