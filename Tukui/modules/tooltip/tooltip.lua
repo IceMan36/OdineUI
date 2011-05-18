@@ -69,7 +69,7 @@ local function SetRightTooltipPos(self)
 						self:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", -1, T.Scale(18))	
 					end
 				else
-					self:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", -1, T.Scale(38))		
+					self:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", -1, T.Scale(28))		
 				end	
 			else
 				self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", T.Scale(-3), T.Scale(38))	

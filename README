@@ -4,6 +4,8 @@ V6.3.4
 * skin updates
 * unit frames have been adjusted to repostion based on how many actionbars are out
 * watchframe default position in a new location now
+* fixed battleground stats panel not showing up
+
 
 TODO:
 * Redo HEALER/DPS Layouts to allow for party mode enable/disable, etc etc
