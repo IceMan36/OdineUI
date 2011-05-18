@@ -22,7 +22,6 @@ local function Shared(self, unit)
 	local t = CreateFrame("Frame", nil, self)
 	t:CreatePanel("Default", 120, 20, "CENTER", self)
 	t:SetFrameLevel(0)
-	-- t:CreateBorder(true, true)
 	self.t = t		
 
 	local health = CreateFrame('StatusBar', nil, self)
@@ -63,7 +62,6 @@ local function Shared(self, unit)
 		tt:SetFrameLevel(t:GetFrameLevel() + 2)
 		tt.shadow:SetFrameLevel(0)
 		self.tt = tt
-		-- tt:CreateBorder(true, true)
 
 		local power = CreateFrame("StatusBar", nil, self)
 		power:SetFrameLevel(tt:GetFrameLevel() + 1)

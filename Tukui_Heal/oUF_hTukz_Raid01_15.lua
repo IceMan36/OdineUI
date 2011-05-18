@@ -20,90 +20,78 @@ local function Shared(self, unit)
 	
 	self.menu = T.SpawnMenu
 	
+	-- health
 	local health = CreateFrame('StatusBar', nil, self)
-	health:SetPoint("TOPLEFT")
-	health:SetPoint("TOPRIGHT")
 	if unit:find("partypet") then
 		health:Height(17)
 	else
 		health:Height(30)
 	end
-	health:SetStatusBarTexture(C["media"].normTex)
+	health:SetPoint("TOPLEFT", T.mult, -T.mult)
+	health:SetPoint("TOPRIGHT", -T.mult, T.mult)
+	health:SetStatusBarTexture(normTex)
 	self.Health = health
-	
-	if C["unitframes"].healthvertical then
-		health:SetOrientation('VERTICAL')
-	end
-
-	local healthBG = health:CreateTexture(nil, 'BORDER')
-	healthBG:SetAllPoints()
-	self.Health.bg = healthBG
-
-	health:CreateBorder(false, true)
+		
+	local healthBg = health:CreateTexture(nil, "BORDER")
+	healthBg:SetAllPoints()
+	healthBg:SetTexture(unpack(C["unitframes"].healthBgColor))
+	self.Health.bg = healthBg
+		
+	local healthB = CreateFrame("Frame", nil, health)
+	healthB:SetFrameLevel(health:GetFrameLevel() - 1)
+	healthB:Point("TOPLEFT", -2, 2)
+	healthB:Point("BOTTOMRIGHT", 2, -2)
+	healthB:SetTemplate("Default", true)
+	healthB:CreateShadow("Default")
+	self.Health.border = healthB
 
 	-- power
 	local power = CreateFrame('StatusBar', nil, self)
-	power:Point("TOPLEFT", health, "BOTTOMLEFT", 0, -3)
-	power:Point("TOPRIGHT", health, "BOTTOMRIGHT", 0, -3)
 	if unit:find("partypet") then
 		power:Height(0)
 	else
 		power:Height(4)
 	end
+	power:SetFrameLevel(self.Health:GetFrameLevel() + 2)
+	power:SetPoint("TOPLEFT", healthB, "BOTTOMLEFT", T.Scale(2), -T.Scale(4))
+	power:SetPoint("TOPRIGHT", healthB, "BOTTOMRIGHT", T.Scale(-2), -T.Scale(4))
 	power:SetStatusBarTexture(normTex)
+	power:GetStatusBarTexture():SetHorizTile(false)
 	self.Power = power
-
-	local powerBG = power:CreateTexture(nil, 'BORDER')
-	powerBG:SetAllPoints(power)
-	powerBG:SetTexture(normTex)
-	powerBG.multiplier = 0.3
-	self.Power.bg = powerBG
+		
+	local powerBg = power:CreateTexture(nil, "BORDER")
+	powerBg:SetAllPoints()
+	powerBg:SetTexture(unpack(C["unitframes"].healthBgColor))
+	powerBg.multiplier = 0.3
+	self.Power.bg = powerBg
 	
-	power:CreateBorder(false, true)
-	
+	local powerB = CreateFrame("Frame", nil, power)
+	powerB:SetFrameLevel(power:GetFrameLevel() - 1)
+	powerB:Point("TOPLEFT", -2, 2)
+	powerB:Point("BOTTOMRIGHT", 2, -2)
+	powerB:SetTemplate("Default", true)
+	powerB:CreateShadow("Default")
+	self.Power.border = powerB	
+		
 	health.frequentUpdates = true
 	power.frequentUpdates = true
-	power.colorDisconnected = true
-
-	if C["unitframes"].showsmooth == true then
-		health.Smooth = true
-		power.Smooth = true
-	end
-
+	
 	if C["general"].classcolortheme ~= true then
 		health.colorDisconnected = false
 		health.colorClass = false
 		health:SetStatusBarColor(unpack(C["unitframes"].healthColor))
-		healthBG:SetTexture(1, 1, 1)
-		healthBG:SetVertexColor(unpack(C["unitframes"].healthBgColor))
+		healthBg:SetTexture(1, 1, 1)
+		healthBg:SetVertexColor(unpack(C["unitframes"].healthBgColor))
 		
 		power.colorClass = true
 	else
-		healthBG:SetTexture(.1, .1, .1)
+		healthBg:SetTexture(.1, .1, .1)
 		health.colorDisconnected = true	
 		health.colorClass = true
 		health.colorReaction = true
 		
 		power.colorPower = true
 	end
-	
-	-- unitframe bg
-	local ufbg = CreateFrame("Frame", nil, self)
-	ufbg:SetFrameLevel(health:GetFrameLevel() - 1)
-	ufbg:Point("TOPLEFT", health, -2, 2)
-	if unit:find("partypet") then
-		ufbg:Point("BOTTOMRIGHT", health, 2, -2)
-	else
-		ufbg:Point("BOTTOMRIGHT", power, 2, -2)
-	end
-	ufbg:SetBackdrop({
-		bgFile = C["media"].blank,
-		insets = { left = -TukuiDB.mult, right = -TukuiDB.mult, top = -TukuiDB.mult, bottom = -TukuiDB.mult }
-	})
-	ufbg:SetBackdropColor(unpack(C["media"].bordercolor))
-	--ufbg:CreateBorder(false, true)
-	ufbg:CreateShadow("Default")
-	self.ufbg = ufbg		
 
 	if C["unitframes"].healthdeficit and not unit:find("partypet") then
 		health.PostUpdate = T.PostUpdateHealthRaid
@@ -151,7 +139,7 @@ local function Shared(self, unit)
     end
 	
 	if C["unitframes"].showsymbols == true then
-		local RaidIcon = health:CreateTexture(nil, 'OVERLAY')
+		local RaidIcon = self.Health:CreateTexture(nil, 'OVERLAY')
 		RaidIcon:Height(18)
 		RaidIcon:Width(18)
 		RaidIcon:SetPoint('CENTER', self, 'TOP')
@@ -165,22 +153,15 @@ local function Shared(self, unit)
 	ReadyCheck:SetPoint('CENTER')
 	self.ReadyCheck = ReadyCheck
 	
-	local debuffHighlight = ufbg:CreateTexture(nil, "OVERLAY")
+	local debuffHighlight = self.Health:CreateTexture(nil, "OVERLAY", healthBg)
 	debuffHighlight:SetAllPoints()
-	debuffHighlight:SetTexture(TukuiCF["media"].blank)
+	debuffHighlight:SetTexture(C["media"].blank)
 	debuffHighlight:SetBlendMode("DISABLE")
 	debuffHighlight:SetVertexColor(0, 0, 0, 0)
 	self.DebuffHighlight = debuffHighlight
 	self.DebuffHighlightAlpha = 1
 	self.DebuffHighlightFilter = C["unitframes"].debuffHighlightFilter
-	
-	--local picon = self.Health:CreateTexture(nil, 'OVERLAY')
-	--picon:SetPoint('CENTER', self.Health)
-	--picon:SetSize(16, 16)
-	--picon:SetTexture[[Interface\AddOns\Tukui\medias\textures\picon]]
-	--picon.Override = T.Phasing
-	--self.PhaseIcon = picon
-	
+
 	if C["unitframes"].showrange == true then
 		local range = {insideAlpha = 1, outsideAlpha = C["unitframes"].raidalphaoor}
 		self.Range = range
@@ -249,16 +230,6 @@ local function Shared(self, unit)
 		RaidDebuffs.icon:Point("TOPLEFT", 2, -2)
 		RaidDebuffs.icon:Point("BOTTOMRIGHT", -2, 2)
 		
-		-- just in case someone want to add this feature, uncomment to enable it
-		--[[
-		if C["unitframes"].auratimer then
-			RaidDebuffs.cd = CreateFrame('Cooldown', nil, RaidDebuffs)
-			RaidDebuffs.cd:SetPoint("TOPLEFT", T.Scale(2), T.Scale(-2))
-			RaidDebuffs.cd:SetPoint("BOTTOMRIGHT", T.Scale(-2), T.Scale(2))
-			RaidDebuffs.cd.noOCC = true -- remove this line if you want cooldown number on it
-		end
-		--]]
-		
 		RaidDebuffs.count = RaidDebuffs:CreateFontString(nil, 'OVERLAY')
 		RaidDebuffs.count:SetFont(font, fonts, fontf)
 		RaidDebuffs.count:SetPoint('BOTTOMRIGHT', RaidDebuffs, 'BOTTOMRIGHT', 0, 2)
@@ -290,7 +261,7 @@ oUF:Factory(function(self)
 	"xOffset", T.Scale(7),
 	"point", "LEFT"
 	)
-	raid:Point("TOP", UIParent, "BOTTOM", 0, 230)
+	raid:Point("TOP", UIParent, "BOTTOM", 0, 165)
 	
 	local pets = {}
 	for i = 1, 5 do 

@@ -12,9 +12,18 @@ local backdropr, backdropg, backdropb, backdropa, borderr, borderg, borderb = 0,
 
 local function GetTemplate(t)
 	backdropa = 1
-	if t == "Transparent" then
+	if t == "ClassColor" or C["general"].classcolortheme == true  then
+		local c = T.oUF_colors.class[class]
+		borderr, borderg, borderb = c[1], c[2], c[3]
+		
+		if t ~= "Transparent" then
+			backdropr, backdropg, backdropb = unpack(C["media"].backdropcolor)
+		else
+			backdropr, backdropg, backdropb, backdropa = unpack(C["media"].backdropfadecolor)
+		end
+	elseif t == "Transparent" then
 		borderr, borderg, borderb = unpack(C["media"].bordercolor)
-		backdropr, backdropg, backdropb, backdropa = unpack(C["media"].backdropfadecolor)
+		backdropr, backdropg, backdropb, backdropa = unpack(C["media"].backdropfadecolor)	
 	else
 		borderr, borderg, borderb = unpack(C["media"].bordercolor)
 		backdropr, backdropg, backdropb = unpack(C["media"].backdropcolor)
@@ -48,70 +57,11 @@ local function Point(obj, arg1, arg2, arg3, arg4, arg5)
 	obj:SetPoint(arg1, arg2, arg3, arg4, arg5)
 end
 
-local function CreateShadow(f, t)
-	if f.shadow then return end -- we seriously don't want to create shadow 2 times in a row on the same frame.
-	
-	borderr, borderg, borderb = 0, 0, 0
-	backdropr, backdropg, backdropb = 0, 0, 0
-	
-	if t == "ClassColor" then
-		local c = T.oUF_colors.class[class]
-		borderr, borderg, borderb = c[1], c[2], c[3]
-		backdropr, backdropg, backdropb = unpack(C["media"].backdropcolor)
-	end
-	
-	local shadow = CreateFrame("Frame", nil, f)
-	shadow:SetFrameLevel(1)
-	shadow:SetFrameStrata(f:GetFrameStrata())
-	shadow:Point("TOPLEFT", -3, 3)
-	shadow:Point("BOTTOMLEFT", -3, -3)
-	shadow:Point("TOPRIGHT", 3, 3)
-	shadow:Point("BOTTOMRIGHT", 3, -3)
-	shadow:SetBackdrop( { 
-		edgeFile = C["media"].glowTex, edgeSize = T.Scale(3),
-		insets = {left = T.Scale(5), right = T.Scale(5), top = T.Scale(5), bottom = T.Scale(5)},
-	})
-	shadow:SetBackdropColor(backdropr, backdropg, backdropb, 0)
-	shadow:SetBackdropBorderColor(borderr, borderg, borderb, 0.9)
-	f.shadow = shadow
-end
-
-local function CreateBorder(f, i, o)
-	if i then
-		if f.iborder then return end
-		local border = CreateFrame("Frame", f:GetName() and f:GetName() .. "InnerBorder" or nil, f)
-		border:Point("TOPLEFT", T.mult, -T.mult)
-		border:Point("BOTTOMRIGHT", -T.mult, T.mult)
-		border:SetBackdrop({
-			edgeFile = C["media"].blank, 
-			edgeSize = T.mult, 
-			insets = { left = T.mult, right = T.mult, top = T.mult, bottom = T.mult }
-		})
-		border:SetBackdropBorderColor(unpack(C["media"].backdropcolor))
-		f.iborder = border
-	end
-	
-	if o then
-		if f.oborder then return end
-		local border = CreateFrame("Frame", f:GetName() and f:GetName() .. "OuterBorder" or nil, f)
-		border:Point("TOPLEFT", -T.mult, T.mult)
-		border:Point("BOTTOMRIGHT", T.mult, -T.mult)
-		border:SetFrameLevel(f:GetFrameLevel() + 1)
-		border:SetBackdrop({
-			edgeFile = C["media"].blank, 
-			edgeSize = T.mult, 
-			insets = { left = T.mult, right = T.mult, top = T.mult, bottom = T.mult }
-		})
-		border:SetBackdropBorderColor(unpack(C["media"].backdropcolor))
-		f.oborder = border
-	end
-end
-
 local function SetTemplate(f, t, texture)
 	GetTemplate(t)
 		
 	f:SetBackdrop({
-	  bgFile =C["media"].blank,
+	  bgFile = C["media"].blank,
 	  edgeFile = C["media"].blank,
 	  tile = false, tileSize = 0, edgeSize = T.mult, 
 	  insets = { left = -T.mult, right = -T.mult, top = -T.mult, bottom = -T.mult}
@@ -168,10 +118,10 @@ local function CreatePanel(f, t, w, h, a1, p, a2, x, y)
 	local sh = T.Scale(h)
 	local sw = T.Scale(w)
 	f:SetFrameLevel(1)
-	f:Height(sh)
-	f:Width(sw)
+	f:SetHeight(sh)
+	f:SetWidth(sw)
 	f:SetFrameStrata("BACKGROUND")
-	f:Point(a1, p, a2, x, y)
+	f:SetPoint(a1, p, a2, x, y)
 	f:SetTemplate(t)
 	f:CreateShadow("Default")
 end
@@ -191,6 +141,34 @@ local function CreateBackdrop(f, t, tex)
 	end
 	
 	f.backdrop = b
+end
+
+local function CreateShadow(f, t)
+	if f.shadow then return end -- we seriously don't want to create shadow 2 times in a row on the same frame.
+	
+	borderr, borderg, borderb = 0, 0, 0
+	backdropr, backdropg, backdropb = 0, 0, 0
+	
+	if t == "ClassColor" then
+		local c = T.oUf.colors.class[class]
+		borderr, borderg, borderb = c[1], c[2], c[3]
+		backdropr, backdropg, backdropb = unpack(C["media"].backdropcolor)
+	end
+	
+	local shadow = CreateFrame("Frame", nil, f)
+	shadow:SetFrameLevel(1)
+	shadow:SetFrameStrata(f:GetFrameStrata())
+	shadow:Point("TOPLEFT", -3, 3)
+	shadow:Point("BOTTOMLEFT", -3, -3)
+	shadow:Point("TOPRIGHT", 3, 3)
+	shadow:Point("BOTTOMRIGHT", 3, -3)
+	shadow:SetBackdrop( { 
+		edgeFile = C["media"].glowTex, edgeSize = T.Scale(3),
+		insets = {left = T.Scale(5), right = T.Scale(5), top = T.Scale(5), bottom = T.Scale(5)},
+	})
+	shadow:SetBackdropColor(backdropr, backdropg, backdropb, 0)
+	shadow:SetBackdropBorderColor(borderr, borderg, borderb, 0.9)
+	f.shadow = shadow
 end
 
 local function Kill(object)
@@ -288,7 +266,6 @@ local function addapi(object)
 	mt.SetTemplate = SetTemplate
 	mt.CreatePanel = CreatePanel
 	mt.CreateShadow = CreateShadow
-	mt.CreateBorder = CreateBorder
 	mt.Kill = Kill
 	mt.StyleButton = StyleButton
 	mt.FontString = FontString

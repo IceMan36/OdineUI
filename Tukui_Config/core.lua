@@ -1201,7 +1201,7 @@ function OUI.GenerateOptionsInternal()
 					v12 = {
 						order = 2,
 						type = "toggle",
-						name = "Use V12 Style",
+						name = "V12 Style",
 					},
 					ABGroup = {
 						order = 3,

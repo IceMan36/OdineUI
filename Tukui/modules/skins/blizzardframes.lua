@@ -19,7 +19,7 @@ local function SetOriginalBackdrop(self)
 	if C["general"].classcolortheme == true then
 		self:SetBackdropBorderColor(color.r, color.g, color.b)
 	else
-		self:SetTemplate("Default", true)
+		self:SetTemplate("Default")
 	end
 end
 

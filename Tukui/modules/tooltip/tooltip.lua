@@ -48,8 +48,8 @@ local function SetRightTooltipPos(self)
 		self:Hide()
 	else
 		if C["bags"].enable == true and TukuiBags and TukuiBags:IsShown() then
-			self:SetPoint("BOTTOMRIGHT", TukuiBags, "TOPRIGHT", -1, T.Scale(18))	
-		elseif TooltipMover and T.Movers["TooltipMover"]["moved"] == true then
+			self:SetPoint("BOTTOMRIGHT", TukuiBags, "TOPRIGHT", -1, T.Scale(3))	
+		--[[elseif TooltipMover and T.Movers["TooltipMover"]["moved"] == true then
 			local point, _, _, _, _ = TooltipMover:GetPoint()
 			if point == "TOPLEFT" then
 				self:SetPoint("TOPLEFT", TooltipMover, "BOTTOMLEFT", 1, T.Scale(-4))
@@ -59,7 +59,7 @@ local function SetRightTooltipPos(self)
 				self:SetPoint("BOTTOMLEFT", TooltipMover, "TOPLEFT", 1, T.Scale(18))
 			else
 				self:SetPoint("BOTTOMRIGHT", TooltipMover, "TOPRIGHT", -1, T.Scale(18))
-			end
+			end--]]
 		else
 			if T.CheckAddOnShown() == true then
 				if C["chat"].background == true and T.ChatRightShown == true then
@@ -69,10 +69,10 @@ local function SetRightTooltipPos(self)
 						self:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", -1, T.Scale(18))	
 					end
 				else
-					self:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", -1, T.Scale(18))		
+					self:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", -1, T.Scale(38))		
 				end	
 			else
-				self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", T.Scale(-3), T.Scale(28))	
+				self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", T.Scale(-3), T.Scale(38))	
 			end
 		end
 	end
@@ -204,7 +204,7 @@ end)
 
 local healthBar = GameTooltipStatusBar
 healthBar:ClearAllPoints()
-healthBar:Height(6)
+healthBar:Height(5)
 healthBar:Point("BOTTOMLEFT", healthBar:GetParent(), "TOPLEFT", 2, 5)
 healthBar:Point("BOTTOMRIGHT", healthBar:GetParent(), "TOPRIGHT", -2, 5)
 healthBar:SetStatusBarTexture(C.media.normTex)
@@ -213,8 +213,7 @@ local healthBarBG = CreateFrame("Frame", "StatusBarBG", healthBar)
 healthBarBG:SetFrameLevel(healthBar:GetFrameLevel() - 1)
 healthBarBG:Point("TOPLEFT", -2, 2)
 healthBarBG:Point("BOTTOMRIGHT", 2, -2)
-healthBarBG:SetTemplate("Default", true)
---healthBarBG:CreateShadow("Default")
+healthBarBG:SetTemplate("Default")
 
 -- Add "Targeted By" line
 local targetedList = {}

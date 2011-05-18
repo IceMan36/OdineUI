@@ -13,12 +13,12 @@ end
 -- Name need to be case sensitive
 ----------------------------------------------------------------------------
 
-if T.myname == "Odine" or T.myname == "Marmon" then
+if T.myname == "Marmon" then
 	-- do something
 end
 
 ----------------------------------------------------------------------------
--- Pretty sure we dont need to display master if not level 80 LOL
+-- Disable mastery datatext if not level 80
 ----------------------------------------------------------------------------
 
 if T.level < 80 then

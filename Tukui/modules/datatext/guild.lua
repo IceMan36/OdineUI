@@ -202,8 +202,9 @@ if C["datatext"].guild and C["datatext"].guild > 0 then
 				local name, rank,rankIndex, level, zone, note, officernote, EP,GP,PR, connected, status, class, zone_r, zone_g, zone_b, classc, levelc,grouped
 				local online, total, gmotd = 0, GetNumGuildMembers(true), GetGuildRosterMOTD()
 				for i = 0, total do if select(9, GetGuildRosterInfo(i)) then online = online + 1 end end
-
-				GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, T.Scale(6));
+				
+				local anchor, panel, xoff, yoff = T.DataTextTooltipAnchor(Text)
+				GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 				GameTooltip:ClearAllPoints()
 				GameTooltip:ClearLines()
 				GameTooltip:AddDoubleLine(GetGuildInfo'player',format("%s: %d/%d",GUILD,online,total),tthead.r,tthead.g,tthead.b,tthead.r,tthead.g,tthead.b)

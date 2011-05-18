@@ -2,6 +2,11 @@ V6.3.3 - [05/18/2011]
 * large player castbar wasnt sized up perfectly.... now it is! =P
 * swingbar hacked to be hidden when not in combat for now
 * strata messed up on new world map. should be ok now
+* adjusted raid/dps layout frames to match new UI style
+* swingbar was overlapping raidframes
+* vengeance bar is enabled by default now
+* adjusted some tooltip positions from datatexts
+* few minor tweaks to API stuff to reflect new raid frame styles
 
 V6.3.2 - [05/17/2011]
 * fixed altpowerbar not displaying in its new location (inforight)

@@ -2,7 +2,7 @@
 
 DB["general"] = {
 	["autoscale"] = true,                               -- mainly enabled for users that don't want to mess with the config file
-	["uiscale"] = 0.71,                                 -- set your value (between 0.64 and 1) of your uiscale if autoscale is off
+	["uiscale"] = 0.72,                                 -- set your value (between 0.64 and 1) of your uiscale if autoscale is off
 	["fontscale"] = 12,									-- global font scale most aspect of the ui (UNFINISHED)m
 	["resolutionoverride"] = "NONE",					--override lowversion (Low, High)
 	["multisampleprotect"] = true,                      -- i don't recommend this because of shitty border but, voila!
@@ -28,10 +28,9 @@ DB["media"] = {
 	["striped"] = [[Interface\AddOns\Tukui\medias\textures\Striped]], -- unitframes combo points
 	["copyicon"] = [[Interface\AddOns\Tukui\medias\textures\copy]], -- copy icon
 	["buttonhover"] = [[Interface\AddOns\Tukui\medias\textures\button_hover]],
-
-	["bordercolor"] = { .2, .2, .2, 1 }, -- border color of tukui panels 
+	
+	["bordercolor"] = { .23, .23, .23 }, -- border color of panels
 	["altbordercolor"] = { .2, .2, .2 }, -- alternative border color, mainly for unitframes text panels.
-
 	["backdropcolor"] = { .1, .1, .1, 1 }, -- background color of panels
 	["backdropfadecolor"] = { .1, .1, .1, 0.8 }, --this is always the same as the backdrop color with an alpha of 0.9, see colors.lua
 	
