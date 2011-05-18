@@ -261,7 +261,7 @@ oUF:Factory(function(self)
 	"xOffset", T.Scale(7),
 	"point", "LEFT"
 	)
-	raid:Point("TOP", UIParent, "BOTTOM", 0, 165)
+	raid:Point("TOP", UIParent, "BOTTOM", 0, 205)
 	
 	local pets = {}
 	for i = 1, 5 do 
