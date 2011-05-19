@@ -149,6 +149,8 @@ DB["actionbar"] = {
 	["swaptopbottombar"] = false,			--swap the main actionbar position with the bottom actionbar
 	["macrotext"] = false,					--show macro text on actionbuttons
 	["verticalstance"] = false,				--make stance bar vertical
+	["microbar"] = false,					--enable microbar display
+	["mousemicro"] = false,					--only show microbar on mouseover
 	
 	["enablecd"] = true,                     -- do i really need to explain this?
 	["treshold"] = 3,                      -- show decimal under X seconds and text turn red

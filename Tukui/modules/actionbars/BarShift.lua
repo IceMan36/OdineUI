@@ -8,7 +8,14 @@ if not C["actionbar"].enable == true then return end
 ---------------------------------------------------------------------------
 -- used for anchor totembar or shapeshiftbar
 local TukuiShift = CreateFrame("Frame","TukuiShiftBar",TukuiActionBarBackground)
-TukuiShift:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 6, -35)
+
+if C["actionbar"].microbar == true then
+	TukuiShift:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 6, -75)
+else
+	TukuiShift:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 6, -35)
+end
+
+--TukuiShift:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 6, -35)
 TukuiShift:SetWidth(200)
 TukuiShift:SetHeight(T.petbuttonsize)
 TukuiShift:SetMovable(true)

@@ -1,8 +1,16 @@
-V6.3.5 - [05/18/2011]
+V6.3.6 - [05/19/2011]
+* added microbar support
+* fixed bug where running /resetui was not resetting window positions and settings
+* tweak nameplates
+* fix some skinning issues
 * updated problems with raid heal layout lagging and debuffs being completely mesed up (sorry about that i derpd some old code)
 * fixed some nasty bugs with healer layout mode
 * debuffs were messing up health colors and borders. this is also now functioning properly
 * fixed editbox not showing when in battleground
+
+TODO:
+* better first time/resetui config regarding skipping reset of frame positins, etc
+* better mover system
 
 V6.3.4
 * fix more tooltip anchors for datatext

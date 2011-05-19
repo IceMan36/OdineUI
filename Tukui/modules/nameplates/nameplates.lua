@@ -64,7 +64,12 @@ local function CreateVirtualFrame(parent, point)
 	parent.backdrop:SetDrawLayer("BORDER", -8)
 	parent.backdrop:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult*3, noscalemult*3)
 	parent.backdrop:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", noscalemult*3, -noscalemult*3)
-	parent.backdrop:SetTexture(unpack(C["media"].backdropcolor))
+	parent.backdrop:SetTexture(0, 0, 0, 1)
+	
+	parent.backdrop2 = parent:CreateTexture(nil, "BORDER")
+	parent.backdrop2:SetDrawLayer("BORDER", -7)
+	parent.backdrop2:SetAllPoints(point)
+	parent.backdrop2:SetTexture(unpack(C["media"].backdropcolor)) 
 
 	parent.bordertop = parent:CreateTexture(nil, "BORDER")
 	parent.bordertop:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult*2, noscalemult*2)

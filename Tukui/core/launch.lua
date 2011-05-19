@@ -19,7 +19,15 @@ function T.Install()
 			TukuiUFpos = {}
 		else
 			TukuiData.ufpos = {}
-		end	
+		end
+		
+		TukuiData[T.myrealm][T.myname] = {}
+		
+		-- reset movable stuff into original position
+		for i = 1, getn(T.MoverFrames) do
+			if T.MoverFrames[i] then T.MoverFrames[i]:SetUserPlaced(false) end
+		end
+		
 		print(L.TukuiInstall_UFSet)
 	end
 	

@@ -247,9 +247,9 @@ L.TukuiInstall_page1_desc1 = "This install process will help you learn some of t
 L.TukuiInstall_page1_desc2 = "You can type the /uihelp command to display a list of commands. The in-game configuration\n menu can be accessed with /oui. Press the button below if you wish to skip the\n installation process."
 L.TukuiInstall_page1_button1 = "Skip Process"
 
-L.TukuiInstall_page2_subtitle = "CVars"
+L.TukuiInstall_page2_subtitle = "CVars and Window Positions"
 L.TukuiInstall_page2_desc1 = "This part of the installation process sets up your World of Warcraft default options it is\n recommended you should do this step for everything to behave properly."
-L.TukuiInstall_page2_desc2 = "Please click the button below to setup your CVars."
+L.TukuiInstall_page2_desc2 = "Please click the button below to setup your CVars and reset window positions to default."
 L.TukuiInstall_page2_button1 = "Setup CVars"
 
 L.TukuiInstall_page3_subtitle = "Chat"

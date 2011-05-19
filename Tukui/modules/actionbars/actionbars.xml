@@ -14,6 +14,7 @@
 	<Script file="range.lua"/>
 	<Script file="others.lua"/>
 	<Script file="movers.lua"/>
+	<Script file="microbar.lua"/>
 	<Script file="cooldown.lua"/>
 	<Script file="bind.lua"/>
 </Ui>

@@ -1274,6 +1274,19 @@ function OUI.GenerateOptionsInternal()
 								order = 12,
 								name = L["Macro Text"],						
 							},
+							microbar = {
+								type = "toggle",
+								order = 13,
+								name = L["Micro Bar"],
+								desc = L["Display blizzards default microbar, this will disable the right click menu on minimap"],
+							},
+							mousemicro = {
+								type = "toggle",
+								order = 14,
+								name = L["Micro Bar on Mouseover"],
+								desc = L["Display blizzards default microbar when mouseovered"],
+								disabled = function() return not db.actionbar.enable or not db.actionbar.microbar end,
+							},
 						},
 					},
 					CDGroup = {
