@@ -256,7 +256,7 @@ if C["datatext"].battleground == true then
 	local bgframe = CreateFrame("Frame", "TukuiInfoLeftBattleGround", UIParent)
 	bgframe:CreatePanel("Default", 1, 1, "TOPLEFT", UIParent, "BOTTOMLEFT", 0, 0)
 	bgframe:SetAllPoints(TukuiInfoLeft)
-	bgframe:SetFrameStrata("TOOLTIP")
+	bgframe:SetFrameStrata("HIGH")
 	bgframe:SetFrameLevel(0)
 	bgframe:EnableMouse(true)
 	bgframe:SetTemplate("Default", true)

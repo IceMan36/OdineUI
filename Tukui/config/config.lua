@@ -105,7 +105,6 @@ DB["unitframes"] = {
 		["aggro"] = true,                                   -- show aggro on all raids layouts
 		["raidunitdebuffwatch"] = true,                     -- track important spell to watch in pve for grid mode.
 		["healcomm"] = true,                               -- enable healprediction support.
-		["debuffHighlightFilter"] = false,					-- filter debuff border coloring
 		["buffindicatorsize"] = 6,							-- size of the buff indicator on raid/party frames
 
 		-- Heal

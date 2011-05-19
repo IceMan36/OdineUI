@@ -133,7 +133,7 @@ T.PostUpdateHealth = function(health, unit, min, max)
 	else
 		local r, g, b
 		
-		if (C["general"].template == "ClassColor" and C["unitframes"].enemyhcolor and unit == "target" and UnitIsEnemy(unit, "player") and UnitIsPlayer(unit)) or (C["general"].template == "ClassColor" and unit == "target" and not UnitIsPlayer(unit) and UnitIsFriend(unit, "player")) then
+		if (C["general"].classcolortheme == true and C["unitframes"].enemyhcolor and unit == "target" and UnitIsEnemy(unit, "player") and UnitIsPlayer(unit)) or (C["general"].classcolortheme == true and unit == "target" and not UnitIsPlayer(unit) and UnitIsFriend(unit, "player")) then
 			local c = T.oUF_colors.reaction[UnitReaction(unit, "player")]
 			if c then 
 				r, g, b = c[1], c[2], c[3]
@@ -190,7 +190,7 @@ T.PostUpdateHealthRaid = function(health, unit, min, max)
 	else
 		-- doing this here to force friendly unit (vehicle or pet) very far away from you to update color correcly
 		-- because if vehicle or pet is too far away, unitreaction return nil and color of health bar is white.
-		if not UnitIsPlayer(unit) and UnitIsFriend(unit, "player") and C["general"].template == "ClassColor" then
+		if not UnitIsPlayer(unit) and UnitIsFriend(unit, "player") and C["general"].classcolortheme == true then
 			local c = T.oUF_colors.reaction[5]
 			local r, g, b = c[1], c[2], c[3]
 			health:SetStatusBarColor(r, g, b)
@@ -208,7 +208,7 @@ end
 T.PostUpdatePetColor = function(health, unit, min, max)
 	-- doing this here to force friendly unit (vehicle or pet) very far away from you to update color correcly
 	-- because if vehicle or pet is too far away, unitreaction return nil and color of health bar is white.
-	if not UnitIsPlayer(unit) and UnitIsFriend(unit, "player") and C["general"].template == "ClassColor" then
+	if not UnitIsPlayer(unit) and UnitIsFriend(unit, "player") and C["general"].classcolortheme == true then
 		local c = T.oUF_colors.reaction[5]
 		local r, g, b = c[1], c[2], c[3]
 
@@ -360,9 +360,9 @@ local CreateAuraTimer = function(self, elapsed)
 				self.text:Hide()
 				self:SetScript("OnUpdate", nil)
 			end
-			if (not self.debuff) and C["general"].template == "ClassColor" then
-				local r, g, b = self:GetParent():GetParent().Health.backdrop:GetBackdropBorderColor()
-				self:SetBackdropBorderColor(r, g, b)
+			if (not self.debuff) and C["general"].classcolortheme == true then
+				--local r, g, b = self:GetParent():GetParent().Health.bg:GetBackdropBorderColor()
+				--self:SetBackdropBorderColor(r, g, b)
 			end
 			self.elapsed = 0
 		end
@@ -430,7 +430,7 @@ function T.PostUpdateAura(icons, unit, icon, index, offset, filter, isDebuff, du
 		if (icon.isStealable or ((T.myclass == "PRIEST" or T.myclass == "SHAMAN") and dtype == "Magic")) and not UnitIsFriend("player", unit) then
 			icon:SetBackdropBorderColor(237/255, 234/255, 142/255)
 		else
-			if C["general"].template == "ClassColor" then
+			if C["general"].classcolortheme == true then
 				local r, g, b = icon:GetParent():GetParent().Health.backdrop:GetBackdropBorderColor()
 				icon:SetBackdropBorderColor(r, g, b)
 			else
@@ -592,11 +592,19 @@ T.EclipseDisplay = function(self, login)
 	if eb:IsShown() then
 		txt:Show()
 		self.FlashInfo:Hide()
-		if self.Buffs then self.Buffs:SetPoint("BOTTOMLEFT", self.ufbg, "TOPLEFT", 0, 7) end
+		if T.lowversion then
+			if self.Buffs then self.Buffs:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 34) end
+		else
+			if self.Buffs then self.Buffs:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 38) end
+		end				
 	else
 		txt:Hide()
 		self.FlashInfo:Show()
-		if self.Buffs then self.Buffs:SetPoint("BOTTOMLEFT", self.ufbg, "TOPLEFT", 0, 3) end
+		if T.lowversion then
+			if self.Buffs then self.Buffs:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 26) end
+		else
+			if self.Buffs then self.Buffs:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 30) end
+		end
 	end
 end
 
@@ -665,39 +673,16 @@ T.UpdateDruidMana = function(self)
 end
 
 T.UpdateThreat = function(self, event, unit)
-	if (self.unit ~= unit) or (unit == "target" or unit == "pet" or unit == "focus" or unit == "focustarget" or unit == "targettarget") then return end
+	if (self.unit ~= unit) or (unit == "target" or unit == "focus" or unit == "focustarget" or unit == "targettarget") then return end
 	local threat = UnitThreatSituation(self.unit)
 	if (threat == 3) then
-		if self.panel then
-			self.panel:SetBackdropBorderColor(.69,.31,.31,1)
+		if self.Health.border then
+			self.Health.border:SetBackdropBorderColor(.69,.31,.31,1)
 		else
 			self.Name:SetTextColor(1,0.1,0.1)
 		end
-		if self.ufbg then
-			self.ufbg:SetBackdropColor(.69,.31,.31,1)
-		elseif self.t then
-			self.t:SetBackdropBorderColor(.69,.31,.31,1)
-			
-			if self.tt then
-				self.tt:SetBackdropBorderColor(.69,.31,.31,1)
-			end
-		end
 	else
-		if self.panel then
-			self.panel:SetBackdropBorderColor(unpack(C["media"].bordercolor))
-		else
-			self.Name:SetTextColor(1,1,1)
-		end
-		
-		if self.ufbg then
-			self.ufbg:SetBackdropColor(unpack(C["media"].bordercolor))
-		elseif self.t then
-			self.t:SetBackdropBorderColor(unpack(C["media"].bordercolor))
-			
-			if self.tt then
-				self.tt:SetBackdropBorderColor(unpack(C["media"].bordercolor))
-			end
-		end
+		self.Health.border:SetBackdropBorderColor(unpack(C["media"].bordercolor))
 	end 
 end
 

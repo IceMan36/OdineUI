@@ -855,18 +855,6 @@ function OUI.GenerateOptionsInternal()
 								type = "description",
 								order = 12.5,
 							},
-							debuffHighlightFilter = { 
-								type = "toggle",
-								order = 13,
-								name = L["Filter Debuff Borders"],
-								desc = L["Toggles whether you want border of debuffs filtered."],
-							},
-							emptyuf1 = {
-								name = "   ",
-								width = "full",
-								type = "description",
-								order = 14,
-							},
 							buffsperrow = {
 								type = "range",
 								order = 15,

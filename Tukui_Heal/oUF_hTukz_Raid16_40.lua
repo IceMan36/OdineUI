@@ -30,6 +30,10 @@ local function Shared(self, unit)
 	health:SetPoint("TOPRIGHT", -T.mult, T.mult)
 	health:SetStatusBarTexture(normTex)
 	self.Health = health
+	
+	if C["unitframes"].healthvertical then
+		health:SetOrientation('VERTICAL')
+	end
 		
 	local healthBg = health:CreateTexture(nil, "BORDER")
 	healthBg:SetAllPoints()
@@ -75,22 +79,34 @@ local function Shared(self, unit)
 	health.frequentUpdates = true
 	power.frequentUpdates = true
 	
-	if C["general"].classcolortheme ~= true then
+	if C["unitframes"].showsmooth == true then
+		health.Smooth = true
+		power.Smooth = true
+	end
+	
+	if C["general"].classcolortheme ~= false then
+		health.colorTapping = true
+		health.colorDisconnected = true
+		health.colorReaction = true
+		health.colorClass = true
+		healthBg.multiplier = 0.3
+			
+		power.colorPower = true
+	else
+		health.colorTapping = false
 		health.colorDisconnected = false
 		health.colorClass = false
+		health.colorReaction = false
 		health:SetStatusBarColor(unpack(C["unitframes"].healthColor))
-		healthBg:SetTexture(1, 1, 1)
-		healthBg:SetVertexColor(unpack(C["unitframes"].healthBgColor))
-		
+		health.bg:SetVertexColor(unpack(C["unitframes"].healthBgColor))
+		health.bg:SetTexture(1, 1, 1)
+			
+		power.multiplier = 0.5
+		power.colorTapping = true
+		power.colorDisconnected = true
 		power.colorClass = true
-	else
-		healthBg:SetTexture(.1, .1, .1)
-		health.colorDisconnected = true	
-		health.colorClass = true
-		health.colorReaction = true
-		
-		power.colorPower = true
-	end	
+		power.colorReaction = true
+	end
 
 	if C["unitframes"].healthdeficit and not unit:find("partypet") then
 		health.PostUpdate = T.PostUpdateHealthRaid
@@ -108,18 +124,10 @@ local function Shared(self, unit)
 		name:SetPoint("CENTER", health, "CENTER", 0, 6)
 	end
 	name:SetFont(font, fonts, fontf)
-	if C["unitframes"].healthdeficit then
-		if C["general"].classcolortheme ~= true then
-			self:Tag(name, "[Tukui:getnamecolor][Tukui:nameshort]")
-		else
-			self:Tag(name, "[Tukui:nameshort]")
-		end
+	if C["general"].classcolortheme ~= true then
+		self:Tag(name, "[Tukui:getnamecolor][Tukui:name_short][Tukui:dead][Tukui:afk]")
 	else
-		if C["general"].classcolortheme ~= true then
-			self:Tag(name, "[Tukui:getnamecolor][Tukui:name_short][Tukui:dead][Tukui:afk]")
-		else
-			self:Tag(name, "[Tukui:name_short][Tukui:dead][Tukui:afk]")
-		end
+		self:Tag(name, "[Tukui:name_short][Tukui:dead][Tukui:afk]")
 	end
 	self.Name = name
 	
@@ -130,15 +138,8 @@ local function Shared(self, unit)
 	LFDRole:SetTexture("Interface\\AddOns\\Tukui\\medias\\textures\\lfdicons.blp")
 	self.LFDRole = LFDRole
 	
-	if C["unitframes"].aggro == true then
-		table.insert(self.__elements, T.UpdateThreat)
-		self:RegisterEvent('PLAYER_TARGET_CHANGED', T.UpdateThreat)
-		self:RegisterEvent('UNIT_THREAT_LIST_UPDATE', T.UpdateThreat)
-		self:RegisterEvent('UNIT_THREAT_SITUATION_UPDATE', T.UpdateThreat)
-    end
-	
 	if C["unitframes"].showsymbols == true then
-		local RaidIcon = self.Health:CreateTexture(nil, 'OVERLAY')
+		local RaidIcon = health:CreateTexture(nil, 'OVERLAY')
 		RaidIcon:Height(18)
 		RaidIcon:Width(18)
 		RaidIcon:SetPoint('CENTER', self, 'TOP')
@@ -146,27 +147,24 @@ local function Shared(self, unit)
 		self.RaidIcon = RaidIcon
 	end
 	
-	local ReadyCheck = health:CreateTexture(nil, "OVERLAY")
+	local ReadyCheck = self.Power:CreateTexture(nil, "OVERLAY")
 	ReadyCheck:Height(12)
 	ReadyCheck:Width(12)
-	ReadyCheck:SetPoint("BOTTOMRIGHT", -2, 2)
+	ReadyCheck:SetPoint('CENTER')
 	self.ReadyCheck = ReadyCheck
-	
-	local debuffHighlight = self.Health:CreateTexture(nil, "OVERLAY", healthBg)
-	debuffHighlight:SetAllPoints()
-	debuffHighlight:SetTexture(C["media"].blank)
-	debuffHighlight:SetBlendMode("DISABLE")
-	debuffHighlight:SetVertexColor(0, 0, 0, 0)
-	self.DebuffHighlight = debuffHighlight
-	self.DebuffHighlightAlpha = 1
-	self.DebuffHighlightFilter = C["unitframes"].debuffHighlightFilter
-	
+
 	if C["unitframes"].showrange == true then
 		local range = {insideAlpha = 1, outsideAlpha = C["unitframes"].raidalphaoor}
 		self.Range = range
 	end
 	
-	
+	if C["unitframes"].aggro == true then
+		table.insert(self.__elements, T.UpdateThreat)
+		self:RegisterEvent('PLAYER_TARGET_CHANGED', T.UpdateThreat)
+		self:RegisterEvent('UNIT_THREAT_LIST_UPDATE', T.UpdateThreat)
+		self:RegisterEvent('UNIT_THREAT_SITUATION_UPDATE', T.UpdateThreat)
+    end
+
 	if C["unitframes"].healcomm then
 		local mhpb = CreateFrame('StatusBar', nil, self.Health)
 		mhpb:SetStatusBarTexture(normTex)
@@ -243,7 +241,7 @@ end
 
 oUF:RegisterStyle('OUIHealRaid', Shared)
 oUF:Factory(function(self)
-	oUF:SetActiveStyle("OUIHealRaid")	
+	oUF:SetActiveStyle("OUIHealRaid")
 
 	local raid = self:SpawnHeader("OUIHealRaid", nil, "raid",
 		'oUF-initialConfigFunction', [[

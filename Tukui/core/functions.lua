@@ -105,11 +105,18 @@ T.Round = function(number, decimals)
     return (("%%.%df"):format(decimals)):format(number)
 end
 
-T.RGBToHex = function(r, g, b)
+--RGB to Hex
+function T.RGBToHex(r, g, b)
 	r = r <= 1 and r >= 0 and r or 0
 	g = g <= 1 and g >= 0 and g or 0
 	b = b <= 1 and b >= 0 and b or 0
 	return string.format("|cff%02x%02x%02x", r*255, g*255, b*255)
+end
+
+--Hex to RGB
+function T.HexToRGB(hex)
+	local rhex, ghex, bhex = string.sub(hex, 1, 2), string.sub(hex, 3, 4), string.sub(hex, 5, 6)
+	return tonumber(rhex, 16), tonumber(ghex, 16), tonumber(bhex, 16)
 end
 
 --Check Player's Role
@@ -252,18 +259,4 @@ end
 function T.Round(v, decimals)
 	if not decimals then decimals = 0 end
     return (("%%.%df"):format(decimals)):format(v)
-end
-
---RGB to Hex
-function T.RGBToHex(r, g, b)
-	r = r <= 1 and r >= 0 and r or 0
-	g = g <= 1 and g >= 0 and g or 0
-	b = b <= 1 and b >= 0 and b or 0
-	return string.format("|cff%02x%02x%02x", r*255, g*255, b*255)
-end
-
---Hex to RGB
-function T.HexToRGB(hex)
-	local rhex, ghex, bhex = string.sub(hex, 1, 2), string.sub(hex, 3, 4), string.sub(hex, 5, 6)
-	return tonumber(rhex, 16), tonumber(ghex, 16), tonumber(bhex, 16)
 end
