@@ -97,7 +97,7 @@ local function SetTemplate(f, t, texture)
 	})
 
 	if texture and not f.tex then
-		if C["general"].sharpborders == true then
+		if C["general"].sharpborders == true and C["general"].classcolortheme ~= true then
 			f:SetBackdropColor(0, 0, 0, backdropa)
 		else
 			f:SetBackdropColor(backdropr, backdropg, backdropb, backdropa)

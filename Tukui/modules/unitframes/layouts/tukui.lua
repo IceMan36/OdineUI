@@ -16,7 +16,7 @@ else
 	T.Player, T.Target, T.ToT, T.Pet, T.Focus, T.Boss = 215, 215, 130, 130, 130, 200
 end
 
-local font, fonts, fontf = C["media"].uffont, 14, "OUTLINE"
+local font, fonts, fontf = C["media"].uffont, 14, "THINOUTLINE"
 
 ------------------------------------------------------------------------
 --	local variables
@@ -66,8 +66,6 @@ local function Shared(self, unit)
 	
 	if (unit == "player" or unit == "target") then	
 		-- health
-		local LSM = LibStub("LibSharedMedia-3.0")
-		
 		local health = CreateFrame('StatusBar', nil, self)
 		health:SetFrameLevel(5)
 		health:Height(30)

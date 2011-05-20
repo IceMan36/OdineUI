@@ -317,11 +317,10 @@ stat[2]:SetScript("OnMouseDown", function () collectgarbage("collect") FpsUpdate
 stat[2]:SetScript("OnEnter", function(self)
 	local bandwidth = GetAvailableBandwidth()
 	local home_latency = select(4, GetNetStats())
-	--local anchor, panel, xoff, yoff = T.DataTextTooltipAnchor(Text)
-	--GameTooltip:SetOwner(panel, anchor, xoff, yoff)
+
 	GameTooltip:SetOwner(stat[2], "ANCHOR_BOTTOMRIGHT", -stat[2]:GetWidth(), -3)
 	GameTooltip:ClearLines()
-	
+
 	--Current Layout
 	if IsAddOnLoaded("Tukui_Heal") then
 		GameTooltip:AddLine("Current Layout: Healer")

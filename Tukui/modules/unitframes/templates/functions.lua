@@ -426,16 +426,11 @@ function T.PostUpdateAura(icons, unit, icon, index, offset, filter, isDebuff, du
 			end
 			icon.icon:SetDesaturated(false)
 		end
-	else
-		if (icon.isStealable or ((T.myclass == "PRIEST" or T.myclass == "SHAMAN") and dtype == "Magic")) and not UnitIsFriend("player", unit) then
+	else	
+		if (icon.isStealable or ((T.myclass == "MAGE" or T.myclass == "PRIEST" or T.myclass == "SHAMAN") and dtype == "Magic")) and not UnitIsFriend("player", unit) then
 			icon:SetBackdropBorderColor(237/255, 234/255, 142/255)
 		else
-			if C["general"].classcolortheme == true then
-				local r, g, b = icon:GetParent():GetParent().Health.backdrop:GetBackdropBorderColor()
-				icon:SetBackdropBorderColor(r, g, b)
-			else
-				icon:SetBackdropBorderColor(unpack(C["media"].bordercolor))
-			end			
+			icon:SetBackdropBorderColor(unpack(C["media"].bordercolor))		
 		end
 	end
 	
