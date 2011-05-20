@@ -894,7 +894,7 @@ function OUI.GenerateOptionsInternal()
 									db.unitframes[ info[#info] ] = {r, g, b}
 								end,
 								hasAlpha = false,
-								disabled = function() return db.general.template == "ClassColor" end,
+								disabled = function() return db.general.classcolortheme end,
 							},
 							healthBgColor = {
 								type = "color",
@@ -910,7 +910,7 @@ function OUI.GenerateOptionsInternal()
 									db.unitframes[ info[#info] ] = {r, g, b}
 								end,
 								hasAlpha = false,
-								disabled = function() return db.general.template == "ClassColor" end,
+								disabled = function() return db.general.classcolortheme end,
 							},
 						},
 					},

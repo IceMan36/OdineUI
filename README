@@ -7,6 +7,11 @@ V6.3.6 - [05/19/2011]
 * fixed some nasty bugs with healer layout mode
 * debuffs were messing up health colors and borders. this is also now functioning properly
 * fixed editbox not showing when in battleground
+* added auctionator skin support
+
+* fix texture for vengeance bar
+* threat functionality has been updated in both healer/dps layouts. (yellow = getting high on threat, red = has aggro)
+* fixed spacing between grid columns in healer layout
 
 TODO:
 * better first time/resetui config regarding skipping reset of frame positins, etc

@@ -262,28 +262,20 @@ local function Shared(self, unit)
 			self:RegisterEvent("PARTY_LEADER_CHANGED", T.MLAnchorUpdate)
 			self:RegisterEvent("PARTY_MEMBERS_CHANGED", T.MLAnchorUpdate)
 			
-			-- Vengeance Bar
-			if C["unitframes"].vengeance == true then
+			-- Vengeance Bar			
+			if C["unitframes"].vengeance then
 				local Vengeance = CreateFrame("StatusBar", self:GetName()..'_Vengeance', TukuiBottomStats)
 				Vengeance:SetFrameStrata("TOOLTIP")
-				Vengeance:SetFrameLevel(TukuiBottomStats:GetFrameLevel() + 2)
-				Vengeance:SetPoint("TOPLEFT", TukuiBottomStats, T.Scale(2), T.Scale(-2))
-				Vengeance:SetPoint("BOTTOMRIGHT", TukuiBottomStats, T.Scale(-2), T.Scale(2))
+				Vengeance:SetFrameLevel(20)
+				Vengeance:Point("TOPLEFT", TukuiBottomStats, 2, -2)
+				Vengeance:Point("BOTTOMRIGHT", TukuiBottomStats, -2, 2)
 				Vengeance:SetStatusBarTexture(normTex)
 				Vengeance:GetStatusBarTexture():SetHorizTile(false)
 				Vengeance:SetStatusBarColor(unpack(C["unitframes"].healthBgColor))
-				Vengeance:SetBackdrop(backdrop)
-				Vengeance:SetBackdropColor(0, 0, 0, 0)
-				
+				Vengeance:SetTemplate("Default", true)
+				Vengeance:SetBackdropBorderColor(0, 0, 0, 0)
 				Vengeance.Text = T.SetFontString(Vengeance, font, fonts, fontf)
 				Vengeance.Text:SetPoint("CENTER")
-				
-				Vengeance.bg = Vengeance:CreateTexture(nil, 'BORDER')
-				Vengeance.bg:SetAllPoints(Vengeance)
-				Vengeance.bg:SetTexture(unpack(C["media"].backdropcolor))
-				
-				Vengeance:SetTemplate("Default", true)
-				
 				self.Vengeance = Vengeance
 			end
 			
@@ -1312,7 +1304,7 @@ if C["unitframes"].showboss then
 	for i = 1, MAX_BOSS_FRAMES do
 		boss[i] = oUF:Spawn("boss"..i, "TukuiBoss"..i)
 		if i == 1 then
-			boss[i]:SetPoint("BOTTOMLEFT", ChatRBackground2, "TOPLEFT", 10, 180)
+			boss[i]:SetPoint("BOTTOMLEFT", ChatRBackground2, "TOPLEFT", 0, 180)
 		else
 			boss[i]:SetPoint('BOTTOM', boss[i-1], 'TOP', 0, T.Scale(80))             
 		end

@@ -675,14 +675,22 @@ end
 T.UpdateThreat = function(self, event, unit)
 	if (self.unit ~= unit) or (unit == "target" or unit == "focus" or unit == "focustarget" or unit == "targettarget") then return end
 	local threat = UnitThreatSituation(self.unit)
-	if (threat == 3) then
+	--if (threat == 3) then
+	if threat and threat > 1 then
+		local r, g, b = GetThreatStatusColor(threat)
 		if self.Health.border then
-			self.Health.border:SetBackdropBorderColor(.69,.31,.31,1)
+			self.Health.border:SetBackdropBorderColor(r, g, b)
+		elseif self.t then
+			self.t:SetBackdropBorderColor(r, g, b)
 		else
 			self.Name:SetTextColor(1,0.1,0.1)
 		end
 	else
-		self.Health.border:SetBackdropBorderColor(unpack(C["media"].bordercolor))
+		if self.Health.border then
+			self.Health.border:SetBackdropBorderColor(unpack(C["media"].bordercolor))
+		elseif self.t then
+			self.t:SetBackdropBorderColor(unpack(C["media"].bordercolor))
+		end
 	end 
 end
 

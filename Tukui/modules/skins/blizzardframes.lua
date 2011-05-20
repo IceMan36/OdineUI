@@ -2018,7 +2018,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		SkinDropDownBox(BrowseDropDown)
 		SkinDropDownBox(PriceDropDown)
 		SkinDropDownBox(DurationDropDown)
-		
+	
 		SkinCheckBox(IsUsableCheckButton)
 		SkinCheckBox(ShowOnPlayerCheckButton)
 		
@@ -2090,6 +2090,56 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			SkinButton(_G[button])
 		end
 		
+		-- Auctionator support
+		if IsAddOnLoaded("Auctionator") then
+			SkinTab(_G["AuctionFrameTab4"])
+			SkinTab(_G["AuctionFrameTab5"])
+			SkinTab(_G["AuctionFrameTab6"])
+		
+			SkinButton(Atr_Search_Button, true)
+			SkinButton(Atr_Back_Button, true)
+			SkinButton(Atr_Buy1_Button, true)
+			SkinButton(Atr_Adv_Search_Button, true)
+			SkinButton(Atr_FullScanButton, true)
+			SkinButton(Auctionator1Button, true)
+			SkinButton(Atr_ListTabsTab1, true)
+			SkinButton(Atr_ListTabsTab2, true)
+			SkinButton(Atr_ListTabsTab3, true)
+			SkinButton(Atr_CreateAuctionButton, true)
+			SkinButton(Atr_RemFromSListButton, true)
+			SkinButton(Atr_AddToSListButton, true)
+			SkinButton(Atr_SrchSListButton, true)
+			SkinButton(Atr_DelSListButton, true)
+			SkinButton(Atr_NewSListButton, true)
+			SkinButton(Atr_CheckActiveButton, true)
+			SkinButton(AuctionatorCloseButton)
+			SkinButton(Atr_CancelSelectionButton)
+
+			SkinDropDownBox(Atr_DropDown1)
+			SkinDropDownBox(Atr_Duration)
+			SkinDropDownBox(Atr_DropDownSL)
+			
+			local ahnator = {			
+				"Atr_StackPriceGold",
+				"Atr_StackPriceSilver",
+				"Atr_StackPriceCopper",
+				"Atr_ItemPriceGold",
+				"Atr_ItemPriceSilver",
+				"Atr_ItemPriceCopper",
+				"Atr_Batch_NumAuctions",
+				"Atr_Batch_Stacksize",
+				"Atr_Search_Box",
+			}
+			for _, abox in pairs(ahnator) do
+				SkinEditBox(_G[abox])
+				_G[abox]:SetTextInsets(1, 1, -1, 1)
+			end
+			
+			Atr_SellControls_Tex:StripTextures()
+			Atr_SellControls_Tex:StyleButton()
+			Atr_SellControls_Tex:SetTemplate("Default", true)
+		end
+		
 		--Fix Button Positions
 		AuctionsCloseButton:Point("BOTTOMRIGHT", AuctionFrameAuctions, "BOTTOMRIGHT", 66, 10)
 		AuctionsCancelAuctionButton:Point("RIGHT", AuctionsCloseButton, "LEFT", -4, 0)
@@ -2139,6 +2189,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		for i=1, 3 do
 			SkinTab(_G["AuctionFrameTab"..i])
 		end
+
 		
 		for i=1, NUM_FILTERS_TO_DISPLAY do
 			local tab = _G["AuctionFilterButton"..i]
@@ -2163,7 +2214,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			"StartPriceCopper",
 			"BuyoutPriceGold",
 			"BuyoutPriceSilver",
-			"BuyoutPriceCopper"			
+			"BuyoutPriceCopper",
 		}
 		
 		for _, editbox in pairs(editboxs) do
@@ -3339,6 +3390,13 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			
 			WorldMapFrame:RegisterEvent("PLAYER_LOGIN")
 			WorldMapFrame:HookScript("OnEvent", function(self, event)
+					--[[if event == "PLAYER_LOGIN" then
+						if not GetCVarBool("miniWorldMap") then
+							ToggleFrame(WorldMapFrame)
+							ToggleFrame(WorldMapFrame)
+						end
+					end--]]
+				-- causes UI Taint but above solution not to viable either...*sadface*
 				if event == "PLAYER_LOGIN" then
 					if not GetCVarBool("miniWorldMap") then
 						ToggleFrame(WorldMapFrame)

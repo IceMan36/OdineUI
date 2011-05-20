@@ -152,6 +152,8 @@ DB["actionbar"] = {
 	["microbar"] = false,					--enable microbar display
 	["mousemicro"] = false,					--only show microbar on mouseover
 	
+	["vertical_rightbars"] = true,				-- horizontal rightbars
+	
 	["enablecd"] = true,                     -- do i really need to explain this?
 	["treshold"] = 3,                      -- show decimal under X seconds and text turn red
 	["expiringcolor"] = { r = 1, g = 0, b = 0 },		--color of expiring seconds turns to 

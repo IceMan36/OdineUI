@@ -58,7 +58,7 @@ local function Shared(self, unit)
 
 	if not C["unitframes"].hidepower then
 		local tt = CreateFrame("Frame", nil, self)
-		tt:CreatePanel("Default", 75, 8, "TOPLEFT", t, "BOTTOMLEFT", 5, 4)
+		tt:CreatePanel("Default", 60, 8, "TOPLEFT", t, "BOTTOMLEFT", 5, 4)
 		tt:SetFrameLevel(t:GetFrameLevel() + 2)
 		tt.shadow:SetFrameLevel(0)
 		self.tt = tt

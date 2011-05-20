@@ -259,7 +259,7 @@ oUF:Factory(function(self)
 		"groupBy", "GROUP",
 		"maxColumns", 5,
 		"unitsPerColumn", 5,
-		"columnSpacing", T.Scale(3),
+		"columnSpacing", T.Scale(7),
 		"columnAnchorPoint", "BOTTOM"
 	)
 	raid:Point("BOTTOM", UIParent, "BOTTOM", 0, 165)
