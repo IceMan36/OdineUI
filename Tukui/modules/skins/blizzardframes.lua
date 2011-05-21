@@ -2698,6 +2698,49 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 				end
 			end
 			hooksecurefunc("AchievementAlertFrame_FixAnchors", SkinAchievePopUp)		
+		
+			function SkinDungeonPopUP()
+				for i = 1, DUNGEON_COMPLETION_MAX_REWARDS do
+					local frame = _G["DungeonCompletionAlertFrame"..i]
+					if frame then
+						frame:SetAlpha(1)
+						frame.SetAlpha = T.dummy
+						if not frame.backdrop then
+							frame:CreateBackdrop("Default")
+							frame.backdrop:Point("TOPLEFT", frame, "TOPLEFT", -2, -6)
+							frame.backdrop:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)		
+						end
+						
+						-- Background
+						for i=1, frame:GetNumRegions() do
+							local region = select(i, frame:GetRegions())
+							if region:GetObjectType() == "Texture" then
+								if region:GetTexture() == "Interface\\LFGFrame\\UI-LFG-DUNGEONTOAST" then
+									region:Kill()
+								end
+							end
+						end
+						
+						_G["DungeonCompletionAlertFrame"..i.."Shine"]:Kill()
+
+						-- Icon
+						_G["DungeonCompletionAlertFrame"..i.."DungeonTexture"]:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+						
+						_G["DungeonCompletionAlertFrame"..i.."DungeonTexture"]:ClearAllPoints()
+						_G["DungeonCompletionAlertFrame"..i.."DungeonTexture"]:Point("LEFT", frame, 7, 0)
+						
+						if not _G["DungeonCompletionAlertFrame"..i.."DungeonTexture"].b then
+							_G["DungeonCompletionAlertFrame"..i.."DungeonTexture"].b = CreateFrame("Frame", nil, _G["DungeonCompletionAlertFrame"..i])
+							_G["DungeonCompletionAlertFrame"..i.."DungeonTexture"].b:SetFrameLevel(0)
+							_G["DungeonCompletionAlertFrame"..i.."DungeonTexture"].b:SetTemplate("Default")
+							_G["DungeonCompletionAlertFrame"..i.."DungeonTexture"].b:Point("TOPLEFT", _G["DungeonCompletionAlertFrame"..i.."DungeonTexture"], "TOPLEFT", -2, 2)
+							_G["DungeonCompletionAlertFrame"..i.."DungeonTexture"].b:Point("BOTTOMRIGHT", _G["DungeonCompletionAlertFrame"..i.."DungeonTexture"], "BOTTOMRIGHT", 2, -2)
+						end
+					end
+				end				
+			end
+			
+			hooksecurefunc("DungeonCompletionAlertFrame_FixAnchors", SkinDungeonPopUP)
 		end
 	
 		-- bg score frame
@@ -3153,6 +3196,71 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			TradeHighlightRecipientEnchant:SetFrameStrata("HIGH")			
 
 		end
+		
+		--Guild Registrar Frame
+		if C["addonskins"].guildregistrar == true then
+			GuildRegistrarFrame:StripTextures(true)
+			GuildRegistrarFrame:SetTemplate("Transparent")
+			GuildRegistrarGreetingFrame:StripTextures()
+			SkinButton(GuildRegistrarFrameGoodbyeButton)
+			SkinButton(GuildRegistrarFrameCancelButton)
+			SkinButton(GuildRegistrarFramePurchaseButton)
+			SkinCloseButton(GuildRegistrarFrameCloseButton)
+			SkinEditBox(GuildRegistrarFrameEditBox)
+			for i=1, GuildRegistrarFrameEditBox:GetNumRegions() do
+				local region = select(i, GuildRegistrarFrameEditBox:GetRegions())
+				if region:GetObjectType() == "Texture" then
+					if region:GetTexture() == "Interface\\ChatFrame\\UI-ChatInputBorder-Left" or region:GetTexture() == "Interface\\ChatFrame\\UI-ChatInputBorder-Right" then
+						region:Kill()
+					end
+				end
+			end
+			
+			GuildRegistrarFrameEditBox:Height(20)
+			
+			for i=1, 2 do
+				_G["GuildRegistrarButton"..i]:GetFontString():SetTextColor(1, 1, 1)
+			end
+			
+			GuildRegistrarPurchaseText:SetTextColor(1, 1, 1)
+			AvailableServicesText:SetTextColor(1, 1, 0)
+		end
+		
+		--Tabard Frame
+		if C["addonskins"].tabard == true then
+			TabardFrame:StripTextures(true)
+			TabardFrame:SetTemplate("Transparent")
+			TabardModel:CreateBackdrop("Default")
+			SkinButton(TabardFrameCancelButton)
+			SkinButton(TabardFrameAcceptButton)
+			SkinCloseButton(TabardFrameCloseButton)
+			SkinRotateButton(TabardCharacterModelRotateLeftButton)
+			SkinRotateButton(TabardCharacterModelRotateRightButton)
+			TabardFrameCostFrame:StripTextures()
+			TabardFrameCustomizationFrame:StripTextures()
+			
+			for i=1, 5 do
+				local custom = "TabardFrameCustomization"..i
+				_G[custom]:StripTextures()
+				SkinNextPrevButton(_G[custom.."LeftButton"])
+				SkinNextPrevButton(_G[custom.."RightButton"])
+				
+				
+				if i > 1 then
+					_G[custom]:ClearAllPoints()
+					_G[custom]:Point("TOP", _G["TabardFrameCustomization"..i-1], "BOTTOM", 0, -6)
+				else
+					local point, anchor, point2, x, y = _G[custom]:GetPoint()
+					_G[custom]:Point(point, anchor, point2, x, y+4)
+				end
+			end
+			
+			TabardCharacterModelRotateLeftButton:Point("BOTTOMLEFT", 4, 4)
+			TabardCharacterModelRotateRightButton:Point("TOPLEFT", TabardCharacterModelRotateLeftButton, "TOPRIGHT", 4, 0)
+			TabardCharacterModelRotateLeftButton.SetPoint = T.dummy
+			TabardCharacterModelRotateRightButton.SetPoint = T.dummy
+		end
+		
 		--Gossip Frame
 		if C["addonskins"].gossip == true then
 
@@ -3365,13 +3473,13 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 				if not InCombatLockdown() then
 					WorldMapFrame:SetScale(1)
 					WorldMapFrameSizeDownButton:Show()
-					WorldMapFrame:SetFrameStrata("DIALOG")
+					--WorldMapFrame:SetFrameStrata("DIALOG")
 				else
 					WorldMapFrameSizeDownButton:Disable()
 					WorldMapFrameSizeUpButton:Disable()
 				end	
 				
-				WorldMapFrameAreaFrame:SetFrameStrata("FULLSCREEN")
+				--WorldMapFrameAreaFrame:SetFrameStrata("FULLSCREEN")
 				WorldMapFrameAreaLabel:SetFont(C["media"].font, 50, "OUTLINE")
 				WorldMapFrameAreaLabel:SetShadowOffset(2, -2)
 				WorldMapFrameAreaLabel:SetTextColor(0.90, 0.8294, 0.6407)	
@@ -3390,14 +3498,14 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			
 			WorldMapFrame:RegisterEvent("PLAYER_LOGIN")
 			WorldMapFrame:HookScript("OnEvent", function(self, event)
-					--[[if event == "PLAYER_LOGIN" then
+					if event == "PLAYER_LOGIN" then
 						if not GetCVarBool("miniWorldMap") then
 							ToggleFrame(WorldMapFrame)
 							ToggleFrame(WorldMapFrame)
 						end
-					end--]]
+					end
 				-- causes UI Taint but above solution not to viable either...*sadface*
-				if event == "PLAYER_LOGIN" then
+				--[[if event == "PLAYER_LOGIN" then
 					if not GetCVarBool("miniWorldMap") then
 						ToggleFrame(WorldMapFrame)
 						WorldMapFrameSizeDownButton:Click()	
@@ -3409,7 +3517,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 						WorldMapFrameSizeDownButton:Click()
 						ToggleFrame(WorldMapFrame)
 					end
-				end
+				end--]]
 			end)	
 		
 			local coords = CreateFrame("Frame", "CoordsFrame", WorldMapFrame)

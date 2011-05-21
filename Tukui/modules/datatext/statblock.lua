@@ -4,7 +4,8 @@ if C["datatext"].statblock ~= true then return end
 
 ----- [[     Panels     ]] -----
 local stat = CreateFrame("Frame")
-local width = (C["chat"].width / 4) - 3
+local width = (377)
+local width = (width / 4) - 3
 
 
 for i = 1, 3 do

@@ -32,8 +32,7 @@ DB["media"] = {
 	["buttonhover"] = [[Interface\AddOns\Tukui\medias\textures\button_hover]],
 	
 	["bordercolor"] = { .23, .23, .23 }, -- border color of panels
-	["altbordercolor"] = { .2, .2, .2 }, -- alternative border color, mainly for unitframes text panels.
-	["backdropcolor"] = { .1, .1, .1, 1 }, -- background color of panels
+	["backdropcolor"] = { .1, .1, .1 }, -- background color of panels
 	["backdropfadecolor"] = { .1, .1, .1, 0.8 }, --this is always the same as the backdrop color with an alpha of 0.9, see colors.lua
 	
 	
@@ -55,16 +54,14 @@ DB["unitframes"] = {
 	["healthBgColor"] = { .7, .1, .1 },					-- see above derp
 	
 	-- Castbar
-	["unitcastbar"] = true,                          	-- enable tukui castbar
-	["cblatency"] = false,                           	-- enable castbar latency
-	["cbicons"] = true,                                 -- enable icons on castbar
+	["unitcastbar"] = true, 
+	["cblatency"] = false, 
+	["cbicons"] = true, 
+	["cbticks"] = true,
 	["cbinside"] = false,								-- castbar inside unit frames, disable for outside of them (will not work if using large player castbar)
 	["large_player"] = true,							-- enable larger player castbar above actionbar
-	["cbticks"] = true,									-- shows ticks for spells listed in Castbar Ticks in the filters section
-	["castbarcolor"] = DB["media"].bordercolor, 		-- Color of player castbar
-	["nointerruptcolor"] = { 0.78, 0.25, 0.25},			-- Color of target castbar
-	["cbclasscolor"] = false,
-		["cbcustomcolor"] = { .20, .21, .19 },
+	["castbarcolor"] = {.20, .21, .19}, 				-- Color of player castbar
+	["nointerruptcolor"] = {0.78, 0.25, 0.25},			-- Color of target castbar
 		
 	-- Auras
 	["auratimer"] = true,                               -- enable timers on buffs/debuffs
@@ -90,6 +87,7 @@ DB["unitframes"] = {
 	["lowThreshold"] = 20,                              -- global low threshold, for low mana warning.
 	["combatfeedback"] = false,                          -- enable combattext on player and target.
 	["playeraggro"] = true,                             -- color player border to red if you have aggro on current target.
+	["debuffhighlight"] = false,						-- Enable highlighting unitframes when there is a debuff you can dispel
 	
 	-- misc
 	["vengeance"] = true,								-- vengeance bar for tanks
@@ -227,7 +225,7 @@ DB["chat"] = {
 	["enable"] = true,                                  -- blah
 	["whispersound"] = true,                            -- play a sound when receiving whisper
 	["height"] = 150,									-- adjust the chatframe height
-	["width"] = 378,									-- adjust the chatframe width
+	["width"] = 357,									-- adjust the chatframe width
 	["background"] = true,								-- chat frame backgrounds 150
 	["fading"] = false,									-- allow chat windows to fade out
 	["justifyRight"] = false,							-- when set to true text in right chat box will be aligned towards the right side of the chat box
@@ -319,6 +317,8 @@ DB["addonskins"] = {
 		["character"] = true,
 		["misc"] = true,
 		["lfr"] = true,
+		["tabard"] = true,
+		["guildregistrar"] = true,
 	["kle"] = true,										-- skins KLE
 	["tinydps"] = true,									-- skins TinyDPS
 	["dbm"] = true,										-- skins DBM
@@ -333,7 +333,7 @@ DB["addonskins"] = {
 DB["classtimer"] = {
 	["enable"] = true,
 	["bar_height"] = 16,
-	["bar_spacing"] = 4,
+	["bar_spacing"] = 5,
 	["icon_position"] = 2, -- 0 = left, 1 = right, 2 = Outside left, 3 = Outside Right
 	["layout"] = 4, --1 - both player and target auras in one frame right above player frame, 2 - player and target auras separated into two frames above player frame, 3 - player, target and trinket auras separated into three frames above player frame, 4 - player and trinket auras are shown above player frame and target auras are shown above target frame, 5 - Everything above player frame, no target debuffs.
 	["showspark"] = true,

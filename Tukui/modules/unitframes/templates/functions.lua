@@ -360,6 +360,7 @@ local CreateAuraTimer = function(self, elapsed)
 				self.text:Hide()
 				self:SetScript("OnUpdate", nil)
 			end
+			-- odine fix this
 			if (not self.debuff) and C["general"].classcolortheme == true then
 				--local r, g, b = self:GetParent():GetParent().Health.bg:GetBackdropBorderColor()
 				--self:SetBackdropBorderColor(r, g, b)
@@ -505,13 +506,14 @@ T.PostCastStart = function(self, unit, name, rank, castid)
 		if UnitCanAttack("player", unit) then
 			self:SetStatusBarColor(unpack(C["unitframes"].nointerruptcolor))
 		else
-			self:SetStatusBarColor(unpack(C["unitframes"].castbarcolor))	
+			self:SetStatusBarColor(unpack(C["unitframes"].castbarcolor))
 		end
 	else
-		if C["unitframes"].cbclasscolor == true then
-			self:SetStatusBarColor(unpack(oUF.colors.class[select(2, UnitClass(unit))]))
+		if C["general"].classcolortheme == true then
+			local c = T.oUF_colors.class[T.myclass]
+			self:SetStatusBarColor(c[1], c[2], c[3])
 		else
-			self:SetStatusBarColor(unpack(C["unitframes"].cbcustomcolor))
+			self:SetStatusBarColor(unpack(C["unitframes"].castbarcolor))
 		end	
 	end
 end

@@ -19,8 +19,6 @@ end
 -- DO NOT EDIT ANYTHING BELOW
 ----------------------------------------------------------------
 
-
--- convert back so gui config can function properly
 C["media"].font = LSM:Fetch("font", C["media"].font)
 C["media"].uffont = LSM:Fetch("font", C["media"].uffont)
 C["media"].dmgfont = LSM:Fetch("font", C["media"].dmgfont)

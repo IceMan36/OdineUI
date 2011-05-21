@@ -23,6 +23,7 @@ else
 	end
 end
 rep:EnableMouse(true)
+--rep:SetTemplate("Default", true)
 
 local bar = CreateFrame("StatusBar", "TukuiReputationBar", rep)
 bar:Point("TOPLEFT", rep, 1, -1)

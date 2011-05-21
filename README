@@ -1,3 +1,21 @@
+V6.3.8
+* updated castbar configuration menu. Changing castbar colors will affect focus/boss castbars now as well
+* lowered width on default chat boxes (should help lower reso users)
+* tweak rune/totem bars
+* no longer using sCombo.. using more built in approach, but similar to sCombo
+* tweaked size of health/power percentages if enabled
+* added maintank/assist frame support finally =P
+* re-added debuffhighlight support, default setting is disabled
+
+TODO:
+* better first time/resetui config regarding skipping reset of frame positins, etc
+* better mover system
+* allow for more customization (width/height of castbars/unitframes/etc)
+* finish redoing all unitframe options (also cleanup raid/party and unitframes section overall)
+
+FIX:
+* sort special for bags is broken
+
 V6.3.7 - [05/20/2011]
 * fixed bug when targetting a unit with a certain debuff would fire lua errors
 * fixed textures for vengeance bar
@@ -14,11 +32,6 @@ V6.3.6 - [05/19/2011]
 * debuffs were messing up health colors and borders. this is also now functioning properly
 * fixed editbox not showing when in battleground
 * added auctionator skin support
-
-TODO:
-* better first time/resetui config regarding skipping reset of frame positins, etc
-* better mover system
-* allow for more customization (width/height of castbars/unitframes/etc)
 
 V6.3.4
 * fix more tooltip anchors for datatext

@@ -649,6 +649,12 @@ function OUI.GenerateOptionsInternal()
 								name = L["Combat Feedback"],
 								desc = L["Enable combat text on player and target"],
 							},
+							debuffhighlight = {
+								type = "toggle",
+								order = 6.5,
+								name = L["Debuff Highlighting"],
+								desc = L["Enable highlighting unitframes when there is a debuff you can dispel"],							
+							},
 							playeraggro = {
 								type = "toggle",
 								order = 7,
@@ -660,6 +666,12 @@ function OUI.GenerateOptionsInternal()
 								order = 8,
 								name = L["Show Percentages"],
 								desc = L["Enable showing percentages for health/mana outside of unitframes."],
+							},
+							emptyuf2288 = {
+								name = "   ",
+								width = "full",
+								type = "description",
+								order = 8.5,
 							},
 							vengeance = {
 								type = "toggle",
@@ -683,45 +695,48 @@ function OUI.GenerateOptionsInternal()
 							},
 						},
 					},
-					Castbar = {
+					UFCBGroup = {
 						order = 5,
 						type = "group",
-						name = L["Castbar Settings"],
+						name = L["Castbar"],
 						guiInline = true,
-						disabled = function() return not db.unitframes.enable end,
-						get = function(info) return db.unitframes[ info[#info] ] end,
-						set = function(info, value) db.unitframes[ info[#info] ] = value; StaticPopup_Show("RELOAD_UI") end,
+						disabled = function() return (not db.unitframes.enable or not db.unitframes.unitcastbar) end,	
 						args = {
 							unitcastbar = {
 								type = "toggle",
 								order = 1,
-								name = L["Enable Cast Bars"],
-								desc = L["Customize settings of your cast bars"],
+								name = ENABLE,
+								desc = L["Enable/Disable Castbars"],
+								disabled = false,
 							},
 							cblatency = {
 								type = "toggle",
 								order = 2,
-								name = L["Show latency"],
-								desc = L["Show your latency in castbar"],
-								disabled = function() return not db.unitframes.unitcastbar end,
+								name = L["Castbar Latency"],
+								desc = L["Show latency on player castbar"],							
 							},
 							cbicons = {
 								type = "toggle",
 								order = 3,
-								name = L["Show icons"],
-								desc = L["Show icons with castbar"],
-								disabled = function() return not db.unitframes.unitcastbar end,
+								name = L["Castbar Icons"],
+								desc = L["Show icons on castbars"],								
+							},
+							cbticks = {
+								type = "toggle",
+								order = 4,
+								name = L["Castbar Ticks"],
+								desc = L["Display ticks on castbar when you cast a spell that is channeled, this list may be modified under filters"],
 							},
 							cbinside = {
 								type = "toggle",
-								order = 3.5,
+								order = 6,
 								name = L["Inside UF"],
 								desc = L["When enabled castbars are inside of your player/target frame. (ONLY WORKS IF LARGE PLAYER CASTBAR IS DISABLED)"],
 								disabled = function() return (not db.unitframes.unitcastbar or db.unitframes.large_player) end,
 							},
 							large_player = {
 								type = "toggle",
-								order = 4,
+								order = 7,
 								name = L["Large Player castbar"],
 								desc = L["Allows you to use a bigger castbar for your casts"],										
 								disabled = function() return (not db.unitframes.unitcastbar or db.unitframes.cbinside) end,
@@ -730,26 +745,38 @@ function OUI.GenerateOptionsInternal()
 								name = "   ",
 								width = "full",
 								type = "description",
-								order = 4.5,
-							},
-							cbclasscolor = {
-								type = "toggle",
-								order = 5,
-								name = L["Class colors"],
-								desc = L["Allows you to use class colors for castbars"],										
-							},
-							cbcustomcolor = {
+								order = 7.5,
+							},				
+							castbarcolor = {
 								type = "color",
-								order = 6,
+								order = 14,
 								name = L["Castbar Color"],
-								desc = L["Allows you to select a custom color for castbars"],
-								disabled = function() return (db.unitframes.cbclasscolor or not db.unitframes.unitcastbar) end,
+								desc = L["Color of the castbar"],
 								hasAlpha = false,
-								get = function() return unpack(db.unitframes.cbcustomcolor) end,
-								set = function(_,r,g,b)
-									db.unitframes.cbcustomcolor = { r, g, b }
-									StaticPopup_Show("RELOAD_UI")
+								disabled = function() return (not db.unitframes.enable or db.general.classcolortheme) end,
+								get = function(info)
+									local r, g, b = unpack(db.unitframes[ info[#info] ])
+									return r, g, b
 								end,
+								set = function(info, r, g, b)
+									StaticPopup_Show("RELOAD_UI")
+									db.unitframes[ info[#info] ] = {r, g, b}
+								end,								
+							},
+							nointerruptcolor = {
+								type = "color",
+								order = 15,
+								name = L["Interrupt Color"],
+								desc = L["Color of the castbar when you can't interrupt the cast"],
+								hasAlpha = false,
+								get = function(info)
+									local r, g, b = unpack(db.unitframes[ info[#info] ])
+									return r, g, b
+								end,
+								set = function(info, r, g, b)
+									StaticPopup_Show("RELOAD_UI")
+									db.unitframes[ info[#info] ] = {r, g, b}
+								end,									
 							},
 						},
 					},
@@ -1766,6 +1793,13 @@ function OUI.GenerateOptionsInternal()
 						desc = L["Toggles whether you want to show tooltips while in combat."],
 						disabled = function() return not db.tooltip.enable end,
 					},
+					hidecombatraid = {
+						order = 2.5,
+						type = "toggle",
+						name = L["Hide Combat in Raid"],
+						desc = L["Hide tooltip when entering combat only inside a raid instance"],	
+						disabled = function() return not db.tooltip.enable or not db.tooltip.hidecombat end,
+					},
 					hidebuttons = {
 						type = "toggle",
 						order = 3,
@@ -2181,18 +2215,6 @@ function OUI.GenerateOptionsInternal()
 									db.media.backdropfadecolor = { r, g, b, a }
 									StaticPopup_Show("RELOAD_UI")
 								end,						
-							},
-							altbordercolor = {
-								type = "color",
-								order = 3,
-								name = L["Alt Border Color"],
-								desc = L["ABDROP_DESC"],
-								hasAlpha = false,
-								get = function() return unpack(db.media.altbordercolor) end,
-								set = function(_,r,g,b,a)
-									db.media.altbordercolor = { r, g, b, a }
-									StaticPopup_Show("RELOAD_UI")
-								end,				
 							},
 						},
 					},	

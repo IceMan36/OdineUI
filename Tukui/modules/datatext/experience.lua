@@ -20,6 +20,7 @@ else
 	xp:CreatePanel("Default", TukuiMinimap:GetWidth(), height, "TOPLEFT", UIParent, "TOPLEFT", 8, -8)
 end
 xp:EnableMouse(true)
+--xp:SetTemplate("Default", true)
 
 local bar = CreateFrame("StatusBar", "TukuiExperienceBar", xp)
 bar:Point("TOPLEFT", xp, 1, -1)

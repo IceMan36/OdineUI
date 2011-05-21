@@ -153,6 +153,18 @@ local function Shared(self, unit)
 	ReadyCheck:Width(12)
 	ReadyCheck:SetPoint('CENTER')
 	self.ReadyCheck = ReadyCheck
+	
+	-- Debuff Highlight
+	if C["unitframes"].debuffhighlight == true then
+		local dbh = self.Health:CreateTexture(nil, "OVERLAY", healthBg)
+		dbh:SetAllPoints(self)
+		dbh:SetTexture(C["media"].blank)
+		dbh:SetBlendMode("ADD")
+		dbh:SetVertexColor(0,0,0,0)
+		self.DebuffHighlight = dbh
+		self.DebuffHighlightFilter = true
+		self.DebuffHighlightAlpha = 0.35
+	end
 
 	if C["unitframes"].showrange == true then
 		local range = {insideAlpha = 1, outsideAlpha = C["unitframes"].raidalphaoor}
