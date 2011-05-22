@@ -108,7 +108,7 @@ local function Shared(self, unit)
 		power.colorReaction = true
 	end
 
-	if C["unitframes"].healthdeficit and not unit:find("partypet") then
+	if C["unitframes"].healthdeficit then
 		health.PostUpdate = T.PostUpdateHealthRaid
 
 		health.value = health:CreateFontString(nil, "OVERLAY")
