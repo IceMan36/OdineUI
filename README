@@ -6,6 +6,7 @@ V6.3.8
 * tweaked size of health/power percentages if enabled
 * added maintank/assist frame support finally =P
 * re-added debuffhighlight support, default setting is disabled
+* framelevel adjusted for bigger worldmap, tooltip adjustments for map compare, other fixes
 
 TODO:
 * better first time/resetui config regarding skipping reset of frame positins, etc

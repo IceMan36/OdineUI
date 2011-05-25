@@ -336,13 +336,16 @@ function T.Install()
 		f.SubTitle:Point("TOP", 0, -40)
 		
 		f:FontString("Desc1", C["media"].font, 12)
-		f.Desc1:Point("TOPLEFT", 20, -75)	
+		f.Desc1:Point("TOPLEFT", 20, -75)
+		f.Desc1:Width(f:GetWidth() - 40)
 
 		f:FontString("Desc2", C["media"].font, 12)
-		f.Desc2:Point("TOPLEFT", 20, -125)		
+		f.Desc2:Point("TOPLEFT", 20, -125)
+		f.Desc2:Width(f:GetWidth() - 40)
 
 		f:FontString("Desc3", C["media"].font, 12)
 		f.Desc3:Point("TOPLEFT", 20, -175)	
+		f.Desc3:Width(f:GetWidth() - 40)
 
 		local close = CreateFrame("Button", "InstallCloseButton", f, "UIPanelCloseButton")
 		close:SetPoint("TOPRIGHT", f, "TOPRIGHT")
