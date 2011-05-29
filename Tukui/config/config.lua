@@ -319,6 +319,7 @@ DB["addonskins"] = {
 		["lfr"] = true,
 		["tabard"] = true,
 		["guildregistrar"] = true,
+		["timemanager"] = true,
 	["kle"] = true,										-- skins KLE
 	["tinydps"] = true,									-- skins TinyDPS
 	["dbm"] = true,										-- skins DBM

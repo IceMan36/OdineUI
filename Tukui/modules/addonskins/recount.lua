@@ -69,13 +69,13 @@ if C["addonskins"].embed == "Recount" then
 		self = nil
 
 		Recount_MainWindow:ClearAllPoints()
-		Recount_MainWindow:SetPoint("TOPLEFT", ChatRBackground2,"TOPLEFT", 0, 7)
-		Recount_MainWindow:SetPoint("BOTTOMRIGHT", ChatRBackground2,"BOTTOMRIGHT", 0, 0)
+		Recount_MainWindow:SetPoint("TOPLEFT", ChatRBackground,"TOPLEFT", 0, 7)
+		Recount_MainWindow:SetPoint("BOTTOMRIGHT", ChatRBackground,"BOTTOMRIGHT", 0, 0)
 		Recount.db.profile.FrameStrata = "4-HIGH"
 		Recount.db.profile.MainWindowWidth = (C["chat"].width - 4)	
 	end)
 	
-	local ctab = CreateFrame("Frame", "TukuiEmbedBar", ChatRBackground2)
+	local ctab = CreateFrame("Frame", "TukuiEmbedBar", ChatRBackground)
 	ctab:SetHeight(T.Scale(22))
 	ctab:SetWidth(T.Scale(C["chat"].width))
 	ctab:SetFrameLevel(3)	

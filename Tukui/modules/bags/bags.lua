@@ -419,7 +419,7 @@ function Stuffing:CreateBagFrame(w)
 			if w == "Bank" then
 				f:SetPoint("BOTTOMLEFT", ChatLBackground2, "BOTTOMLEFT")
 			else
-				f:SetPoint("BOTTOMRIGHT", ChatRBackground2, "BOTTOMRIGHT")
+				f:SetPoint("BOTTOMRIGHT", ChatRBackground, "BOTTOMRIGHT")
 			end
 		else
 			if w == "Bank" then
@@ -433,24 +433,24 @@ function Stuffing:CreateBagFrame(w)
 					if not C["chat"].background then
 						f:SetPoint("BOTTOMLEFT", TukuiInfoRight, "TOPLEFT", 0, 3)
 					else
-						f:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", 0, 3)
+						f:SetPoint("BOTTOMRIGHT", ChatRBackground, "TOPRIGHT", 0, 3)
 					end
 				else
 					if not C["chat"].background then
 						f:SetPoint("BOTTOMLEFT", TukuiInfoRight, "TOPLEFT", 0, 3)
 					elseif HasPetUI() then
 						if C["actionbar"].vertical_rightbars then
-							f:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", 0, 3)
+							f:SetPoint("BOTTOMRIGHT", ChatRBackground, "TOPRIGHT", 0, 3)
 						else
 							f:SetPoint("BOTTOMRIGHT", TukuiPetBar, "TOPRIGHT", 0, 3)
 						end
 					elseif UnitHasVehicleUI("player") then
-						f:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", 0, 3)
+						f:SetPoint("BOTTOMRIGHT", ChatRBackground, "TOPRIGHT", 0, 3)
 					else
 						if C["actionbar"].vertical_rightbars then
-							f:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", 0, 3)
+							f:SetPoint("BOTTOMRIGHT", ChatRBackground, "TOPRIGHT", 0, 3)
 						else
-							f:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", 0, 3)
+							f:SetPoint("BOTTOMRIGHT", ChatRBackground, "TOPRIGHT", 0, 3)
 						end
 					end
 				end

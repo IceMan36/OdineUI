@@ -104,7 +104,10 @@ local function SkinNextPrevButton(btn, horizonal)
 		btn:GetDisabledTexture():SetTexCoord(0.3, 0.29, 0.3, 0.75, 0.65, 0.29, 0.65, 0.75)	
 	else
 		btn:GetNormalTexture():SetTexCoord(0.3, 0.29, 0.3, 0.81, 0.65, 0.29, 0.65, 0.81)
-		btn:GetPushedTexture():SetTexCoord(0.3, 0.35, 0.3, 0.81, 0.65, 0.35, 0.65, 0.81)
+		
+		if btn:GetPushedTexture() then
+			btn:GetPushedTexture():SetTexCoord(0.3, 0.35, 0.3, 0.81, 0.65, 0.35, 0.65, 0.81)
+		end
 		if btn:GetDisabledTexture() then
 			btn:GetDisabledTexture():SetTexCoord(0.3, 0.29, 0.3, 0.75, 0.65, 0.29, 0.65, 0.75)
 		end
@@ -113,8 +116,14 @@ local function SkinNextPrevButton(btn, horizonal)
 	btn:GetNormalTexture():ClearAllPoints()
 	btn:GetNormalTexture():Point("TOPLEFT", 2, -2)
 	btn:GetNormalTexture():Point("BOTTOMRIGHT", -2, 2)
-	btn:GetDisabledTexture():SetAllPoints(btn:GetNormalTexture())
-	btn:GetPushedTexture():SetAllPoints(btn:GetNormalTexture())
+	if btn:GetDisabledTexture() then
+		btn:GetDisabledTexture():SetAllPoints(btn:GetNormalTexture())
+	end
+	
+	if btn:GetPushedTexture() then
+		btn:GetPushedTexture():SetAllPoints(btn:GetNormalTexture())
+	end
+	
 	btn:GetHighlightTexture():SetTexture(1, 1, 1, 0.3)
 	btn:GetHighlightTexture():SetAllPoints(btn:GetNormalTexture())
 end
@@ -209,6 +218,55 @@ local TukuiSkin = CreateFrame("Frame")
 TukuiSkin:RegisterEvent("ADDON_LOADED")
 TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 	if IsAddOnLoaded("Skinner") or IsAddOnLoaded("Aurora") then return end
+	
+	if addon == "Blizzard_TimeManager" and C["addonskins"].timemanager == true then
+		TimeManagerFrame:StripTextures()
+		TimeManagerFrame:SetTemplate("Transparent")
+
+		SkinCloseButton(TimeManagerCloseButton)
+
+		SkinDropDownBox(TimeManagerAlarmHourDropDown, 80)
+		SkinDropDownBox(TimeManagerAlarmMinuteDropDown, 80)
+		SkinDropDownBox(TimeManagerAlarmAMPMDropDown, 80)
+		
+		SkinEditBox(TimeManagerAlarmMessageEditBox)
+		
+		SkinButton(TimeManagerAlarmEnabledButton, true)
+		TimeManagerAlarmEnabledButton:HookScript("OnClick", function(self)
+			SkinButton(self)
+		end)
+
+		TimeManagerFrame:HookScript("OnShow", function(self)
+			SkinButton(TimeManagerAlarmEnabledButton)
+		end)		
+		
+		SkinCheckBox(TimeManagerMilitaryTimeCheck)
+		SkinCheckBox(TimeManagerLocalTimeCheck)
+		
+		TimeManagerStopwatchFrame:StripTextures()
+		TimeManagerStopwatchCheck:SetTemplate("Default")
+		TimeManagerStopwatchCheck:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+		TimeManagerStopwatchCheck:GetNormalTexture():ClearAllPoints()
+		TimeManagerStopwatchCheck:GetNormalTexture():Point("TOPLEFT", 2, -2)
+		TimeManagerStopwatchCheck:GetNormalTexture():Point("BOTTOMRIGHT", -2, 2)
+		local hover = TimeManagerStopwatchCheck:CreateTexture("frame", nil, TimeManagerStopwatchCheck) -- hover
+		hover:SetTexture(1,1,1,0.3)
+		hover:Point("TOPLEFT",TimeManagerStopwatchCheck,2,-2)
+		hover:Point("BOTTOMRIGHT",TimeManagerStopwatchCheck,-2,2)
+		TimeManagerStopwatchCheck:SetHighlightTexture(hover)
+		
+		StopwatchFrame:StripTextures()
+		StopwatchFrame:CreateBackdrop("Transparent")
+		StopwatchFrame.backdrop:Point("TOPLEFT", 0, -17)
+		StopwatchFrame.backdrop:Point("BOTTOMRIGHT", 0, 2)
+		
+		StopwatchTabFrame:StripTextures()
+		SkinCloseButton(StopwatchCloseButton)
+		SkinNextPrevButton(StopwatchPlayPauseButton)
+		SkinNextPrevButton(StopwatchResetButton)
+		StopwatchPlayPauseButton:Point("RIGHT", StopwatchResetButton, "LEFT", -4, 0)
+		StopwatchResetButton:Point("BOTTOMRIGHT", StopwatchFrame, "BOTTOMRIGHT", -4, 6)
+	end
 	
 	if addon == "Blizzard_ReforgingUI" and C["addonskins"].reforge == true then
 		ReforgingFrame:StripTextures()
@@ -1040,6 +1098,30 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		for i=1, 4 do
 			SkinTab(_G["GuildBankFrameTab"..i])
 		end
+		
+		--Popup
+		GuildBankPopupFrame:StripTextures()
+		GuildBankPopupScrollFrame:StripTextures()
+		GuildBankPopupFrame:SetTemplate("Transparent")
+		GuildBankPopupFrame:Point("TOPLEFT", GuildBankFrame, "TOPRIGHT", 1, -30)
+		SkinButton(GuildBankPopupOkayButton)
+		SkinButton(GuildBankPopupCancelButton)
+		SkinEditBox(GuildBankPopupEditBox)
+		GuildBankPopupNameLeft:Kill()
+		GuildBankPopupNameRight:Kill()
+		GuildBankPopupNameMiddle:Kill()
+
+		for i=1, 16 do
+			local button = _G["GuildBankPopupButton"..i]
+			local icon = _G[button:GetName().."Icon"]
+			button:StripTextures()
+			button:SetTemplate("Default")
+			button:StyleButton(true)
+			icon:ClearAllPoints()
+			icon:Point("TOPLEFT", 2, -2)
+			icon:Point("BOTTOMRIGHT", -2, 2)
+			icon:SetTexCoord(.08, .92, .08, .92)
+		end
 	end
 	
 	--Archaeology
@@ -1050,6 +1132,7 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		ArchaeologyFrame:CreateShadow("Default")
 		
 		SkinButton(ArchaeologyFrameArtifactPageSolveFrameSolveButton, true)
+		SkinButton(ArchaeologyFrameArtifactPageBackButton, true)
 		SkinDropDownBox(ArchaeologyFrameRaceFilter, 125)
 		
 		ArchaeologyFrameRankBar:StripTextures()
@@ -1574,16 +1657,9 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			_G[object]:StripTextures()
 		end
 
-		local function raidskinupdate()
-			nummembers = GetNumRaidMembers();
-
-			for i=1,nummembers do
-				SkinButton(_G["RaidGroupButton"..i])
-			end
+		for i=1, MAX_RAID_GROUPS*5 do
+			SkinButton(_G["RaidGroupButton"..i], true)
 		end
-		raidskinupdate()
-		RaidFrame:HookScript("OnShow", raidskinupdate)
-		hooksecurefunc("RaidGroupFrame_OnEvent", raidskinupdate)
 
 		for i=1,8 do
 			for j=1,5 do
@@ -2098,10 +2174,10 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		
 		-- Auctionator support
 		if IsAddOnLoaded("Auctionator") then
-			SkinTab(_G["AuctionFrameTab4"])
-			SkinTab(_G["AuctionFrameTab5"])
-			SkinTab(_G["AuctionFrameTab6"])
-		
+			SkinDropDownBox(Atr_DropDown1)
+			SkinDropDownBox(Atr_Duration)
+			SkinDropDownBox(Atr_DropDownSL)
+
 			SkinButton(Atr_Search_Button, true)
 			SkinButton(Atr_Back_Button, true)
 			SkinButton(Atr_Buy1_Button, true)
@@ -2115,31 +2191,73 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			SkinButton(Atr_RemFromSListButton, true)
 			SkinButton(Atr_AddToSListButton, true)
 			SkinButton(Atr_SrchSListButton, true)
-			SkinButton(Atr_DelSListButton, true)
+			SkinButton(Atr_MngSListsButton, true)
 			SkinButton(Atr_NewSListButton, true)
 			SkinButton(Atr_CheckActiveButton, true)
-			SkinButton(AuctionatorCloseButton)
-			SkinButton(Atr_CancelSelectionButton)
+			SkinButton(AuctionatorCloseButton, true)
+			SkinButton(Atr_CancelSelectionButton, true)
+			SkinButton(Atr_FullScanStartButton, true)
+			SkinButton(Atr_FullScanDone, true)
+			SkinButton(Atr_CheckActives_Yes_Button, true)
+			SkinButton(Atr_CheckActives_No_Button, true)
+			SkinButton(Atr_Adv_Search_ResetBut, true)
+			SkinButton(Atr_Adv_Search_OKBut, true)
+			SkinButton(Atr_Adv_Search_CancelBut, true)
+			SkinButton(Atr_Buy_Confirm_OKBut, true)
+			SkinButton(Atr_Buy_Confirm_CancelBut, true)
+			SkinButton(Atr_SaveThisList_Button, true)
 
-			SkinDropDownBox(Atr_DropDown1)
-			SkinDropDownBox(Atr_Duration)
-			SkinDropDownBox(Atr_DropDownSL)
+			SkinEditBox(Atr_StackPriceGold)
+			SkinEditBox(Atr_StackPriceSilver)
+			SkinEditBox(Atr_StackPriceCopper)
+			SkinEditBox(Atr_ItemPriceGold)
+			SkinEditBox(Atr_ItemPriceSilver)
+			SkinEditBox(Atr_ItemPriceCopper)
+			SkinEditBox(Atr_Batch_NumAuctions)
+			SkinEditBox(Atr_Batch_Stacksize)
+			SkinEditBox(Atr_Search_Box)
+			SkinEditBox(Atr_AS_Searchtext)
+			SkinEditBox(Atr_AS_Minlevel)
+			SkinEditBox(Atr_AS_Maxlevel)
+			SkinEditBox(Atr_AS_MinItemlevel)
+			SkinEditBox(Atr_AS_MaxItemlevel)		
+
+			Atr_FullScanResults:StripTextures()
+			Atr_FullScanResults:SetTemplate("Transparent")
+			Atr_Adv_Search_Dialog:StripTextures()
+			Atr_Adv_Search_Dialog:SetTemplate("Transparent")
+			Atr_FullScanFrame:StripTextures()
+			Atr_FullScanFrame:SetTemplate("Transparent")
+			Atr_HeadingsBar:StripTextures()
+			Atr_HeadingsBar:SetTemplate("Default")
+			Atr_HeadingsBar:Height(19)
+			Atr_Error_Frame:StripTextures()		
+			Atr_Error_Frame:SetTemplate("Transparent")
+			Atr_Hlist:StripTextures()
+			Atr_Hlist:SetTemplate("Default")
+			Atr_Hlist:Width(196)
+			Atr_Hlist:ClearAllPoints()
+			Atr_Hlist:Point("TOPLEFT", -195, -75)
+			Atr_Buy_Confirm_Frame:StripTextures()
+			Atr_Buy_Confirm_Frame:SetTemplate("Default")
+			Atr_CheckActives_Frame:StripTextures()
+			Atr_CheckActives_Frame:SetTemplate("Default")
 			
-			local ahnator = {			
-				"Atr_StackPriceGold",
-				"Atr_StackPriceSilver",
-				"Atr_StackPriceCopper",
-				"Atr_ItemPriceGold",
-				"Atr_ItemPriceSilver",
-				"Atr_ItemPriceCopper",
-				"Atr_Batch_NumAuctions",
-				"Atr_Batch_Stacksize",
-				"Atr_Search_Box",
-			}
-			for _, abox in pairs(ahnator) do
-				SkinEditBox(_G[abox])
-				_G[abox]:SetTextInsets(1, 1, -1, 1)
+			-- resize some buttons to fit
+			Atr_SrchSListButton:Width(196)
+			Atr_MngSListsButton:Width(196)
+			Atr_NewSListButton:Width(196)
+			Atr_CheckActiveButton:Width(196)
+			
+			for i = 1, 6 do
+				SkinTab(_G["AuctionFrameTab"..i])
 			end
+			
+			-- Button Positions
+			AuctionatorCloseButton:ClearAllPoints()
+			AuctionatorCloseButton:Point("BOTTOMLEFT", Atr_Main_Panel, "BOTTOMRIGHT", -17, 10)
+			Atr_Buy1_Button:Point("RIGHT", AuctionatorCloseButton, "LEFT", -5, 0)
+			Atr_CancelSelectionButton:Point("RIGHT", Atr_Buy1_Button, "LEFT", -5, 0)
 			
 			Atr_SellControls_Tex:StripTextures()
 			Atr_SellControls_Tex:StyleButton()
@@ -2311,6 +2429,8 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 		AuctionFrameBrowse.bg1:SetTemplate("Default")
 		AuctionFrameBrowse.bg1:Point("TOPLEFT", 20, -103)
 		AuctionFrameBrowse.bg1:Point("BOTTOMRIGHT", -575, 40)
+		--BrowseNoResultsText:SetParent(AuctionFrameBrowse.bg1)
+		--BrowseSearchCountText:SetParent(AuctionFrameBrowse.bg1)
 		BrowseFilterScrollFrame:Height(300) --Adjust scrollbar height a little off
 
 		AuctionFrameBrowse.bg2 = CreateFrame("Frame", nil, AuctionFrameBrowse)
@@ -3785,6 +3905,18 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 				SkinCheckBox(_G[object]:GetChildren())
 			end
 			
+			hooksecurefunc("LFDQueueFrameSpecificListButton_SetDungeon", function(button, dungeonID, mode, submode)
+				for _, object in pairs(checkButtons) do
+					local button = _G[object]
+					if not ( button.checkButton:GetChecked() ) then
+						button.checkButton:SetDisabledTexture(nil)	
+					else
+						button.checkButton:SetDisabledTexture("Interface\\Buttons\\UI-CheckBox-Check-Disabled")	
+					end
+				end
+			end)
+			
+			
 			for _, object in pairs(StripAllTextures) do
 				_G[object]:StripTextures()
 			end
@@ -3803,44 +3935,6 @@ TukuiSkin:SetScript("OnEvent", function(self, event, addon)
 			end
 			
 			LFDQueueFrameCapBar:SetPoint("LEFT", 40, 0)
-			LFDQueueFrameRandom:HookScript("OnShow", function()
-				for i=1, LFD_MAX_REWARDS do
-					local button = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i]
-					local icon = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."IconTexture"]
-					local count = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."Count"]
-					local role1 = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."RoleIcon1"]
-					local role2 = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."RoleIcon2"]
-					local role3 = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."RoleIcon3"]
-					
-					if button then
-						button:StripTextures()
-						icon:SetTexCoord(.08, .92, .08, .92)
-						icon:Point("TOPLEFT", 2, -2)
-						icon:SetDrawLayer("OVERLAY")
-						count:SetDrawLayer("OVERLAY")
-						if not button.backdrop then
-							button:CreateBackdrop("Default")
-							button.backdrop:Point("TOPLEFT", icon, "TOPLEFT", -2, 2)
-							button.backdrop:Point("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 2, -2)
-							icon:SetParent(button.backdrop)
-							icon.SetPoint = T.dummy
-							
-							if count then
-								count:SetParent(button.backdrop)
-							end
-							if role1 then
-								role1:SetParent(button.backdrop)
-							end
-							if role2 then
-								role2:SetParent(button.backdrop)
-							end
-							if role3 then
-								role3:SetParent(button.backdrop)
-							end							
-						end
-					end
-				end
-			end)
 			
 			LFDQueueFrameSpecificListScrollFrame:StripTextures()
 			LFDQueueFrameSpecificListScrollFrame:Height(LFDQueueFrameSpecificListScrollFrame:GetHeight() - 8)

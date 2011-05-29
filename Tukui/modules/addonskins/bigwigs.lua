@@ -146,12 +146,12 @@ local function PositionBWAnchor()
 	if T.CheckAddOnShown() == true then
 		if C["chat"].background == true and T.ChatRightShown == true then
 			if T.RightChat == true then
-				BigWigsAnchor:Point("BOTTOM", ChatRBackground2, "TOP", 13, 3)	
+				BigWigsAnchor:Point("BOTTOM", ChatRBackground, "TOP", 13, 3)	
 			else
-				BigWigsAnchor:Point("BOTTOM", ChatRBackground2, "TOP", 13, -22)
+				BigWigsAnchor:Point("BOTTOM", ChatRBackground, "TOP", 13, -22)
 			end
 		else
-			BigWigsAnchor:Point("BOTTOM", ChatRBackground2, "TOP", 13, -22)	
+			BigWigsAnchor:Point("BOTTOM", ChatRBackground, "TOP", 13, -22)	
 		end	
 	else
 		BigWigsAnchor:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -5, 3)		

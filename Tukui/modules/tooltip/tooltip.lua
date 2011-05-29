@@ -34,7 +34,7 @@ anchor:SetAlpha(0)
 anchor:SetTemplate("Default", true)
 anchor:SetBackdropBorderColor(1, 0, 0, 1)
 anchor:SetMovable(true)
-anchor:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", 0, T.Scale(3))
+anchor:SetPoint("BOTTOMRIGHT", ChatRBackground, "TOPRIGHT", 0, T.Scale(3))
 anchor.text = T.SetFontString(anchor, C["media"].font, 11, "OUTLINE")
 anchor.text:SetPoint("CENTER")
 anchor.text:SetText(L.move_tooltip)
@@ -64,12 +64,12 @@ local function SetRightTooltipPos(self)
 			if T.CheckAddOnShown() == true then
 				if C["chat"].background == true and T.ChatRightShown == true then
 					if T.RightChat == true then
-						self:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", -1, T.Scale(28))	
+						self:SetPoint("BOTTOMRIGHT", ChatRBackground, "TOPRIGHT", -1, T.Scale(28))	
 					else
-						self:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", -1, T.Scale(18))	
+						self:SetPoint("BOTTOMRIGHT", ChatRBackground, "TOPRIGHT", -1, T.Scale(18))	
 					end
 				else
-					self:SetPoint("BOTTOMRIGHT", ChatRBackground2, "TOPRIGHT", -1, T.Scale(28))		
+					self:SetPoint("BOTTOMRIGHT", ChatRBackground, "TOPRIGHT", -1, T.Scale(28))		
 				end	
 			else
 				self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", T.Scale(-3), T.Scale(38))	

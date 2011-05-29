@@ -93,23 +93,11 @@ chatlbgdummy:SetWidth(C["chat"].width)
 chatlbgdummy:SetHeight(C["chat"].height+6)
 chatlbgdummy:SetPoint("BOTTOMLEFT", TukuiBottomPanel, "TOPLEFT", T.Scale(6),  T.Scale(12))
 
--- CHAT BACKGROUND LEFT (DOESN'T MOVE THIS IS WHAT WE ATTACH FRAMES TO)
-local chatlbgdummy2 = CreateFrame("Frame", "ChatLBackground2", UIParent)
-chatlbgdummy2:SetWidth(C["chat"].width)
-chatlbgdummy2:SetHeight(C["chat"].height+6)
-chatlbgdummy2:SetPoint("BOTTOMLEFT", TukuiBottomPanel, "TOPLEFT", T.Scale(6),  T.Scale(12))
-
 -- CHAT BACKGROUND RIGHT (MOVES)
 local chatrbgdummy = CreateFrame("Frame", "ChatRBackground", UIParent)
 chatrbgdummy:SetWidth(C["chat"].width)
 chatrbgdummy:SetHeight(C["chat"].height+6)
 chatrbgdummy:SetPoint("BOTTOMRIGHT", TukuiBottomPanel, "TOPRIGHT", T.Scale(-6),  T.Scale(16))
-
--- CHAT BACKGROUND RIGHT (DOESN'T MOVE THIS IS WHAT WE ATTACH FRAMES TO)
-local chatrbgdummy2 = CreateFrame("Frame", "ChatRBackground2", UIParent)
-chatrbgdummy2:SetWidth(C["chat"].width)
-chatrbgdummy2:SetHeight(C["chat"].height+6)
-chatrbgdummy2:SetPoint("BOTTOMRIGHT", TukuiBottomPanel, "TOPRIGHT", T.Scale(-6),  T.Scale(16))
 
 T.ChatRightShown = true
 if C["chat"].background == true then
@@ -151,19 +139,19 @@ local infoleft = CreateFrame("Frame", "TukuiInfoLeft", UIParent)
 infoleft:SetFrameLevel(2)
 infoleft:SetTemplate("Default", true)
 infoleft:CreateShadow("Default")
-infoleft:SetPoint("TOPLEFT", chatlbgdummy2, "BOTTOMLEFT", T.Scale(17), T.Scale(-4))
-infoleft:SetPoint("BOTTOMRIGHT", chatlbgdummy2, "BOTTOMRIGHT", T.Scale(-17), T.Scale(-C["general"].panelheight-3))
+infoleft:SetPoint("TOPLEFT", chatlbgdummy, "BOTTOMLEFT", T.Scale(17), T.Scale(-4))
+infoleft:SetPoint("BOTTOMRIGHT", chatlbgdummy, "BOTTOMRIGHT", T.Scale(-17), T.Scale(-C["general"].panelheight-3))
 
 	-- LEFT BUTTONS
 	local infoleftLbutton = CreateFrame("Button", "TukuiInfoLeftLButton", TukuiInfoLeft)
 	infoleftLbutton:SetTemplate("Default", true)
 	infoleftLbutton:SetPoint("TOPRIGHT", infoleft, "TOPLEFT", T.Scale(-2), 0)
-	infoleftLbutton:SetPoint("BOTTOMLEFT", chatlbgdummy2, "BOTTOMLEFT", 0, T.Scale(-C["general"].panelheight-3))
+	infoleftLbutton:SetPoint("BOTTOMLEFT", chatlbgdummy, "BOTTOMLEFT", 0, T.Scale(-C["general"].panelheight-3))
 
 	local infoleftRbutton = CreateFrame("Button", "TukuiInfoLeftRButton", TukuiInfoLeft)
 	infoleftRbutton:SetTemplate("Default", true)
 	infoleftRbutton:SetPoint("TOPLEFT", infoleft, "TOPRIGHT", T.Scale(2), 0)
-	infoleftRbutton:SetPoint("BOTTOMRIGHT", chatlbgdummy2, "BOTTOMRIGHT", 0, T.Scale(-C["general"].panelheight-3))
+	infoleftRbutton:SetPoint("BOTTOMRIGHT", chatlbgdummy, "BOTTOMRIGHT", 0, T.Scale(-C["general"].panelheight-3))
 
 	infoleft.shadow:ClearAllPoints()
 	infoleft.shadow:SetPoint("TOPLEFT", infoleftLbutton, "TOPLEFT", T.Scale(-4), T.Scale(4))
@@ -182,19 +170,19 @@ local inforight = CreateFrame("Frame", "TukuiInfoRight", UIParent)
 inforight:SetTemplate("Default", true)
 inforight:SetFrameLevel(2)
 inforight:CreateShadow("Default")
-inforight:SetPoint("TOPLEFT", chatrbgdummy2, "BOTTOMLEFT", T.Scale(17), T.Scale(-4))
-inforight:SetPoint("BOTTOMRIGHT", chatrbgdummy2, "BOTTOMRIGHT", T.Scale(-17), T.Scale(-C["general"].panelheight-3))
+inforight:SetPoint("TOPLEFT", chatrbgdummy, "BOTTOMLEFT", T.Scale(17), T.Scale(-4))
+inforight:SetPoint("BOTTOMRIGHT", chatrbgdummy, "BOTTOMRIGHT", T.Scale(-17), T.Scale(-C["general"].panelheight-3))
 
 	-- RIGHT BUTTONS
 	local inforightLbutton = CreateFrame("Button", "TukuiInfoRightLButton", TukuiInfoRight)
 	inforightLbutton:SetTemplate("Default", true)
 	inforightLbutton:SetPoint("TOPRIGHT", inforight, "TOPLEFT", T.Scale(-2), 0)
-	inforightLbutton:SetPoint("BOTTOMLEFT", chatrbgdummy2, "BOTTOMLEFT", 0, T.Scale(-C["general"].panelheight-3))
+	inforightLbutton:SetPoint("BOTTOMLEFT", chatrbgdummy, "BOTTOMLEFT", 0, T.Scale(-C["general"].panelheight-3))
 	
 	local inforightRbutton = CreateFrame("Button", "TukuiInfoRightRButton", TukuiInfoRight)
 	inforightRbutton:SetTemplate("Default", true)
 	inforightRbutton:SetPoint("TOPLEFT", inforight, "TOPRIGHT", T.Scale(2), 0)
-	inforightRbutton:SetPoint("BOTTOMRIGHT", chatrbgdummy2, "BOTTOMRIGHT", 0, T.Scale(-C["general"].panelheight-3))
+	inforightRbutton:SetPoint("BOTTOMRIGHT", chatrbgdummy, "BOTTOMRIGHT", 0, T.Scale(-C["general"].panelheight-3))
 
 	inforight.shadow:ClearAllPoints()
 	inforight.shadow:SetPoint("TOPLEFT", inforightLbutton, "TOPLEFT", T.Scale(-4), T.Scale(4))
