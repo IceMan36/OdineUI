@@ -12,16 +12,7 @@ local backdropr, backdropg, backdropb, backdropa, borderr, borderg, borderb = 0,
 
 local function GetTemplate(t)
 	backdropa = 1
-	if t == "ClassColor" or C["general"].classcolortheme == true  then
-		local c = T.oUF_colors.class[class]
-		borderr, borderg, borderb = c[1], c[2], c[3]
-		
-		if t ~= "Transparent" then
-			backdropr, backdropg, backdropb = unpack(C["media"].backdropcolor)
-		else
-			backdropr, backdropg, backdropb, backdropa = unpack(C["media"].backdropfadecolor)
-		end
-	elseif t == "Transparent" then
+	if t == "Transparent" then
 		borderr, borderg, borderb = unpack(C["media"].bordercolor)
 		backdropr, backdropg, backdropb, backdropa = unpack(C["media"].backdropfadecolor)	
 	else

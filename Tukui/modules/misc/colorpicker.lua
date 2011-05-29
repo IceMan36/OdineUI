@@ -8,12 +8,16 @@ local colorBuffer = {}
 local editingText
 
 local function SetModifiedBackdrop(self)
-	self:SetBackdropBorderColor(unpack(C["media"].bordercolor))		
+	if C["general"].classcolortheme == true then
+		self:SetBackdropBorderColor(unpack(C["media"].bordercolor))		
+	else
+		self:SetBackdropBorderColor(unpack(C["media"].txtcolor))	
+	end
 end
 
 local function SetOriginalBackdrop(self)
-	local color = RAID_CLASS_COLORS[T.myclass]
-	if C["unitframes"].unicolor == false then
+	local color = RAID_CLASS_COLORS[E.myclass]
+	if C["general"].classcolortheme == true then
 		self:SetBackdropBorderColor(color.r, color.g, color.b)
 	else
 		self:SetTemplate("Default")

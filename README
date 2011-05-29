@@ -1,3 +1,7 @@
+V6.3.9 - [05/28/2011]
+* tweaks to classcolortheme... (should look more usable, lol)
+* other fixes that i cant remember what i did exactly lol
+
 V6.3.8
 * updated castbar configuration menu. Changing castbar colors will affect focus/boss castbars now as well
 * lowered width on default chat boxes (should help lower reso users)

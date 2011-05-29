@@ -510,10 +510,19 @@ function Stuffing:CreateBagFrame(w)
 		f.b_purchase:RegisterForClicks("AnyUp")
 		f.b_purchase:SetTemplate(C["general"].template, true)
 		f.b_purchase:SetScript("OnEnter", function(self)
-			self:SetBackdropBorderColor(unpack(C["media"].bordercolor))			
+			if C["general"].classcolortheme == true then
+				self:SetBackdropBorderColor(unpack(C["media"].bordercolor))		
+			else
+				self:SetBackdropBorderColor(unpack(C["media"].txtcolor))	
+			end		
 		end)
 		f.b_purchase:SetScript("OnLeave", function(self)
-			self:SetBackdropBorderColor(unpack(C["media"].bordercolor))
+			if C["general"].classcolortheme == true then
+				local color = RAID_CLASS_COLORS[E.myclass]
+				self:SetBackdropBorderColor(color.r, color.g, color.b)
+			else
+				self:SetBackdropBorderColor(unpack(C["media"].bordercolor))
+			end
 		end)
 		
 		f.b_purchase:SetScript("OnClick", function(self, btn)
